@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/error-state";
+import { EmptyState } from "@/components/empty-state";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
@@ -82,7 +83,7 @@ export default function DashboardPage() {
             Refresh
           </Button>
         </PageHeader>
-        <ErrorState onRetry={() => refetch()} message={(error as Error)?.message} />
+        <ErrorState onRetry={() => refetch()} />
       </div>
     );
   }
@@ -134,7 +135,7 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground py-8 text-center">No recent activity</p>
+              <EmptyState title="No recent activity" description="Activity will appear here as users interact with the system." />
             )}
           </CardContent>
         </Card>
@@ -211,7 +212,7 @@ export default function DashboardPage() {
           {isLoading ? (
             <Skeleton className="h-[300px] w-full" />
           ) : isError ? (
-            <p className="text-muted-foreground text-center py-8">Failed to load revenue data</p>
+            <ErrorState message="Failed to load revenue data" onRetry={() => refetch()} />
           ) : data?.monthly_revenue && data.monthly_revenue.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={data.monthly_revenue}>
@@ -223,7 +224,7 @@ export default function DashboardPage() {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <p className="text-muted-foreground text-center py-8">No revenue data available</p>
+            <EmptyState title="No revenue data" description="Revenue data will appear once orders are placed." />
           )}
         </CardContent>
       </Card>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useCallback } from "react";
 import { X, LayoutDashboard, Users, ShoppingCart, FileText, Settings, Package, Tags, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,20 +27,32 @@ const navItems = [
 export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
   const pathname = usePathname();
 
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === "Escape" && open) onClose();
+  }, [open, onClose]);
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener("keydown", handleKeyDown);
+      return () => document.removeEventListener("keydown", handleKeyDown);
+    }
+  }, [open, handleKeyDown]);
+
   return (
     <>
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/50 lg:hidden" onClick={onClose} />
+        <div className="fixed inset-0 z-50 bg-black/50 lg:hidden" onClick={onClose} aria-label="Close overlay" role="presentation" />
       )}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 w-60 bg-sidebar p-4 transition-transform lg:hidden",
           open ? "translate-x-0" : "-translate-x-full",
         )}
+        aria-label="Mobile navigation"
       >
         <div className="flex items-center justify-between mb-6">
           <span className="text-sm font-bold text-sidebar-foreground">{APP_NAME}</span>
-          <Button variant="ghost" size="icon" onClick={onClose} className="text-sidebar-foreground hover:bg-sidebar-accent">
+          <Button variant="ghost" size="icon" onClick={onClose} className="text-sidebar-foreground hover:bg-sidebar-accent" aria-label="Close navigation menu">
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -53,6 +66,7 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
                 key={item.href}
                 href={item.href}
                 onClick={onClose}
+                aria-current={isActive ? "page" : undefined}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                   isActive

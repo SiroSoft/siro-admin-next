@@ -17,7 +17,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
-      <Button variant="ghost" size="icon" onClick={onMenuToggle} className="lg:hidden">
+      <Button variant="ghost" size="icon" onClick={onMenuToggle} className="lg:hidden" aria-label="Open navigation menu">
         <Menu className="h-5 w-5" />
       </Button>
 
@@ -38,6 +38,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         variant="ghost"
         size="icon"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
       >
         <Sun className={cn("h-5 w-5", theme === "dark" && "hidden")} />
         <Moon className={cn("h-5 w-5", theme !== "dark" && "hidden")} />

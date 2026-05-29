@@ -75,10 +75,10 @@ export function CategoryTable({ onEdit, onCreate, params, onParamsChange }: Cate
         id: "actions",
         cell: (info) => (
           <div className="flex justify-end gap-1">
-            <Button variant="ghost" size="icon" onClick={() => onEdit(info.row.original)}>
+            <Button variant="ghost" size="icon" onClick={() => onEdit(info.row.original)} aria-label={`Edit ${info.row.original.name ?? "category"}`}>
               <Edit className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setDeleteId(info.row.original.id!)}>
+            <Button variant="ghost" size="icon" onClick={() => setDeleteId(info.row.original.id!)} aria-label={`Delete ${info.row.original.name ?? "category"}`}>
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
           </div>

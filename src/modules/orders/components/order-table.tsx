@@ -78,14 +78,14 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
         cell: (info) => (
           <div className="flex justify-end gap-1">
             {onView && (
-              <Button variant="ghost" size="icon" onClick={() => onView(info.row.original)}>
+              <Button variant="ghost" size="icon" onClick={() => onView(info.row.original)} aria-label={`View order #${info.row.original.id}`}>
                 <Eye className="h-4 w-4" />
               </Button>
             )}
-            <Button variant="ghost" size="icon" onClick={() => onEdit(info.row.original)}>
+            <Button variant="ghost" size="icon" onClick={() => onEdit(info.row.original)} aria-label={`Edit order #${info.row.original.id}`}>
               <Edit className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setDeleteId(info.row.original.id!)}>
+            <Button variant="ghost" size="icon" onClick={() => setDeleteId(info.row.original.id!)} aria-label={`Delete order #${info.row.original.id}`}>
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
           </div>

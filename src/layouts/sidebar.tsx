@@ -58,6 +58,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           size="icon"
           onClick={onToggle}
           className={cn("ml-auto text-sidebar-foreground hover:bg-sidebar-accent", collapsed && "ml-0")}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           <ChevronLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
         </Button>
@@ -71,6 +72,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
+              aria-current={isActive ? "page" : undefined}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                 isActive
