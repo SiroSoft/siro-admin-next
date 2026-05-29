@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useCallback, useState } from "react";
 import Link from "next/link";
-import { Users, ShoppingCart, DollarSign, Package, TrendingUp, TrendingDown, Plus, Eye, Settings } from "lucide-react";
+import { Users, ShoppingCart, DollarSign, Package, TrendingUp, TrendingDown, Plus, Eye, Settings, RefreshCw } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/error-state";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
-import { formatDate, formatNumber } from "@/lib/utils";
+import { formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/hooks/use-dashboard";
 import type { components } from "@/types/api";
@@ -55,14 +55,20 @@ function StatCardSkeleton() {
 }
 
 export default function DashboardPage() {
-  const { data, isLoading, isError, error, refetch } = useDashboard();
+  const { data, isLoading, isError, error, refetch, isRefetching } = useDashboard();
+  const [lastChecked, setLastChecked] = useState<Date | null>(null);
+
+  const handleRefresh = useCallback(() => {
+    refetch();
+    setLastChecked(new Date());
+  }, [refetch]);
 
   const stats = useMemo(
     () => [
       { title: "Total Users", value: formatNumber(data?.total_users ?? 0), icon: Users, href: "/users" },
       { title: "Total Orders", value: formatNumber(data?.total_orders ?? 0), icon: ShoppingCart, href: "/orders" },
       { title: "Total Products", value: formatNumber(data?.total_products ?? 0), icon: Package, href: "/products" },
-      { title: "Revenue", value: `$${formatNumber(data?.total_revenue ?? 0)}`, icon: DollarSign, trend: { value: "+12.5%", up: true } },
+      { title: "Revenue", value: `$${formatNumber(data?.total_revenue ?? 0)}`, icon: DollarSign, href: "/orders", trend: { value: "+12.5%", up: true } },
     ],
     [data],
   );
@@ -70,7 +76,12 @@ export default function DashboardPage() {
   if (isError) {
     return (
       <div className="space-y-6">
-        <PageHeader title="Dashboard" description="Overview of your application" />
+        <PageHeader title="Dashboard" description="Overview of your application">
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
+            <RefreshCw className={`mr-2 h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
+            Refresh
+          </Button>
+        </PageHeader>
         <ErrorState onRetry={() => refetch()} message={(error as Error)?.message} />
       </div>
     );
@@ -78,7 +89,12 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Dashboard" description="Overview of your application" />
+      <PageHeader title="Dashboard" description="Overview of your application">
+        <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
+          <RefreshCw className={`mr-2 h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
+          Refresh
+        </Button>
+      </PageHeader>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {isLoading
@@ -112,7 +128,7 @@ export default function DashboardPage() {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{activity.action}</p>
                       <p className="text-xs text-muted-foreground truncate">{activity.description}</p>
-                      <p className="text-xs text-muted-foreground">{activity.user} &middot; {formatDate(activity.created_at!)}</p>
+                      <p className="text-xs text-muted-foreground">{activity.user} &middot; {formatRelativeTime(activity.created_at!)}</p>
                     </div>
                   </div>
                 ))}
@@ -155,6 +171,10 @@ export default function DashboardPage() {
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-muted-foreground">Response Time</span>
                     <span className="text-sm font-medium">{data.api_status.response_time}ms</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-muted-foreground">Last Checked</span>
+                    <span className="text-sm font-medium">{lastChecked ? formatRelativeTime(lastChecked) : "–"}</span>
                   </div>
                 </div>
               ) : (

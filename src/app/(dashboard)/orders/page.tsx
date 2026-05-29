@@ -9,13 +9,24 @@ import { OrderTable } from "@/modules/orders/components/order-table";
 import { OrderFormDialog } from "@/modules/orders/components/order-form-dialog";
 import { useCreateOrder, useUpdateOrder } from "@/hooks/use-orders";
 import { useDebounce } from "@/hooks/use-debounce";
+import { cn } from "@/lib/utils";
 import type { components } from "@/types/api";
 
 type Order = components["schemas"]["Order"];
 
+const STATUS_OPTIONS = [
+  { label: "All", value: "" },
+  { label: "Pending", value: "pending" },
+  { label: "Processing", value: "processing" },
+  { label: "Shipped", value: "shipped" },
+  { label: "Completed", value: "completed" },
+  { label: "Cancelled", value: "cancelled" },
+];
+
 export default function OrdersPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [status, setStatus] = useState("");
   const [editOrder, setEditOrder] = useState<Order | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
@@ -24,7 +35,7 @@ export default function OrdersPage() {
   const createMutation = useCreateOrder();
   const updateMutation = useUpdateOrder(editOrder?.id ?? 0);
 
-  const params = { page, search: debouncedSearch || undefined, per_page: 10 };
+  const params = { page, search: debouncedSearch || undefined, status: status || undefined, per_page: 10 };
 
   const handleEdit = useCallback((order: Order) => setEditOrder(order), []);
 
@@ -38,6 +49,11 @@ export default function OrdersPage() {
     [updateMutation],
   );
 
+  const handleStatusChange = useCallback((value: string) => {
+    setStatus(value);
+    setPage(1);
+  }, []);
+
   return (
     <div className="space-y-4">
       <PageHeader title="Orders" description="Manage customer orders">
@@ -47,8 +63,22 @@ export default function OrdersPage() {
         </Button>
       </PageHeader>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Search orders..." />
+      </div>
+
+      <div className="flex flex-wrap gap-1">
+        {STATUS_OPTIONS.map((opt) => (
+          <Button
+            key={opt.value}
+            variant={status === opt.value ? "default" : "outline"}
+            size="sm"
+            onClick={() => handleStatusChange(opt.value)}
+            className={cn(status === opt.value && "")}
+          >
+            {opt.label}
+          </Button>
+        ))}
       </div>
 
       <OrderTable

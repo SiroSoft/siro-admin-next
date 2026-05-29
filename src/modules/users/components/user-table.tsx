@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -12,6 +12,7 @@ import { Edit, Trash2 } from "lucide-react";
 import { DataTable } from "@/components/data-table";
 import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { StatusBadge } from "@/components/status-badge";
 import { formatDate } from "@/lib/utils";
 import { DeleteDialog } from "@/components/delete-dialog";
@@ -28,19 +29,61 @@ interface UserTableProps {
   onCreate: () => void;
   params: Record<string, unknown>;
   onParamsChange: (params: Record<string, unknown>) => void;
+  selectedIds?: number[];
+  onSelectionChange?: (ids: number[]) => void;
 }
 
 const columnHelper = createColumnHelper<User>();
 
-export function UserTable({ onEdit, onCreate, params, onParamsChange }: UserTableProps) {
+export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedIds = [], onSelectionChange }: UserTableProps) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const { users, meta, isLoading, isError, error, refetch } = useUsers(params);
   const deleteMutation = useDeleteUser();
 
+  const allSelected = users.length > 0 && selectedIds.length === users.length;
+  const someSelected = selectedIds.length > 0 && !allSelected;
+
+  const handleSelectAll = useCallback((checked: boolean) => {
+    if (checked) {
+      onSelectionChange?.(users.map((u) => u.id!).filter(Boolean));
+    } else {
+      onSelectionChange?.([]);
+    }
+  }, [users, onSelectionChange]);
+
+  const handleSelectOne = useCallback((id: number, checked: boolean) => {
+    if (checked) {
+      onSelectionChange?.([...selectedIds, id]);
+    } else {
+      onSelectionChange?.(selectedIds.filter((sid) => sid !== id));
+    }
+  }, [selectedIds, onSelectionChange]);
+
   const columns = useMemo(
     () => [
+      columnHelper.display({
+        id: "select",
+        header: () => (
+          <Checkbox
+            checked={allSelected}
+            onCheckedChange={(v) => handleSelectAll(v === true)}
+            aria-label="Select all"
+          />
+        ),
+        cell: (info) => {
+          const id = info.row.original.id;
+          return (
+            <Checkbox
+              checked={id ? selectedIds.includes(id) : false}
+              onCheckedChange={(v) => id && handleSelectOne(id, v === true)}
+              aria-label="Select row"
+            />
+          );
+        },
+        enableSorting: false,
+      }),
       columnHelper.accessor("name", {
         header: "Name",
         cell: (info) => (
@@ -78,7 +121,7 @@ export function UserTable({ onEdit, onCreate, params, onParamsChange }: UserTabl
         ),
       }),
     ],
-    [onEdit],
+    [onEdit, selectedIds, allSelected, handleSelectAll, handleSelectOne],
   );
 
   const table = useReactTable({

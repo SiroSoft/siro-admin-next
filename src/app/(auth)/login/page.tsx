@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -21,21 +21,49 @@ const loginSchema = z.object({
 
 type LoginForm = z.infer<typeof loginSchema>;
 
+const REMEMBER_EMAIL_KEY = "siro_remember_email";
+
 export default function LoginPage() {
-  const { login, isLoginPending, loginError } = useAuth();
+  const { login, isLoginPending, loginError, isLoading: isAuthLoading } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
   });
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem(REMEMBER_EMAIL_KEY);
+    if (savedEmail) {
+      setValue("email", savedEmail);
+      setRemember(true);
+    }
+  }, [setValue]);
+
   const onSubmit = (data: LoginForm) => {
+    if (remember) {
+      localStorage.setItem(REMEMBER_EMAIL_KEY, data.email);
+    } else {
+      localStorage.removeItem(REMEMBER_EMAIL_KEY);
+    }
     login(data);
   };
+
+  if (isAuthLoading) {
+    return (
+      <Card className="shadow-lg">
+        <CardContent className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="shadow-lg">
@@ -89,8 +117,12 @@ export default function LoginPage() {
           )}
 
           <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm">
-              <Checkbox name="remember" /> Remember me
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <Checkbox
+                checked={remember}
+                onCheckedChange={(v) => setRemember(v === true)}
+              />
+              Remember me
             </label>
             <Link href="/forgot-password" className="text-sm text-primary hover:underline">Forgot password?</Link>
           </div>

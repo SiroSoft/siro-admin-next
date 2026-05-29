@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2, Sun, Moon, Monitor, Info } from "lucide-react";
+import { Loader2, Sun, Moon, Monitor, Info, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,17 @@ import { useSettings, useUpdateSettings } from "@/hooks/use-settings";
 import { useUpdateProfile, useChangePassword } from "@/hooks/use-profile";
 import { useAuth } from "@/hooks/use-auth";
 import { API_URL, APP_NAME } from "@/lib/constants";
-import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useState, useCallback } from "react";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -126,6 +136,9 @@ export default function SettingsPage() {
     },
   });
 
+  const [pendingMaintenanceValue, setPendingMaintenanceValue] = useState<boolean | null>(null);
+  const [showMaintenanceConfirm, setShowMaintenanceConfirm] = useState(false);
+
   const handleSettingsSubmit = (data: SettingsFormData) => {
     updateSettings.mutate(data, {
       onSuccess: () => {
@@ -136,6 +149,23 @@ export default function SettingsPage() {
       },
     });
   };
+
+  const handleMaintenanceToggle = useCallback((checked: boolean) => {
+    setPendingMaintenanceValue(checked);
+    if (checked) {
+      setShowMaintenanceConfirm(true);
+    } else {
+      settingsForm.setValue("maintenance_mode", false);
+    }
+  }, [settingsForm]);
+
+  const confirmMaintenance = useCallback(() => {
+    if (pendingMaintenanceValue !== null) {
+      settingsForm.setValue("maintenance_mode", pendingMaintenanceValue);
+    }
+    setShowMaintenanceConfirm(false);
+    setPendingMaintenanceValue(null);
+  }, [pendingMaintenanceValue, settingsForm]);
 
   const handleProfileSubmit = (data: { name: string; email: string }) => {
     updateProfile.mutate(data, {
@@ -353,10 +383,13 @@ export default function SettingsPage() {
                     <Switch
                       id="maintenance_mode"
                       checked={settingsForm.watch("maintenance_mode")}
-                      onCheckedChange={(v) => settingsForm.setValue("maintenance_mode", v)}
+                      onCheckedChange={handleMaintenanceToggle}
                       disabled={updateSettings.isPending}
                     />
-                    <Label htmlFor="maintenance_mode">Maintenance Mode</Label>
+                    <Label htmlFor="maintenance_mode" className="flex items-center gap-1">
+                      Maintenance Mode
+                      <AlertTriangle className="h-3 w-3 text-amber-500" />
+                    </Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <Switch
@@ -376,6 +409,21 @@ export default function SettingsPage() {
             )}
           </CardContent>
         </Card>
+
+        <AlertDialog open={showMaintenanceConfirm} onOpenChange={setShowMaintenanceConfirm}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Enable Maintenance Mode?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will make the application inaccessible to users. Only administrators will be able to access the site. Are you sure you want to proceed?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmMaintenance}>Enable Maintenance Mode</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <Card className="lg:col-span-2">
           <CardHeader>
