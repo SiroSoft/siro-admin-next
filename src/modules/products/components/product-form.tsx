@@ -54,7 +54,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
       width: product?.width ?? undefined,
       height: product?.height ?? undefined,
       length: product?.length ?? undefined,
-      cover_image: product?.images?.[0]?.url ?? "",
+      cover_image: product?.cover_image ?? "",
       is_active: product?.is_active ?? true,
       is_featured: product?.is_featured ?? false,
       category_id: product?.category_id ?? undefined,

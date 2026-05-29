@@ -575,15 +575,16 @@ export interface components {
             name?: string;
             /** Format: email */
             email?: string;
-            /** @enum {string} */
-            role?: "admin" | "editor" | "viewer";
-            /** @enum {string} */
-            status?: "active" | "inactive" | "suspended";
-            avatar?: string | null;
+            /** @example admin */
+            role?: string;
+            /** @example 1 */
+            status?: number;
             /** Format: date-time */
             created_at?: string;
             /** Format: date-time */
             updated_at?: string;
+            avatar?: string | null;
+            phone?: string | null;
         };
         CreateUserRequest: {
             name: string;
@@ -607,7 +608,7 @@ export interface components {
         };
         Order: {
             id?: number;
-            user_id?: number;
+            /** @example John Doe */
             user_name?: string;
             /** Format: float */
             total?: number;
@@ -622,8 +623,8 @@ export interface components {
             /** @enum {string} */
             status?: "pending" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled";
             payment_method?: string;
-            /** @enum {string} */
-            payment_status?: "pending" | "paid" | "failed" | "refunded";
+            /** @example pending */
+            payment_status?: string;
             shipping_address?: string;
             billing_address?: string;
             notes?: string | null;
@@ -632,6 +633,11 @@ export interface components {
             created_at?: string;
             /** Format: date-time */
             updated_at?: string;
+            /**
+             * Format: email
+             * @example john@example.com
+             */
+            customer_email?: string;
         };
         OrderItem: {
             id?: number;
@@ -664,36 +670,34 @@ export interface components {
         Product: {
             id?: number;
             name?: string;
-            slug?: string;
+            slug?: string | null;
             description?: string | null;
             short_description?: string | null;
             /** Format: float */
             price?: number;
-            /** Format: float */
             compare_price?: number | null;
-            /** Format: float */
             cost_price?: number | null;
-            sku?: string;
+            sku?: string | null;
             barcode?: string | null;
             stock?: number;
             stock_min?: number | null;
-            /** Format: float */
             weight?: number | null;
-            /** Format: float */
             width?: number | null;
-            /** Format: float */
             height?: number | null;
-            /** Format: float */
             length?: number | null;
+            /** @example true */
             is_active?: boolean;
+            /** @example false */
             is_featured?: boolean;
+            /** @example 1 */
             category_id?: number | null;
+            /** @example Electronics */
             category_name?: string | null;
-            images?: components["schemas"]["ProductImage"][];
             /** Format: date-time */
             created_at?: string;
             /** Format: date-time */
             updated_at?: string;
+            cover_image?: string | null;
         };
         ProductImage: {
             id?: number;
@@ -722,7 +726,7 @@ export interface components {
             is_active: boolean;
             /** @default false */
             is_featured: boolean;
-            category_id?: number;
+            category_id?: number | null;
         };
         UpdateProductRequest: {
             name?: string;
@@ -741,22 +745,23 @@ export interface components {
             length?: number;
             is_active?: boolean;
             is_featured?: boolean;
-            category_id?: number;
+            category_id?: number | null;
         };
         Category: {
             id?: number;
             name?: string;
-            slug?: string;
             description?: string | null;
-            icon?: string | null;
             color?: string | null;
             parent_id?: number | null;
             sort_order?: number;
+            /** @example true */
             is_active?: boolean;
             /** Format: date-time */
             created_at?: string;
             /** Format: date-time */
             updated_at?: string;
+            icon?: string | null;
+            slug?: string | null;
         };
         CreateCategoryRequest: {
             name: string;
@@ -781,11 +786,14 @@ export interface components {
             id?: number;
             title?: string;
             slug?: string;
+            /** @example Post body content */
             content?: string;
             excerpt?: string | null;
+            /** @example https://example.com/image.jpg */
             cover_image?: string | null;
             /** @enum {string} */
             status?: "draft" | "published" | "archived";
+            /** @example false */
             featured?: boolean;
             author_id?: number;
             author_name?: string;
@@ -828,12 +836,15 @@ export interface components {
         Tag: {
             id?: number;
             name?: string;
-            slug?: string;
             color?: string | null;
             /** Format: date-time */
             created_at?: string;
             /** Format: date-time */
             updated_at?: string;
+            description?: string | null;
+            slug?: string | null;
+            /** @example true */
+            is_active?: boolean;
         };
         CreateTagRequest: {
             name: string;
