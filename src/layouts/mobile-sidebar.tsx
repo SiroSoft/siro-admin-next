@@ -68,7 +68,7 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
                 onClick={onClose}
                 aria-current={isActive ? "page" : undefined}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors active:scale-[0.98]",
                   isActive
                     ? "bg-sidebar-accent text-sidebar-foreground"
                     : "text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground",

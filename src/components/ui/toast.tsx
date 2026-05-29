@@ -33,7 +33,7 @@ export function Toaster() {
           <div
             key={t.id}
             className={cn(
-              "flex items-start gap-3 rounded-lg border p-4 shadow-md animate-in slide-in-from-right-full",
+              "flex items-start gap-3 rounded-lg border p-4 shadow-md animate-in slide-in-from-right-full fade-in-0 zoom-in-95",
               toastVariants[t.variant ?? "default"],
             )}
           >

@@ -21,7 +21,7 @@ type DashboardStats = components["schemas"]["DashboardStatsResponse"];
 
 function StatCard({ title, value, icon: Icon, trend, href }: { title: string; value: string; icon: any; trend?: { value: string; up: boolean }; href?: string }) {
   const content = (
-    <Card className="transition-colors hover:bg-muted/50">
+    <Card className="hover:bg-muted/50">
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
         <Icon className="h-4 w-4 text-muted-foreground" />

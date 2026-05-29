@@ -74,7 +74,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               href={item.href}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.98]",
                 isActive
                   ? "bg-sidebar-accent text-sidebar-foreground"
                   : "text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground",
@@ -96,7 +96,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           size="sm"
           onClick={() => logout()}
           className={cn(
-            "w-full justify-start text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground",
+            "w-full justify-start text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground active:scale-[0.98]",
             collapsed && "justify-center px-2",
           )}
         >
