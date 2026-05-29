@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ImageUpload } from "@/components/ui/image-upload";
 import {
   createUserSchema,
   updateUserSchema,
@@ -25,8 +26,6 @@ interface UserFormProps {
 
 export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
   const isEdit = !!user;
-  const schema = isEdit ? updateUserSchema : createUserSchema;
-  type FormData = typeof schema extends typeof updateUserSchema ? UpdateUserFormData : CreateUserFormData;
 
   const {
     register,
@@ -34,46 +33,54 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
     setValue,
     watch,
     formState: { errors },
-  } = useForm<FormData>({
-    resolver: zodResolver(schema),
+  } = useForm<CreateUserFormData | UpdateUserFormData>({
+    resolver: zodResolver(isEdit ? updateUserSchema : createUserSchema),
     defaultValues: {
       name: user?.name ?? "",
       email: user?.email ?? "",
       ...(isEdit ? {} : { password: "", password_confirmation: "" }),
       role: user?.role ?? "viewer",
       status: user?.status ?? "active",
-    } as any,
+      avatar: user?.avatar ?? "",
+      phone: user?.["phone" as keyof User] ?? "",
+    } as CreateUserFormData | UpdateUserFormData,
   });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
+        <Label>Avatar</Label>
+        <ImageUpload value={watch("avatar") ?? ""} onChange={(v) => setValue("avatar", v)} disabled={isPending} />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
         <Input id="name" {...register("name")} placeholder="John Doe" disabled={isPending} />
-        {(errors as any).name && <p className="text-sm text-destructive">{(errors as any).name.message}</p>}
+        {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
         <Input id="email" type="email" {...register("email")} placeholder="john@example.com" disabled={isPending} />
-        {(errors as any).email && <p className="text-sm text-destructive">{(errors as any).email.message}</p>}
+        {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="phone">Phone</Label>
+        <Input id="phone" type="tel" {...register("phone")} placeholder="+1 (555) 000-0000" disabled={isPending} />
       </div>
 
       {!isEdit && (
         <>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" {...register("password" as any)} placeholder="••••••••" disabled={isPending} />
-            {(errors as any).password && (
-              <p className="text-sm text-destructive">{(errors as any).password.message}</p>
-            )}
+            <Input id="password" type="password" {...register("password")} placeholder="••••••••" disabled={isPending} />
+            {"password" in errors && <p className="text-sm text-destructive">{String((errors as { password?: { message?: string } }).password?.message)}</p>}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password_confirmation">Confirm Password</Label>
-            <Input id="password_confirmation" type="password" {...register("password_confirmation" as any)} placeholder="••••••••" disabled={isPending} />
-            {(errors as any).password_confirmation && (
-              <p className="text-sm text-destructive">{(errors as any).password_confirmation.message}</p>
-            )}
+            <Input id="password_confirmation" type="password" {...register("password_confirmation")} placeholder="••••••••" disabled={isPending} />
+            {"password_confirmation" in errors && <p className="text-sm text-destructive">{String((errors as { password_confirmation?: { message?: string } }).password_confirmation?.message)}</p>}
           </div>
         </>
       )}
@@ -82,8 +89,9 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
         <div className="space-y-2">
           <Label>Role</Label>
           <Select
-            value={watch("role" as any)}
-            onValueChange={(v) => setValue("role" as any, v)}
+            value={watch("role")}
+            onValueChange={(v) => setValue("role", v)}
+            disabled={isPending}
           >
             <SelectTrigger>
               <SelectValue />
@@ -94,14 +102,15 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
               <SelectItem value="viewer">Viewer</SelectItem>
             </SelectContent>
           </Select>
-          {(errors as any).role && <p className="text-sm text-destructive">{(errors as any).role.message}</p>}
+          {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
         </div>
 
         <div className="space-y-2">
           <Label>Status</Label>
           <Select
-            value={watch("status" as any)}
-            onValueChange={(v) => setValue("status" as any, v)}
+            value={watch("status")}
+            onValueChange={(v) => setValue("status", v)}
+            disabled={isPending}
           >
             <SelectTrigger>
               <SelectValue />
@@ -112,7 +121,7 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
               <SelectItem value="suspended">Suspended</SelectItem>
             </SelectContent>
           </Select>
-          {(errors as any).status && <p className="text-sm text-destructive">{(errors as any).status.message}</p>}
+          {errors.status && <p className="text-sm text-destructive">{errors.status.message}</p>}
         </div>
       </div>
 

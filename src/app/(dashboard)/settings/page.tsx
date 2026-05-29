@@ -11,8 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useSettings, useUpdateSettings } from "@/hooks/use-settings";
 import { useUpdateProfile, useChangePassword } from "@/hooks/use-profile";
@@ -21,13 +23,13 @@ import { API_URL, APP_NAME } from "@/lib/constants";
 import { useState } from "react";
 
 const profileSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
 });
 
 const passwordSchema = z.object({
-  current_password: z.string().min(1),
-  new_password: z.string().min(8),
+  current_password: z.string().min(1, "Current password is required"),
+  new_password: z.string().min(8, "Password must be at least 8 characters"),
   new_password_confirmation: z.string(),
 }).refine((d) => d.new_password === d.new_password_confirmation, {
   message: "Passwords do not match",
@@ -35,15 +37,62 @@ const passwordSchema = z.object({
 });
 
 const settingsSchema = z.object({
-  app_name: z.string().optional(),
+  app_name: z.string().min(1, "App name is required"),
   app_description: z.string().optional(),
-  language: z.string().optional(),
-  timezone: z.string().optional(),
-  currency: z.string().optional(),
-  pagination_per_page: z.coerce.number().optional(),
-  maintenance_mode: z.boolean().optional(),
-  email_notifications: z.boolean().optional(),
+  language: z.string().min(1),
+  timezone: z.string().min(1),
+  currency: z.string().min(1),
+  pagination_per_page: z.coerce.number().min(1).max(100),
+  maintenance_mode: z.boolean(),
+  email_notifications: z.boolean(),
 });
+
+const LANGUAGES = [
+  { value: "en", label: "English" },
+  { value: "vi", label: "Vietnamese" },
+  { value: "ja", label: "Japanese" },
+  { value: "ko", label: "Korean" },
+  { value: "zh", label: "Chinese" },
+  { value: "fr", label: "French" },
+  { value: "de", label: "German" },
+  { value: "es", label: "Spanish" },
+];
+
+const TIMEZONES = [
+  "UTC",
+  "America/New_York",
+  "America/Chicago",
+  "America/Denver",
+  "America/Los_Angeles",
+  "Europe/London",
+  "Europe/Berlin",
+  "Europe/Paris",
+  "Asia/Tokyo",
+  "Asia/Shanghai",
+  "Asia/Ho_Chi_Minh",
+  "Asia/Singapore",
+  "Asia/Seoul",
+  "Asia/Dubai",
+  "Australia/Sydney",
+  "Pacific/Auckland",
+];
+
+const CURRENCIES = [
+  { value: "USD", label: "USD - US Dollar" },
+  { value: "EUR", label: "EUR - Euro" },
+  { value: "VND", label: "VND - Vietnamese Dong" },
+  { value: "JPY", label: "JPY - Japanese Yen" },
+  { value: "GBP", label: "GBP - British Pound" },
+  { value: "CNY", label: "CNY - Chinese Yuan" },
+  { value: "KRW", label: "KRW - Korean Won" },
+  { value: "SGD", label: "SGD - Singapore Dollar" },
+  { value: "AUD", label: "AUD - Australian Dollar" },
+  { value: "CAD", label: "CAD - Canadian Dollar" },
+  { value: "INR", label: "INR - Indian Rupee" },
+  { value: "BRL", label: "BRL - Brazilian Real" },
+];
+
+type SettingsFormData = z.infer<typeof settingsSchema>;
 
 export default function SettingsPage() {
   const { user } = useAuth();
@@ -63,6 +112,54 @@ export default function SettingsPage() {
     defaultValues: { current_password: "", new_password: "", new_password_confirmation: "" },
   });
 
+  const settingsForm = useForm<SettingsFormData>({
+    resolver: zodResolver(settingsSchema),
+    values: {
+      app_name: settings?.app_name ?? APP_NAME,
+      app_description: settings?.app_description ?? "",
+      language: settings?.language ?? "en",
+      timezone: settings?.timezone ?? "UTC",
+      currency: settings?.currency ?? "USD",
+      pagination_per_page: settings?.pagination_per_page ?? 15,
+      maintenance_mode: settings?.maintenance_mode ?? false,
+      email_notifications: settings?.email_notifications ?? true,
+    },
+  });
+
+  const handleSettingsSubmit = (data: SettingsFormData) => {
+    updateSettings.mutate(data, {
+      onSuccess: () => {
+        toast({ title: "Settings saved", description: "Application settings have been updated.", variant: "success" });
+      },
+      onError: () => {
+        toast({ title: "Error", description: "Failed to save settings.", variant: "destructive" });
+      },
+    });
+  };
+
+  const handleProfileSubmit = (data: { name: string; email: string }) => {
+    updateProfile.mutate(data, {
+      onSuccess: () => {
+        toast({ title: "Profile updated", description: "Your profile has been updated.", variant: "success" });
+      },
+      onError: () => {
+        toast({ title: "Error", description: "Failed to update profile.", variant: "destructive" });
+      },
+    });
+  };
+
+  const handlePasswordSubmit = (data: { current_password: string; new_password: string; new_password_confirmation: string }) => {
+    changePassword.mutate(data, {
+      onSuccess: () => {
+        passwordForm.reset();
+        toast({ title: "Password changed", description: "Your password has been changed.", variant: "success" });
+      },
+      onError: () => {
+        toast({ title: "Error", description: "Failed to change password.", variant: "destructive" });
+      },
+    });
+  };
+
   const themeOptions = [
     { value: "light", label: "Light", icon: Sun },
     { value: "dark", label: "Dark", icon: Moon },
@@ -80,14 +177,20 @@ export default function SettingsPage() {
             <CardDescription>Update your name and email</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={profileForm.handleSubmit((d) => updateProfile.mutate(d))} className="space-y-4">
+            <form onSubmit={profileForm.handleSubmit(handleProfileSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="s-name">Name</Label>
-                <Input id="s-name" {...profileForm.register("name")} />
+                <Input id="s-name" {...profileForm.register("name")} disabled={updateProfile.isPending} />
+                {profileForm.formState.errors.name && (
+                  <p className="text-sm text-destructive">{profileForm.formState.errors.name.message}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="s-email">Email</Label>
-                <Input id="s-email" type="email" {...profileForm.register("email")} />
+                <Input id="s-email" type="email" {...profileForm.register("email")} disabled={updateProfile.isPending} />
+                {profileForm.formState.errors.email && (
+                  <p className="text-sm text-destructive">{profileForm.formState.errors.email.message}</p>
+                )}
               </div>
               <Button type="submit" disabled={updateProfile.isPending}>
                 {updateProfile.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -103,19 +206,25 @@ export default function SettingsPage() {
             <CardDescription>Update your password</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={passwordForm.handleSubmit((d) => changePassword.mutate(d, { onSuccess: () => passwordForm.reset() }))} className="space-y-4">
+            <form onSubmit={passwordForm.handleSubmit(handlePasswordSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="s-current">Current Password</Label>
-                <Input id="s-current" type="password" {...passwordForm.register("current_password")} />
+                <Input id="s-current" type="password" {...passwordForm.register("current_password")} disabled={changePassword.isPending} />
+                {passwordForm.formState.errors.current_password && (
+                  <p className="text-sm text-destructive">{passwordForm.formState.errors.current_password.message}</p>
+                )}
               </div>
               <Separator />
               <div className="space-y-2">
                 <Label htmlFor="s-new">New Password</Label>
-                <Input id="s-new" type="password" {...passwordForm.register("new_password")} />
+                <Input id="s-new" type="password" {...passwordForm.register("new_password")} disabled={changePassword.isPending} />
+                {passwordForm.formState.errors.new_password && (
+                  <p className="text-sm text-destructive">{passwordForm.formState.errors.new_password.message}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="s-confirm">Confirm Password</Label>
-                <Input id="s-confirm" type="password" {...passwordForm.register("new_password_confirmation")} />
+                <Input id="s-confirm" type="password" {...passwordForm.register("new_password_confirmation")} disabled={changePassword.isPending} />
                 {passwordForm.formState.errors.new_password_confirmation && (
                   <p className="text-sm text-destructive">{passwordForm.formState.errors.new_password_confirmation.message}</p>
                 )}
@@ -162,52 +271,101 @@ export default function SettingsPage() {
           <CardContent>
             {settingsLoading ? (
               <div className="space-y-3">
-                {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
+                {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
               </div>
             ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (settings) {
-                    const formData = new FormData(e.currentTarget);
-                    updateSettings.mutate({
-                      app_name: formData.get("app_name") as string,
-                      app_description: formData.get("app_description") as string,
-                      language: formData.get("language") as string,
-                      timezone: formData.get("timezone") as string,
-                      currency: formData.get("currency") as string,
-                      pagination_per_page: Number(formData.get("pagination_per_page")),
-                    });
-                  }
-                }}
-                className="space-y-4"
-              >
+              <form onSubmit={settingsForm.handleSubmit(handleSettingsSubmit)} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="app_name">App Name</Label>
-                  <Input id="app_name" name="app_name" defaultValue={settings?.app_name ?? APP_NAME} />
+                  <Input id="app_name" {...settingsForm.register("app_name")} disabled={updateSettings.isPending} />
+                  {settingsForm.formState.errors.app_name && (
+                    <p className="text-sm text-destructive">{settingsForm.formState.errors.app_name.message}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="app_description">Description</Label>
-                  <Input id="app_description" name="app_description" defaultValue={settings?.app_description ?? ""} />
+                  <Input id="app_description" {...settingsForm.register("app_description")} disabled={updateSettings.isPending} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="language">Language</Label>
-                    <Input id="language" name="language" defaultValue={settings?.language ?? "en"} />
+                    <Label>Language</Label>
+                    <Select
+                      value={settingsForm.watch("language")}
+                      onValueChange={(v) => settingsForm.setValue("language", v)}
+                      disabled={updateSettings.isPending}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {LANGUAGES.map((l) => (
+                          <SelectItem key={l.value} value={l.value}>{l.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="timezone">Timezone</Label>
-                    <Input id="timezone" name="timezone" defaultValue={settings?.timezone ?? "UTC"} />
+                    <Label>Timezone</Label>
+                    <Select
+                      value={settingsForm.watch("timezone")}
+                      onValueChange={(v) => settingsForm.setValue("timezone", v)}
+                      disabled={updateSettings.isPending}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {TIMEZONES.map((tz) => (
+                          <SelectItem key={tz} value={tz}>{tz}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="currency">Currency</Label>
-                    <Input id="currency" name="currency" defaultValue={settings?.currency ?? "USD"} />
+                    <Label>Currency</Label>
+                    <Select
+                      value={settingsForm.watch("currency")}
+                      onValueChange={(v) => settingsForm.setValue("currency", v)}
+                      disabled={updateSettings.isPending}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {CURRENCIES.map((c) => (
+                          <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="pagination_per_page">Items Per Page</Label>
-                    <Input id="pagination_per_page" name="pagination_per_page" type="number" defaultValue={settings?.pagination_per_page ?? 15} />
+                    <Input id="pagination_per_page" type="number" {...settingsForm.register("pagination_per_page")} disabled={updateSettings.isPending} />
+                    {settingsForm.formState.errors.pagination_per_page && (
+                      <p className="text-sm text-destructive">{settingsForm.formState.errors.pagination_per_page.message}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      id="maintenance_mode"
+                      checked={settingsForm.watch("maintenance_mode")}
+                      onCheckedChange={(v) => settingsForm.setValue("maintenance_mode", v)}
+                      disabled={updateSettings.isPending}
+                    />
+                    <Label htmlFor="maintenance_mode">Maintenance Mode</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      id="email_notifications"
+                      checked={settingsForm.watch("email_notifications")}
+                      onCheckedChange={(v) => settingsForm.setValue("email_notifications", v)}
+                      disabled={updateSettings.isPending}
+                    />
+                    <Label htmlFor="email_notifications">Email Notifications</Label>
                   </div>
                 </div>
                 <Button type="submit" disabled={updateSettings.isPending}>

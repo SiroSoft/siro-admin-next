@@ -8,6 +8,8 @@ export const createUserSchema = z
     password_confirmation: z.string(),
     role: z.string().min(1, "Role is required"),
     status: z.string().min(1, "Status is required"),
+    avatar: z.string().optional(),
+    phone: z.string().optional(),
   })
   .refine((data) => data.password === data.password_confirmation, {
     message: "Passwords do not match",
@@ -19,6 +21,8 @@ export const updateUserSchema = z.object({
   email: z.string().email("Invalid email"),
   role: z.string().min(1, "Role is required"),
   status: z.string().min(1, "Status is required"),
+  avatar: z.string().optional(),
+  phone: z.string().optional(),
 });
 
 export type CreateUserFormData = z.infer<typeof createUserSchema>;

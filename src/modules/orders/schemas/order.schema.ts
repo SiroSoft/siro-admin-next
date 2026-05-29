@@ -13,6 +13,8 @@ export const createOrderSchema = z.object({
   billing_address: z.string().optional(),
   notes: z.string().optional(),
   payment_method: z.string().optional(),
+  status: z.string().optional(),
+  customer_id: z.coerce.number().optional(),
 });
 
 export const updateOrderSchema = z.object({
