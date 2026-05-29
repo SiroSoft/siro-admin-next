@@ -12,7 +12,7 @@ export function useUpdateProfile() {
   return useMutation({
     mutationFn: (data: any) => profileService.update(data),
     onSuccess: (user) => {
-      setUser(user as any);
+      setUser(user ?? null);
       queryClient.invalidateQueries({ queryKey: ["auth", "session"] });
       toast({ title: "Profile updated", description: "Your profile has been updated." });
     },

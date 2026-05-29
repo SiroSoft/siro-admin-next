@@ -35,7 +35,7 @@ export function useAuth() {
       setLoading(true);
       try {
         const userData = await authService.me();
-        useAuthStore.getState().setUser(userData as any);
+        useAuthStore.getState().setUser(userData ?? null);
         return userData;
       } catch {
         useAuthStore.getState().logout();

@@ -596,6 +596,8 @@ export interface components {
             role: "admin" | "editor" | "viewer";
             /** @enum {string} */
             status: "active" | "inactive" | "suspended";
+            avatar?: string;
+            phone?: string;
         };
         UpdateUserRequest: {
             name: string;
@@ -605,6 +607,8 @@ export interface components {
             role: "admin" | "editor" | "viewer";
             /** @enum {string} */
             status: "active" | "inactive" | "suspended";
+            avatar?: string;
+            phone?: string;
         };
         Order: {
             id?: number;
@@ -659,6 +663,8 @@ export interface components {
             billing_address?: string;
             notes?: string;
             payment_method?: string;
+            status?: string;
+            customer_id?: number;
         };
         UpdateOrderRequest: {
             /** @enum {string} */
@@ -727,6 +733,7 @@ export interface components {
             /** @default false */
             is_featured: boolean;
             category_id?: number | null;
+            cover_image?: string;
         };
         UpdateProductRequest: {
             name?: string;
@@ -746,6 +753,7 @@ export interface components {
             is_active?: boolean;
             is_featured?: boolean;
             category_id?: number | null;
+            cover_image?: string;
         };
         Category: {
             id?: number;
@@ -849,10 +857,14 @@ export interface components {
         CreateTagRequest: {
             name: string;
             color?: string;
+            description?: string;
+            is_active?: boolean;
         };
         UpdateTagRequest: {
             name?: string;
             color?: string;
+            description?: string;
+            is_active?: boolean;
         };
         Settings: {
             app_name?: string;
