@@ -30,6 +30,7 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
         <Button
           variant="outline"
           size="icon"
+          className="h-8 w-8"
           disabled={currentPage <= 1}
           onClick={() => onPageChange(currentPage - 1)}
         >
@@ -49,6 +50,7 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
         <Button
           variant="outline"
           size="icon"
+          className="h-8 w-8"
           disabled={currentPage >= last_page}
           onClick={() => onPageChange(currentPage + 1)}
         >
