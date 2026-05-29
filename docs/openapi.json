@@ -2207,20 +2207,37 @@
       "AuthTokenResponse": {
         "type": "object",
         "properties": {
-          "access_token": {
-            "type": "string"
+          "success": {
+            "type": "boolean",
+            "example": true
           },
-          "refresh_token": {
-            "type": "string"
+          "message": {
+            "type": "string",
+            "example": "Login successful"
           },
-          "token_type": {
-            "type": "string"
-          },
-          "expires_in": {
-            "type": "integer"
-          },
-          "user": {
-            "$ref": "#/components/schemas/User"
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "example": "eyJ..."
+              },
+              "refresh_token": {
+                "type": "string",
+                "example": "eyJ..."
+              },
+              "token_type": {
+                "type": "string",
+                "example": "Bearer"
+              },
+              "expires_in": {
+                "type": "integer",
+                "example": 3600
+              },
+              "user": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
           }
         }
       },
@@ -3442,6 +3459,40 @@
           "token": {
             "type": "string",
             "example": "verification-token"
+          }
+        }
+      },
+      "RefreshTokenResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Token refreshed"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "example": "eyJ..."
+              },
+              "refresh_token": {
+                "type": "string",
+                "example": "eyJ..."
+              },
+              "token_type": {
+                "type": "string",
+                "example": "Bearer"
+              },
+              "expires_in": {
+                "type": "integer",
+                "example": 3600
+              }
+            }
           }
         }
       }

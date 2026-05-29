@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { API_URL, STORAGE_KEYS } from "@/lib/constants";
+import type { components } from "@/types/api";
 
 function generateRequestId(): string {
   return `req_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
@@ -96,9 +97,9 @@ api.interceptors.response.use(
         const { data } = await axios.post<
           components["schemas"]["AuthTokenResponse"]
         >(`${API_URL}/api/auth/refresh`, { refresh_token: refreshToken });
-        const tokens = data.data || data;
-        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, tokens.token);
-        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, tokens.refresh_token);
+        const payload = data.data!;
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, payload.token!);
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, payload.refresh_token!);
         processQueue(null);
         return api(originalRequest);
       } catch (refreshError) {

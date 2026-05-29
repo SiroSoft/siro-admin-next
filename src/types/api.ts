@@ -539,11 +539,21 @@ export interface components {
             timestamp: number;
         };
         AuthTokenResponse: {
-            access_token?: string;
-            refresh_token?: string;
-            token_type?: string;
-            expires_in?: number;
-            user?: components["schemas"]["User"];
+            /** @example true */
+            success?: boolean;
+            /** @example Login successful */
+            message?: string;
+            data?: {
+                /** @example eyJ... */
+                token?: string;
+                /** @example eyJ... */
+                refresh_token?: string;
+                /** @example Bearer */
+                token_type?: string;
+                /** @example 3600 */
+                expires_in?: number;
+                user?: components["schemas"]["User"];
+            };
         };
         UploadResponse: {
             path?: string;
@@ -960,6 +970,22 @@ export interface components {
         VerifyEmailRequest: {
             /** @example verification-token */
             token: string;
+        };
+        RefreshTokenResponse: {
+            /** @example true */
+            success?: boolean;
+            /** @example Token refreshed */
+            message?: string;
+            data?: {
+                /** @example eyJ... */
+                token?: string;
+                /** @example eyJ... */
+                refresh_token?: string;
+                /** @example Bearer */
+                token_type?: string;
+                /** @example 3600 */
+                expires_in?: number;
+            };
         };
     };
     responses: never;
