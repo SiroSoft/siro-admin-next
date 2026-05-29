@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -78,7 +79,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
 
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea id="description" {...register("description")} placeholder="Full product description" disabled={isPending} />
+        <RichTextEditor value={watch("description") ?? ""} onChange={(html) => setValue("description", html, { shouldValidate: true })} placeholder="Full product description..." disabled={isPending} minHeight={200} />
       </div>
 
       <div className="space-y-2">

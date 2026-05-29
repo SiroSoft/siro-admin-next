@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ImageUpload } from "@/components/ui/image-upload";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import {
   createPostSchema,
   updatePostSchema,
@@ -78,14 +79,14 @@ export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="content">Content *</Label>
-        <textarea
-          id="content"
-          {...register("content")}
-          className="flex min-h-[120px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-          placeholder="Post content..."
+        <RichTextEditor
+          value={watch("content") ?? ""}
+          onChange={(html) => setValue("content", html, { shouldValidate: true })}
+          placeholder="Write your post content..."
           disabled={isPending}
+          error={errors.content?.message}
+          minHeight={300}
         />
-        {errors.content && <p className="text-sm text-destructive">{errors.content.message}</p>}
       </div>
 
       <div className="space-y-2">
