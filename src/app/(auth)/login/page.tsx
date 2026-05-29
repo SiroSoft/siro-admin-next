@@ -67,9 +67,12 @@ export default function LoginPage() {
 
   return (
     <Card className="shadow-lg">
-      <CardHeader className="space-y-1 text-center">
-        <CardTitle className="text-2xl font-bold">{APP_NAME}</CardTitle>
-        <CardDescription>Sign in to your account</CardDescription>
+      <CardHeader className="space-y-4 text-center">
+        <img src="/logo.svg" alt="Siro Admin" className="mx-auto h-12 w-12" />
+        <div>
+          <CardTitle className="text-2xl font-bold">{APP_NAME}</CardTitle>
+          <CardDescription>Sign in to your account</CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

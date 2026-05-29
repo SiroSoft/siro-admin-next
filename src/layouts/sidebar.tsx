@@ -47,12 +47,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
         collapsed ? "w-16" : "w-60",
       )}
     >
-      <div className={cn("flex h-14 items-center border-b border-sidebar-border px-4", collapsed && "justify-center")}>
-        {!collapsed && (
-          <Link href="/" className="text-sm font-bold text-sidebar-foreground truncate">
-            {APP_NAME}
-          </Link>
-        )}
+      <div className={cn("flex h-14 items-center border-b border-sidebar-border px-4 gap-2", collapsed && "justify-center")}>
+        <Link href="/" className="flex items-center gap-2 truncate">
+          <img src="/logo.svg" alt="Siro Admin" className="h-7 w-7 shrink-0" />
+          {!collapsed && <span className="text-sm font-bold text-sidebar-foreground">{APP_NAME}</span>}
+        </Link>
         <Button
           variant="ghost"
           size="icon"
