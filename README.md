@@ -1,4 +1,3 @@
-<![CDATA[
 # Siro Admin — Next.js 15 Enterprise Starter
 
 > **Production-ready admin panel for [SiroPHP](https://sirophp.com) — the zero-dependency PHP API framework.**
@@ -240,4 +239,3 @@ MIT — built for [SiroPHP](https://sirophp.com).
   <br>
   <strong>Powered by <a href="https://sirophp.com">SiroPHP</a></strong> — 1 command, 0 dependency.
 </p>
-]]>
