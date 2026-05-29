@@ -23,7 +23,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       >
         <Header onMenuToggle={() => setMobileOpen(true)} />
 
-        <main className="p-4 lg:p-6">
+        <main className="p-4 lg:p-6 animate-fade-in">
           {children}
         </main>
       </div>

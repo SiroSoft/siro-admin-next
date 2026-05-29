@@ -2,7 +2,8 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { Users, ShoppingCart, DollarSign, Activity, Package, FileText, TrendingUp, TrendingDown, Plus, Eye, Settings } from "lucide-react";
+import { Users, ShoppingCart, DollarSign, Package, TrendingUp, TrendingDown, Plus, Eye, Settings } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/page-header";
@@ -184,23 +185,28 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {data?.monthly_revenue && data.monthly_revenue.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-6 gap-2">
-              {data.monthly_revenue.map((m) => (
-                <div key={m.month} className="text-center">
-                  <div className="text-xs text-muted-foreground">{m.month}</div>
-                  <div className="text-sm font-semibold mt-1">${formatNumber(m.revenue ?? 0)}</div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <Card>
+        <CardHeader><CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle></CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <Skeleton className="h-[300px] w-full" />
+          ) : isError ? (
+            <p className="text-muted-foreground text-center py-8">Failed to load revenue data</p>
+          ) : data?.monthly_revenue && data.monthly_revenue.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={data.monthly_revenue}>
+                <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                <XAxis dataKey="month" className="text-xs fill-muted-foreground" />
+                <YAxis className="text-xs fill-muted-foreground" />
+                <Tooltip contentStyle={{ backgroundColor: "hsl(var(--popover))", border: "1px solid hsl(var(--border))", borderRadius: "var(--radius)" }} />
+                <Bar dataKey="revenue" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <p className="text-muted-foreground text-center py-8">No revenue data available</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }

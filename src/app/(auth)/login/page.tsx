@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
@@ -85,6 +87,13 @@ export default function LoginPage() {
               {(loginError as any)?.response?.data?.message || "Invalid credentials"}
             </p>
           )}
+
+          <div className="flex items-center justify-between">
+            <label className="flex items-center gap-2 text-sm">
+              <Checkbox name="remember" /> Remember me
+            </label>
+            <Link href="/forgot-password" className="text-sm text-primary hover:underline">Forgot password?</Link>
+          </div>
 
           <Button type="submit" className="w-full" disabled={isLoginPending}>
             {isLoginPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}

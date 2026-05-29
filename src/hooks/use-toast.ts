@@ -6,7 +6,7 @@ export interface Toast {
   id: string;
   title: string;
   description?: string;
-  variant?: "default" | "destructive";
+  variant?: "default" | "destructive" | "success" | "warning" | "info";
 }
 
 let toastListeners: Array<(toast: Toast) => void> = [];
@@ -23,9 +23,12 @@ export function useToast() {
 
   const addToast = useCallback((t: Toast) => {
     setToasts((prev) => [...prev, t]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((x) => x.id !== t.id));
-    }, 5000);
+    const autoDismissVariants: Toast["variant"][] = ["default", "success", "warning", "info"];
+    if (autoDismissVariants.includes(t.variant ?? "default")) {
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((x) => x.id !== t.id));
+      }, 5000);
+    }
   }, []);
 
   const dismiss = useCallback((id: string) => {

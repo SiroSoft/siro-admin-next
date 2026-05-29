@@ -49,13 +49,13 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
-        <Input id="name" {...register("name")} placeholder="John Doe" />
+        <Input id="name" {...register("name")} placeholder="John Doe" disabled={isPending} />
         {(errors as any).name && <p className="text-sm text-destructive">{(errors as any).name.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" {...register("email")} placeholder="john@example.com" />
+        <Input id="email" type="email" {...register("email")} placeholder="john@example.com" disabled={isPending} />
         {(errors as any).email && <p className="text-sm text-destructive">{(errors as any).email.message}</p>}
       </div>
 
@@ -63,14 +63,14 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
         <>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" {...register("password" as any)} placeholder="••••••••" />
+            <Input id="password" type="password" {...register("password" as any)} placeholder="••••••••" disabled={isPending} />
             {(errors as any).password && (
               <p className="text-sm text-destructive">{(errors as any).password.message}</p>
             )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password_confirmation">Confirm Password</Label>
-            <Input id="password_confirmation" type="password" {...register("password_confirmation" as any)} placeholder="••••••••" />
+            <Input id="password_confirmation" type="password" {...register("password_confirmation" as any)} placeholder="••••••••" disabled={isPending} />
             {(errors as any).password_confirmation && (
               <p className="text-sm text-destructive">{(errors as any).password_confirmation.message}</p>
             )}
@@ -78,7 +78,7 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
         </>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Role</Label>
           <Select
