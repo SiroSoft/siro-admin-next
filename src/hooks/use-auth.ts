@@ -52,7 +52,7 @@ export function useAuth() {
     user,
     isAuthenticated,
     isLoading: isLoading || sessionQuery.isLoading,
-    login: loginMutation.mutateAsync,
+    login: loginMutation.mutate,
     loginError: loginMutation.error,
     isLoginPending: loginMutation.isPending,
     logout: logoutMutation.mutate,
