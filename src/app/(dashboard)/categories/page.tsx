@@ -8,7 +8,6 @@ import { SearchInput } from "@/components/search-input";
 import { CategoryTable } from "@/modules/categories/components/category-table";
 import { CategoryFormDialog } from "@/modules/categories/components/category-form-dialog";
 import { useCreateCategory, useUpdateCategory } from "@/hooks/use-categories";
-import { useDebounce } from "@/hooks/use-debounce";
 import type { components } from "@/types/api";
 
 type Category = components["schemas"]["Category"];
@@ -19,12 +18,10 @@ export default function CategoriesPage() {
   const [editCategory, setEditCategory] = useState<Category | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
-  const debouncedSearch = useDebounce(search);
-
   const createMutation = useCreateCategory();
   const updateMutation = useUpdateCategory(editCategory?.id ?? 0);
 
-  const params = { page, search: debouncedSearch || undefined, per_page: 10 };
+  const params = { page, search: search || undefined, per_page: 10 };
 
   const handleEdit = useCallback((category: Category) => setEditCategory(category), []);
 

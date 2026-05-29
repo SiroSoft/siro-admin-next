@@ -8,7 +8,6 @@ import { SearchInput } from "@/components/search-input";
 import { TagTable } from "@/modules/tags/components/tag-table";
 import { TagFormDialog } from "@/modules/tags/components/tag-form-dialog";
 import { useCreateTag, useUpdateTag } from "@/hooks/use-tags";
-import { useDebounce } from "@/hooks/use-debounce";
 import type { components } from "@/types/api";
 
 type Tag = components["schemas"]["Tag"];
@@ -19,12 +18,10 @@ export default function TagsPage() {
   const [editTag, setEditTag] = useState<Tag | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
-  const debouncedSearch = useDebounce(search);
-
   const createMutation = useCreateTag();
   const updateMutation = useUpdateTag(editTag?.id ?? 0);
 
-  const params = { page, search: debouncedSearch || undefined, per_page: 10 };
+  const params = { page, search: search || undefined, per_page: 10 };
 
   const handleEdit = useCallback((tag: Tag) => setEditTag(tag), []);
 

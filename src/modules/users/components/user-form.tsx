@@ -42,7 +42,7 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
       role: user?.role ?? "viewer",
       status: user?.status ?? "active",
       avatar: user?.avatar ?? "",
-      phone: user?.["phone" as keyof User] ?? "",
+      phone: user?.phone ?? "",
     } as CreateUserFormData | UpdateUserFormData,
   });
 
@@ -54,13 +54,13 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
+        <Label htmlFor="name">Name <span className="text-destructive">*</span></Label>
         <Input id="name" {...register("name")} placeholder="John Doe" disabled={isPending} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
         <Input id="email" type="email" {...register("email")} placeholder="john@example.com" disabled={isPending} />
         {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
       </div>
@@ -73,12 +73,12 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
       {!isEdit && (
         <>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Password <span className="text-destructive">*</span></Label>
             <Input id="password" type="password" {...register("password")} placeholder="••••••••" disabled={isPending} />
             {"password" in errors && <p className="text-sm text-destructive">{String((errors as { password?: { message?: string } }).password?.message)}</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password_confirmation">Confirm Password</Label>
+            <Label htmlFor="password_confirmation">Confirm Password <span className="text-destructive">*</span></Label>
             <Input id="password_confirmation" type="password" {...register("password_confirmation")} placeholder="••••••••" disabled={isPending} />
             {"password_confirmation" in errors && <p className="text-sm text-destructive">{String((errors as { password_confirmation?: { message?: string } }).password_confirmation?.message)}</p>}
           </div>

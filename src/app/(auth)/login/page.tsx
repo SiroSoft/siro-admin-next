@@ -77,13 +77,14 @@ export default function LoginPage() {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
             <Input
               id="email"
               type="email"
               placeholder="admin@example.com"
               {...register("email")}
               autoComplete="email"
+              autoFocus
             />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -91,7 +92,7 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">Password <span className="text-destructive">*</span></Label>
             <div className="relative">
               <Input
                 id="password"

@@ -8,7 +8,6 @@ import { SearchInput } from "@/components/search-input";
 import { ProductTable } from "@/modules/products/components/product-table";
 import { ProductFormDialog } from "@/modules/products/components/product-form-dialog";
 import { useCreateProduct, useUpdateProduct } from "@/hooks/use-products";
-import { useDebounce } from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
 import type { components } from "@/types/api";
 
@@ -27,12 +26,10 @@ export default function ProductsPage() {
   const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
-  const debouncedSearch = useDebounce(search);
-
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct(editProduct?.id ?? 0);
 
-  const params = { page, search: debouncedSearch || undefined, is_active: status || undefined, per_page: 10 };
+  const params = { page, search: search || undefined, is_active: status || undefined, per_page: 10 };
 
   const handleEdit = useCallback((product: Product) => setEditProduct(product), []);
 

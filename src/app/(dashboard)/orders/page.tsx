@@ -8,7 +8,6 @@ import { SearchInput } from "@/components/search-input";
 import { OrderTable } from "@/modules/orders/components/order-table";
 import { OrderFormDialog } from "@/modules/orders/components/order-form-dialog";
 import { useCreateOrder, useUpdateOrder } from "@/hooks/use-orders";
-import { useDebounce } from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
 import type { components } from "@/types/api";
 
@@ -30,12 +29,10 @@ export default function OrdersPage() {
   const [editOrder, setEditOrder] = useState<Order | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
-  const debouncedSearch = useDebounce(search);
-
   const createMutation = useCreateOrder();
   const updateMutation = useUpdateOrder(editOrder?.id ?? 0);
 
-  const params = { page, search: debouncedSearch || undefined, status: status || undefined, per_page: 10 };
+  const params = { page, search: search || undefined, status: status || undefined, per_page: 10 };
 
   const handleEdit = useCallback((order: Order) => setEditOrder(order), []);
 

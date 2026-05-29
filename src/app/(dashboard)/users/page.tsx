@@ -14,8 +14,6 @@ import { toast } from "@/hooks/use-toast";
 import type { components } from "@/types/api";
 
 type User = components["schemas"]["User"];
-import { useDebounce } from "@/hooks/use-debounce";
-
 export default function UsersPage() {
   const router = useRouter();
   const [search, setSearch] = useState("");
@@ -25,14 +23,12 @@ export default function UsersPage() {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [showBulkDelete, setShowBulkDelete] = useState(false);
 
-  const debouncedSearch = useDebounce(search);
-
   const createMutation = useCreateUser();
   const updateMutation = useUpdateUser(editUser?.id ?? 0);
 
   const params = {
     page,
-    search: debouncedSearch || undefined,
+    search: search || undefined,
     per_page: 10,
   };
 
@@ -70,9 +66,8 @@ export default function UsersPage() {
 
   const confirmBulkDelete = useCallback(async () => {
     try {
-      for (const id of selectedIds) {
-        await fetch(`/api/users/${id}`, { method: "DELETE" });
-      }
+      const { usersService } = await import("@/services/users.service");
+      await Promise.all(selectedIds.map((id) => usersService.delete(id)));
       setSelectedIds([]);
       setShowBulkDelete(false);
       refetch();

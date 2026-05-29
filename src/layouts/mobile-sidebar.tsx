@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useCallback } from "react";
-import { X, LayoutDashboard, Users, ShoppingCart, FileText, Settings, Package, Tags, User } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { X, LayoutDashboard, Users, ShoppingCart, FileText, Settings, Package, Tags, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { APP_NAME } from "@/lib/constants";
@@ -26,6 +27,7 @@ const navItems = [
 
 export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
   const pathname = usePathname();
+  const { logout } = useAuth();
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape" && open) onClose();
@@ -80,6 +82,16 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
             );
           })}
         </nav>
+
+        <div className="absolute bottom-4 left-4 right-4">
+          <button
+            onClick={() => { logout(); onClose(); }}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors active:scale-[0.98]"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </button>
+        </div>
       </aside>
     </>
   );

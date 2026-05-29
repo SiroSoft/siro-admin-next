@@ -8,7 +8,6 @@ import { SearchInput } from "@/components/search-input";
 import { PostTable } from "@/modules/posts/components/post-table";
 import { PostFormDialog } from "@/modules/posts/components/post-form-dialog";
 import { useCreatePost, useUpdatePost } from "@/hooks/use-posts";
-import { useDebounce } from "@/hooks/use-debounce";
 import type { components } from "@/types/api";
 
 type Post = components["schemas"]["Post"];
@@ -19,12 +18,10 @@ export default function PostsPage() {
   const [editPost, setEditPost] = useState<Post | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
-  const debouncedSearch = useDebounce(search);
-
   const createMutation = useCreatePost();
   const updateMutation = useUpdatePost(editPost?.id ?? 0);
 
-  const params = { page, search: debouncedSearch || undefined, per_page: 10 };
+  const params = { page, search: search || undefined, per_page: 10 };
 
   const handleEdit = useCallback((post: Post) => setEditPost(post), []);
 
