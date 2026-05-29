@@ -108,7 +108,7 @@ export default function UsersPage() {
         </Button>
       </PageHeader>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <SearchInput
           value={search}
           onChange={(v) => {

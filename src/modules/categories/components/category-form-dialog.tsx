@@ -23,7 +23,7 @@ interface CategoryFormDialogProps {
 export function CategoryFormDialog({ open, onOpenChange, category, onSubmit, isPending }: CategoryFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{category ? "Edit Category" : "Create Category"}</DialogTitle>
           <DialogDescription>

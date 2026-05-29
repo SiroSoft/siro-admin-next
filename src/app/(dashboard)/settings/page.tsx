@@ -316,7 +316,7 @@ export default function SettingsPage() {
                   <Label htmlFor="app_description">Description</Label>
                   <Input id="app_description" {...settingsForm.register("app_description")} disabled={updateSettings.isPending} />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Language</Label>
                     <Select
@@ -352,7 +352,7 @@ export default function SettingsPage() {
                     </Select>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Currency</Label>
                     <Select

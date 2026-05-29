@@ -47,7 +47,7 @@ export default function PostsPage() {
         </Button>
       </PageHeader>
 
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Search posts..." />
       </div>
 

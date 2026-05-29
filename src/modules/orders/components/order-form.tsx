@@ -83,7 +83,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
   );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
       {isEdit ? (
         <>
           {statusField}

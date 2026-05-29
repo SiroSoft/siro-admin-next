@@ -47,7 +47,7 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
       <div className="space-y-2">
         <Label>Avatar</Label>
         <ImageUpload value={watch("avatar") ?? ""} onChange={(v) => setValue("avatar", v)} disabled={isPending} />

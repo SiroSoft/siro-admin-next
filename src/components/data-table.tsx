@@ -51,7 +51,7 @@ export function DataTable<TData>({ table, isLoading }: DataTableProps<TData>) {
   const columns = table.getAllColumns();
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border overflow-x-auto">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

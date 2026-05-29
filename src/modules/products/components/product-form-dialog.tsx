@@ -23,7 +23,7 @@ interface ProductFormDialogProps {
 export function ProductFormDialog({ open, onOpenChange, product, onSubmit, isPending }: ProductFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{product ? "Edit Product" : "Create Product"}</DialogTitle>
           <DialogDescription>

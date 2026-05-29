@@ -23,7 +23,7 @@ interface TagFormDialogProps {
 export function TagFormDialog({ open, onOpenChange, tag, onSubmit, isPending }: TagFormDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{tag ? "Edit Tag" : "Create Tag"}</DialogTitle>
           <DialogDescription>

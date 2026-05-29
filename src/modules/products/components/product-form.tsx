@@ -63,7 +63,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">Name *</Label>
           <Input id="name" {...register("name")} placeholder="Product name" disabled={isPending} />
@@ -86,7 +86,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
         <Textarea id="short_description" {...register("short_description")} placeholder="Brief product summary" disabled={isPending} />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="price">Price *</Label>
           <div className="relative">
@@ -111,7 +111,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="stock">Stock</Label>
           <Input id="stock" type="number" {...register("stock")} disabled={isPending} />
@@ -122,7 +122,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="weight">Weight</Label>
           <Input id="weight" type="number" step="0.01" {...register("weight")} disabled={isPending} />
@@ -137,7 +137,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="barcode">Barcode</Label>
           <Input id="barcode" {...register("barcode")} disabled={isPending} />
