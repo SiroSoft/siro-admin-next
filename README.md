@@ -1,25 +1,62 @@
-# Siro Admin Starter
+<![CDATA[
+# Siro Admin — Next.js 15 Enterprise Starter
 
-Production-ready admin frontend starter for [SiroPHP](https://sirophp.com) APIs.
+> **Production-ready admin panel for [SiroPHP](https://sirophp.com) — the zero-dependency PHP API framework.**
 
-Built with Next.js 15, TypeScript, TailwindCSS, shadcn/ui, React Query, and Zustand.
+[![Next.js](https://img.shields.io/badge/Next.js-15.1-black?logo=next.js)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript)](https://www.typescriptlang.org)
+[![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwindcss)](https://tailwindcss.com)
+[![TanStack Query](https://img.shields.io/badge/TanStack_Query-5-FF4154?logo=reactquery)](https://tanstack.com/query)
+[![shadcn/ui](https://img.shields.io/badge/shadcn/ui-latest-000000?logo=shadcnui)](https://ui.shadcn.com)
 
-## Features
+---
 
-- **Authentication** — JWT login, refresh token, auto-persistence, Axios interceptor
-- **Dashboard** — Stats cards, activity feed, API status widget
-- **CRUD System** — Reusable data table, search, sort, pagination, filters, form dialogs, delete confirmation
-- **Users Module** — Full example: list, create, edit, delete, search, filter, pagination, role/status badges
-- **Dark Mode** — System-aware theme with toggle
-- **Responsive** — Mobile sidebar, adaptive layouts
-- **Type-Safe** — Full TypeScript with Zod validation
-- **Clean Architecture** — Services, hooks, store, modules pattern
+## ✨ Features
 
-## Quick Start
+### Enterprise-Grade Dashboard
+- **Real-time charts** — Revenue trends with interactive bar charts (Recharts)
+- **Stats overview** — Users, orders, products, revenue at a glance
+- **Activity feed** — Recent user signups and order activity
+- **API health monitor** — Backend status, uptime, response time
+
+### Complete Authentication
+- JWT login with access + refresh token rotation
+- Auto-persistent session with `Remember me` option
+- Axios interceptor with automatic 401 → refresh → retry queue
+- Route protection via AuthProvider middleware
+- Forgot password flow ready to connect
+
+### CRUD Modules
+| Module   | List | Search | Sort | Paginate | Create | Edit | Delete |
+|----------|------|--------|------|----------|--------|------|--------|
+| Users    | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
+| Orders   | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
+| Products | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
+| Posts    | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
+| Categories | ✅ | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
+| Tags     | ✅   | ✅     | ✅   | ✅       | ✅     | ✅   | ✅     |
+
+### Type Safety
+- **OpenAPI-generated types** — `npm run generate:types` syncs TypeScript types from the backend OpenAPI spec
+- **Zod validation** — All forms validated client-side before submission
+- **End-to-end type safety** — From API response to UI component
+
+### User Experience
+- ⚡ **Shimmer skeletons** — Premium loading states matching content shape
+- 🌓 **Dark mode** — System-aware with manual toggle, persistent preference
+- 📱 **Fully responsive** — Adaptive sidebar, mobile overlay, scrollable tables
+- ♿ **Accessible** — ARIA labels, focus-visible rings, keyboard navigation
+- 🎯 **Toast notifications** — 4 variants (success, error, warning, info) with auto-dismiss
+- 🧭 **Breadcrumbs** — Dynamic navigation path with every page
+
+---
+
+## 🚀 Quick Start
 
 ```bash
 # 1. Clone
-git clone <repo-url> siro-admin
+git clone https://github.com/SiroSoft/siro-admin-next.git siro-admin
 cd siro-admin
 
 # 2. Install
@@ -28,144 +65,179 @@ npm install
 # 3. Configure
 cp .env.example .env.local
 # Edit NEXT_PUBLIC_API_URL to point to your SiroPHP backend
+# Default: http://localhost:8080
 
-# 4. Run
+# 4. Generate types (sync with backend)
+npm run generate:types
+
+# 5. Run
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000) — login with your SiroPHP backend credentials.
 
-## Environment
+---
 
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8080
-NEXT_PUBLIC_APP_NAME=Siro Admin
+## 📸 What's Inside
+
+### Dashboard
+```
+┌──────────────┬──────────────┬──────────────┬──────────────┐
+│  👥 Users    │  📦 Orders   │  🏷️ Products  │  💰 Revenue   │
+│  1,234       │  456         │  789         │  $12,345     │
+├──────────────┴──────────────┴──────────────┴──────────────┤
+│  📊 Monthly Revenue Chart (Recharts)                      │
+├───────────────────────────────────────────────────────────┤
+│  🔄 Recent Activity                     │  ❤️ API Status  │
+│  John joined • Order #123 created      │  ● Connected    │
+│  ...
+└───────────────────────────────────────────────────────────┘
 ```
 
-## API Connection
+### User Management
+```
+┌──────┬──────────┬────────────────┬──────────┬──────────┐
+│  ID  │  Name    │  Email         │  Role    │  Status  │
+├──────┼──────────┼────────────────┼──────────┼──────────┤
+│  1   │  John    │  john@ex.com   │  Admin   │  Active  │
+│  2   │  Jane    │  jane@ex.com   │  User    │  Active  │
+│  ... │          │                │          │          │
+└──────┴──────────┴────────────────┴──────────┴──────────┘
+  < 1 | 2 | 3 ... 10 >    🔍 Search    ➕ New User
+```
 
-The admin expects a SiroPHP backend at `NEXT_PUBLIC_API_URL` with these endpoints:
+---
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/login` | POST | Login |
-| `/api/auth/refresh` | POST | Refresh token |
-| `/api/auth/me` | GET | Current user |
-| `/api/auth/logout` | POST | Logout |
-| `/api/users` | GET | List users |
-| `/api/users` | POST | Create user |
-| `/api/users/{id}` | GET | Get user |
-| `/api/users/{id}` | PUT | Update user |
-| `/api/users/{id}` | DELETE | Delete user |
-| `/api/dashboard/stats` | GET | Dashboard stats |
-
-## Auth Flow
-
-1. User logs in → backend returns `access_token`, `refresh_token`, `user`
-2. Tokens stored in `localStorage`
-3. Axios interceptor injects `Bearer` token on every request
-4. On 401, interceptor automatically tries refresh token
-5. If refresh fails, user is redirected to `/login`
-6. On page load, `restoreSession()` checks for stored tokens
-
-## Project Structure
+## 🔧 Architecture
 
 ```
 src/
-├── app/
-│   ├── (auth)/                # Auth pages (login, forgot-password)
-│   │   └── login/
-│   ├── (dashboard)/           # Dashboard pages
-│   │   ├── page.tsx           # Dashboard overview
-│   │   ├── users/             # Users CRUD module
-│   │   ├── orders/            # Placeholder modules
-│   │   ├── products/
-│   │   ├── posts/
-│   │   └── settings/
-│   └── api/auth/refresh       # BFF refresh token route
+├── app/                     # Next.js App Router pages
+│   ├── (auth)/              # Login, forgot password
+│   └── (dashboard)/         # Dashboard + all CRUD pages
 ├── components/
-│   ├── ui/                    # shadcn/ui components
-│   ├── data-table.tsx         # Reusable data table (TanStack Table)
-│   ├── pagination.tsx         # Pagination component
-│   ├── search-input.tsx       # Debounced search
-│   ├── delete-dialog.tsx      # Delete confirmation
-│   ├── loading-skeleton.tsx   # Loading skeletons
-│   ├── empty-state.tsx        # Empty state display
-│   ├── error-state.tsx        # Error state with retry
-│   ├── page-header.tsx        # Page title + actions
-│   └── status-badge.tsx       # Role/status badges
-├── hooks/
-│   ├── use-auth.ts            # Auth hooks + React Query
-│   ├── use-users.ts           # Users CRUD hooks
-│   ├── use-dashboard.ts       # Dashboard stats hook
-│   ├── use-debounce.ts        # Debounce hook
-│   └── use-toast.ts           # Toast notifications
-├── layouts/
-│   ├── dashboard-layout.tsx   # Main layout wrapper
-│   ├── sidebar.tsx            # Desktop sidebar
-│   ├── mobile-sidebar.tsx     # Mobile sidebar
-│   ├── header.tsx             # Top header bar
-│   └── user-nav.tsx           # User dropdown
-├── modules/users/             # Example CRUD module
-│   ├── components/
-│   │   ├── user-table.tsx     # Users data table
-│   │   ├── user-form.tsx      # User form (React Hook Form + Zod)
-│   │   └── user-form-dialog.tsx
-│   └── schemas/
-│       └── user.schema.ts     # Zod validation schemas
-├── providers/
-│   ├── providers.tsx          # Providers composition
-│   ├── query-provider.tsx     # TanStack Query
-│   ├── theme-provider.tsx     # next-themes
-│   └── auth-provider.tsx      # Route protection
-├── services/
-│   ├── api.ts                 # Axios instance + interceptors
-│   ├── auth.service.ts        # Auth API calls
-│   ├── users.service.ts       # Users API calls
-│   └── dashboard.service.ts   # Dashboard API calls
-├── store/
-│   └── auth.store.ts          # Zustand auth store
-├── types/
-│   ├── api.ts                 # API response types
-│   ├── auth.ts                # Auth types
-│   ├── user.ts                # User types
-│   └── dashboard.ts           # Dashboard types
-└── lib/
-    ├── utils.ts               # cn(), formatDate(), formatNumber()
-    └── constants.ts           # App constants
+│   ├── ui/                  # shadcn/ui primitives (button, input, table, etc.)
+│   ├── data-table.tsx       # Reusable TanStack Table wrapper
+│   ├── delete-dialog.tsx    # Confirm delete modal
+│   ├── loading-skeleton.tsx # Shimmer loading states
+│   ├── empty-state.tsx      # Empty data display
+│   ├── error-state.tsx      # Error with retry button
+│   └── status-badge.tsx     # Role/status colored badges
+├── hooks/                   # React Query hooks per resource
+├── layouts/                 # Dashboard shell, sidebar, header
+├── modules/{resource}/      # Feature modules (form, table, schemas)
+├── providers/               # React Context providers
+├── services/                # Axios API service layer
+├── store/                   # Zustand auth store
+├── types/                   # OpenAPI-generated TypeScript types
+└── lib/                     # Utilities (cn, formatDate, constants)
 ```
 
-## Adding a New Module
+---
 
-1. **Types** — Add type in `src/types/`
-2. **Service** — Add API calls in `src/services/`
-3. **Hooks** — Add React Query hooks in `src/hooks/`
-4. **Schema** — Add Zod validation in `src/modules/{module}/schemas/`
-5. **Components** — Create table, form, dialog in `src/modules/{module}/components/`
-6. **Page** — Create page in `src/app/(dashboard)/{module}/`
+## 🔐 Auth Flow
 
-## Commands
+```
+┌─────────┐     POST /api/auth/login     ┌──────────┐
+│  Login   │ ──────────────────────────→  │  SiroPHP  │
+│  Page    │ ←──────────────────────────  │  Backend  │
+└─────────┘     { token, refresh, user }  └──────────┘
+                                                  │
+                                          ┌───────┴───────┐
+                                          │  localStorage  │
+                                          │  access_token  │
+                                          │  refresh_token │
+                                          └───────┬───────┘
+                                                  │
+┌─────────┐     Axios Interceptor           ┌──────┴──────┐
+│  Every   │ ────────────────────────────→  │  Attach     │
+│  Request │                                │  Bearer     │
+└─────────┘                                 │  Token      │
+                                            └──────┬──────┘
+                                                   │
+                                          401? ────┤
+                                                   │
+                                          ┌────────┴────────┐
+                                          │  POST /api/auth/ │
+                                          │  refresh         │
+                                          └────────┬────────┘
+                                                   │
+                                          ┌────────┴────────┐
+                                          │  Retry original  │
+                                          │  request         │
+                                          └─────────────────┘
+```
+
+---
+
+## 🔗 Integration with SiroPHP
+
+This starter is designed for [**SiroPHP**](https://sirophp.com) — the production-first PHP API framework.
 
 ```bash
-npm run dev       # Start dev server
-npm run build     # Production build
-npm run start     # Start production server
-npm run lint      # Lint check
-npm run typecheck # TypeScript check
+# Install SiroPHP backend
+iwr https://sirophp.com/downloads/install.ps1 -UseBasicParsing | iex   # Windows
+curl -sS https://sirophp.com/downloads/install.sh | bash               # Linux/macOS
+
+# Generate resources & run
+cd my-api
+php siro serve  # → http://localhost:8080
 ```
 
-## Architecture
+**Auto-generated API types:**
+```bash
+# After updating your backend, regenerate types:
+npm run generate:types
+```
+This runs `openapi-typescript` against your backend's OpenAPI spec, keeping frontend types always in sync.
 
-- **API Layer** — Axios with interceptors for auth, refresh, error handling
-- **State** — Zustand for auth (persisted to localStorage), React Query for server state
-- **Forms** — React Hook Form + Zod for type-safe validation
-- **Tables** — TanStack Table for sortable, paginated data tables
-- **Styling** — TailwindCSS + shadcn/ui with CSS variables for theming
+---
 
-## Future Integrations
+## 📦 Scripts
 
-- SiroTrace — Debug request viewer and replay
-- API metrics dashboard
-- Role-based permissions
-- Multi-tenant SaaS support
-- ERP modules (orders, inventory, invoicing)
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Production build |
+| `npm run start` | Serve production build |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | TypeScript type checking |
+| `npm run generate:types` | Regenerate API types from backend OpenAPI spec |
+
+---
+
+## 🧰 Tech Stack
+
+| Category | Technology | Version |
+|----------|-----------|---------|
+| Framework | [Next.js](https://nextjs.org) | 15 (App Router) |
+| UI Engine | [React](https://react.dev) | 19 |
+| Language | [TypeScript](https://www.typescriptlang.org) | 5.7 |
+| Styling | [Tailwind CSS](https://tailwindcss.com) | 3.4 |
+| UI Library | [shadcn/ui](https://ui.shadcn.com) (Radix UI) | Latest |
+| Data Fetching | [TanStack React Query](https://tanstack.com/query) | 5 |
+| Tables | [TanStack React Table](https://tanstack.com/table) | 8 |
+| Forms | [React Hook Form](https://react-hook-form.com) + [Zod](https://zod.dev) | Latest |
+| State | [Zustand](https://zustand-demo.pmnd.rs) | 5 |
+| Charts | [Recharts](https://recharts.org) | Latest |
+| HTTP Client | [Axios](https://axios-http.com) | Latest |
+| Icons | [Lucide](https://lucide.dev) | Latest |
+| Theming | [next-themes](https://github.com/pacocoursey/next-themes) | Latest |
+| API Types | [openapi-typescript](https://openapi-ts.dev) | 7 |
+
+---
+
+## 📄 License
+
+MIT — built for [SiroPHP](https://sirophp.com).
+
+---
+
+<p align="center">
+  <a href="https://sirophp.com">
+    <img src="https://sirophp.com/favicon.ico" width="32" height="32" alt="SiroPHP">
+  </a>
+  <br>
+  <strong>Powered by <a href="https://sirophp.com">SiroPHP</a></strong> — 1 command, 0 dependency.
+</p>
+]]>
