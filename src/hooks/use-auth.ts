@@ -15,7 +15,8 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: (data: components["schemas"]["LoginRequest"]) => authService.login(data),
     onSuccess: (res) => {
-      login(res.user!, res.access_token!, res.refresh_token!);
+      const payload = res.data!;
+      login(payload.user!, payload.token!, payload.refresh_token!);
       router.push("/");
     },
   });

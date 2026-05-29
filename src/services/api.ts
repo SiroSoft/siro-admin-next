@@ -93,12 +93,12 @@ api.interceptors.response.use(
       }
 
       try {
-        const { data } = await axios.post(
-          `${API_URL}/api/auth/refresh`,
-          { refresh_token: refreshToken },
-        );
-        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, data.access_token);
-        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refresh_token);
+        const { data } = await axios.post<
+          components["schemas"]["AuthTokenResponse"]
+        >(`${API_URL}/api/auth/refresh`, { refresh_token: refreshToken });
+        const tokens = data.data || data;
+        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, tokens.token);
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, tokens.refresh_token);
         processQueue(null);
         return api(originalRequest);
       } catch (refreshError) {
