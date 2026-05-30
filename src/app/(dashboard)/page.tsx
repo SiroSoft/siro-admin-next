@@ -2,7 +2,7 @@
 
 import { useMemo, useCallback, useState } from "react";
 import Link from "next/link";
-import { Users, ShoppingCart, DollarSign, Package, TrendingUp, TrendingDown, Plus, Eye, Settings, RefreshCw } from "lucide-react";
+import { Users, ShoppingCart, DollarSign, Package, TrendingUp, TrendingDown, ArrowRight, Plus, Eye, Settings, RefreshCw, Activity, Server } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { ErrorState } from "@/components/error-state";
 import { EmptyState } from "@/components/empty-state";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/hooks/use-dashboard";
@@ -19,21 +20,26 @@ import type { components } from "@/types/api";
 
 type DashboardStats = components["schemas"]["DashboardStatsResponse"];
 
-function StatCard({ title, value, icon: Icon, trend, href }: { title: string; value: string; icon: any; trend?: { value: string; up: boolean }; href?: string }) {
+const iconColors: Record<string, string> = {
+  Users: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+  Orders: "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
+  Products: "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+  Revenue: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
+};
+
+function StatCard({ title, value, icon: Icon, href }: { title: string; value: string; icon: any; href?: string }) {
   const content = (
-    <Card className="hover:bg-muted/50">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        {trend && (
-          <div className={cn("flex items-center gap-1 mt-1 text-xs", trend.up ? "text-emerald-500" : "text-destructive")}>
-            {trend.up ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-            {trend.value}
+    <Card className="transition-all duration-200 hover:-translate-y-1 hover:shadow-lg cursor-pointer border-l-4 border-l-primary/20">
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between">
+          <div className={cn("rounded-xl p-3", iconColors[title] || "bg-muted")}>
+            <Icon className="h-5 w-5" />
           </div>
-        )}
+        </div>
+        <div className="mt-4">
+          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <p className="text-2xl font-bold tracking-tight mt-1">{value}</p>
+        </div>
       </CardContent>
     </Card>
   );
@@ -125,11 +131,15 @@ export default function DashboardPage() {
               <div className="space-y-4">
                 {data.recent_activity.slice(0, 8).map((activity) => (
                   <div key={activity.id} className="flex items-start gap-3">
-                    <div className="h-2 w-2 mt-2 rounded-full bg-primary shrink-0" />
+                    <Avatar className="h-8 w-8 shrink-0">
+                      <AvatarFallback className="text-xs bg-primary/10 text-primary">
+                        {(activity.user ?? "?").charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{activity.action}</p>
                       <p className="text-xs text-muted-foreground truncate">{activity.description}</p>
-                      <p className="text-xs text-muted-foreground">{activity.user} &middot; {formatRelativeTime(activity.created_at!)}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{formatRelativeTime(activity.created_at!)}</p>
                     </div>
                   </div>
                 ))}
@@ -188,18 +198,30 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="text-sm font-medium">Quick Actions</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <Link href="/users">
-                <Button variant="outline" className="w-full justify-start"><Plus className="mr-2 h-4 w-4" /> New User</Button>
+            <CardContent className="grid gap-2">
+              <Link href="/users/new" className="group">
+                <Button variant="default" className="w-full justify-start">
+                  <Plus className="mr-2 h-4 w-4" /> New User
+                  <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
               </Link>
-              <Link href="/orders">
-                <Button variant="outline" className="w-full justify-start"><Eye className="mr-2 h-4 w-4" /> View Orders</Button>
+              <Link href="/orders" className="group">
+                <Button variant="secondary" className="w-full justify-start">
+                  <Eye className="mr-2 h-4 w-4" /> View Orders
+                  <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
               </Link>
-              <Link href="/products">
-                <Button variant="outline" className="w-full justify-start"><Package className="mr-2 h-4 w-4" /> Manage Products</Button>
+              <Link href="/products" className="group">
+                <Button variant="secondary" className="w-full justify-start">
+                  <Package className="mr-2 h-4 w-4" /> Manage Products
+                  <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
               </Link>
-              <Link href="/settings">
-                <Button variant="outline" className="w-full justify-start"><Settings className="mr-2 h-4 w-4" /> Settings</Button>
+              <Link href="/settings" className="group">
+                <Button variant="secondary" className="w-full justify-start">
+                  <Settings className="mr-2 h-4 w-4" /> Settings
+                  <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
+                </Button>
               </Link>
             </CardContent>
           </Card>
