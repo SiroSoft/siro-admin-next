@@ -1,9 +1,10 @@
 "use client";
 import { useState, useRef } from "react";
-import { Upload, X, Link } from "lucide-react";
+import { Upload, X, Link, Loader2 } from "lucide-react";
 import { Button } from "./button";
 import { Input } from "./input";
 import { cn } from "@/lib/utils";
+import { uploadService } from "@/services/upload.service";
 
 interface ImageUploadProps {
   value?: string;
@@ -15,16 +16,20 @@ interface ImageUploadProps {
 export function ImageUpload({ value, onChange, error, disabled }: ImageUploadProps) {
   const [urlInput, setUrlInput] = useState("");
   const [preview, setPreview] = useState(value || "");
+  const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target?.result as string;
-      setPreview(dataUrl);
-      onChange(dataUrl);
-    };
-    reader.readAsDataURL(file);
+  const handleFile = async (file: File) => {
+    setUploading(true);
+    try {
+      const url = await uploadService.upload(file);
+      setPreview(url);
+      onChange(url);
+    } catch (err) {
+      console.error("Upload failed", err);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -66,6 +71,11 @@ export function ImageUpload({ value, onChange, error, disabled }: ImageUploadPro
               </Button>
             )}
           </div>
+        ) : uploading ? (
+          <div className="flex flex-col items-center py-4">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+            <p className="text-sm text-muted-foreground mt-2">Uploading...</p>
+          </div>
         ) : (
           <>
             <Upload className="mb-2 h-8 w-8 text-muted-foreground" />
@@ -76,9 +86,9 @@ export function ImageUpload({ value, onChange, error, disabled }: ImageUploadPro
               accept="image/*"
               className="hidden"
               onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-              disabled={disabled}
+              disabled={disabled || uploading}
             />
-            <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => fileInputRef.current?.click()} disabled={disabled}>
+            <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => fileInputRef.current?.click()} disabled={disabled || uploading}>
               Browse
             </Button>
           </>
