@@ -16,25 +16,35 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { useDashboard } from "@/hooks/use-dashboard";
+import { useAuth } from "@/hooks/use-auth";
 import type { components } from "@/types/api";
 
 type DashboardStats = components["schemas"]["DashboardStatsResponse"];
 
 const iconColors: Record<string, string> = {
-  Users: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
-  Orders: "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
-  Products: "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
-  Revenue: "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400",
+  Users: "bg-gradient-to-br from-blue-500/10 to-blue-600/20 text-blue-600 dark:from-blue-500/20 dark:to-blue-600/30 dark:text-blue-400 ring-1 ring-blue-500/20",
+  Orders: "bg-gradient-to-br from-orange-500/10 to-orange-600/20 text-orange-600 dark:from-orange-500/20 dark:to-orange-600/30 dark:text-orange-400 ring-1 ring-orange-500/20",
+  Products: "bg-gradient-to-br from-purple-500/10 to-purple-600/20 text-purple-600 dark:from-purple-500/20 dark:to-purple-600/30 dark:text-purple-400 ring-1 ring-purple-500/20",
+  Revenue: "bg-gradient-to-br from-emerald-500/10 to-emerald-600/20 text-emerald-600 dark:from-emerald-500/20 dark:to-emerald-600/30 dark:text-emerald-400 ring-1 ring-emerald-500/20",
+};
+
+const gradColors: Record<string, string> = {
+  Users: "from-blue-600 to-blue-400",
+  Orders: "from-orange-600 to-orange-400",
+  Products: "from-purple-600 to-purple-400",
+  Revenue: "from-emerald-600 to-emerald-400",
 };
 
 function StatCard({ title, value, icon: Icon, href }: { title: string; value: string; icon: any; href?: string }) {
   const content = (
-    <Card className="transition-all duration-200 hover:-translate-y-1 hover:shadow-lg cursor-pointer border-l-4 border-l-primary/20">
-      <CardContent className="p-6">
+    <Card className="relative overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-xl cursor-pointer group">
+      <div className={cn("absolute inset-0 opacity-[0.03] bg-gradient-to-br dark:opacity-[0.08]", gradColors[title])} />
+      <CardContent className="p-6 relative">
         <div className="flex items-center justify-between">
-          <div className={cn("rounded-xl p-3", iconColors[title] || "bg-muted")}>
+          <div className={cn("rounded-xl p-3 transition-transform group-hover:scale-110", iconColors[title] || "bg-muted")}>
             <Icon className="h-5 w-5" />
           </div>
+          <div className={cn("h-16 w-16 rounded-full opacity-10 blur-2xl bg-gradient-to-br", gradColors[title])} />
         </div>
         <div className="mt-4">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -63,7 +73,10 @@ function StatCardSkeleton() {
 
 export default function DashboardPage() {
   const { data, isLoading, isError, error, refetch, isRefetching } = useDashboard();
+  const { user } = useAuth();
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -96,12 +109,18 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Dashboard" description="Overview of your application">
-        <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
-          <RefreshCw className={`mr-2 h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
-          Refresh
-        </Button>
-      </PageHeader>
+      <div className="rounded-xl bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 p-6 border">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">{greeting}, {user?.name || "there"} 👋</h1>
+            <p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening with your application today.</p>
+          </div>
+          <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
+            <RefreshCw className={`mr-2 h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
+            Refresh
+          </Button>
+        </div>
+      </div>
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {isLoading
