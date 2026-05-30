@@ -16,7 +16,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useUpdateProfile, useChangePassword } from "@/hooks/use-profile";
 import { toast } from "@/hooks/use-toast";
 import { formatDate } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -76,6 +76,11 @@ export default function ProfilePage() {
       },
     });
   };
+
+  // Sync avatar when user data loads from session query
+  useEffect(() => {
+    if (user?.avatar) setAvatar(user.avatar);
+  }, [user?.avatar]);
 
   const initials = user?.name
     ?.split(" ")

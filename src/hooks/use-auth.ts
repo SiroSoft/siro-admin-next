@@ -46,7 +46,8 @@ export function useAuth() {
     },
     enabled: isAuthenticated,
     retry: false,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   return {
