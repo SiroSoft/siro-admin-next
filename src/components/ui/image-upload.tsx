@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Upload, X, Link, Loader2 } from "lucide-react";
 import { Button } from "./button";
 import { Input } from "./input";
@@ -18,6 +18,11 @@ export function ImageUpload({ value, onChange, error, disabled }: ImageUploadPro
   const [preview, setPreview] = useState(value || "");
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync preview when value prop changes (e.g. after data loads)
+  useEffect(() => {
+    if (value) setPreview(value);
+  }, [value]);
 
   const handleFile = async (file: File) => {
     setUploading(true);
