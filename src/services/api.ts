@@ -32,6 +32,11 @@ function processQueue(error: unknown) {
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     config.headers.set("X-Request-Id", generateRequestId());
+    const locale =
+      typeof window !== "undefined"
+        ? localStorage.getItem("siro_locale") || "en"
+        : "en";
+    config.headers.set("X-Locale", locale);
     const token =
       typeof window !== "undefined"
         ? localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)
