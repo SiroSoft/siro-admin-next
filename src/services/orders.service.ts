@@ -17,17 +17,17 @@ export const ordersService = {
 
   async get(id: number) {
     const res = await api.get<components["schemas"]["SuccessResponse_Order"]>(`/api/orders/${id}`);
-    return res.data;
+    return res.data.data;
   },
 
   async create(data: components["schemas"]["CreateOrderRequest"]) {
     const res = await api.post<components["schemas"]["SuccessResponse_Order"]>("/api/orders", data);
-    return res.data;
+    return res.data.data;
   },
 
   async update(id: number, data: components["schemas"]["UpdateOrderRequest"]) {
     const res = await api.put<components["schemas"]["SuccessResponse_Order"]>(`/api/orders/${id}`, data);
-    return res.data;
+    return res.data.data;
   },
 
   async delete(id: number) {
@@ -36,6 +36,6 @@ export const ordersService = {
 
   async updateStatus(id: number, status: string) {
     const res = await api.patch<components["schemas"]["SuccessResponse_Order"]>(`/api/orders/${id}/status`, { status });
-    return res.data;
+    return res.data.data;
   },
 };

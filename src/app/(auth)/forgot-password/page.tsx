@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useI18n } from "@/providers/i18n-provider";
 import { toast } from "@/hooks/use-toast";
+import { authService } from "@/services/auth.service";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -32,15 +33,7 @@ export default function ForgotPasswordPage() {
   const onSubmit = async (data: Form) => {
     setIsPending(true);
     try {
-      const res = await fetch("/api/auth/forgot-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "Failed to send reset link");
-      }
+      await authService.forgotPassword(data.email);
       setSent(true);
     } catch (e) {
       toast({ title: t("errors.unknown"), description: (e as Error).message || t("errors.networkError"), variant: "destructive" });

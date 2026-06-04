@@ -19,6 +19,11 @@ export const authService = {
     return res.data.data ?? null;
   },
 
+  async forgotPassword(email: string) {
+    const res = await api.post<components["schemas"]["SuccessResponse_null"]>("/api/auth/forgot-password", { email });
+    return res.data;
+  },
+
   async logout() {
     await api.post("/api/auth/logout");
   },
