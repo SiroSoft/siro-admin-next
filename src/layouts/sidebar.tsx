@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
+import { useI18n } from "@/providers/i18n-provider";
 import { APP_NAME } from "@/lib/constants";
 
 interface SidebarProps {
@@ -25,20 +26,21 @@ interface SidebarProps {
   onToggle: () => void;
 }
 
-const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/users", label: "Users", icon: Users },
-  { href: "/orders", label: "Orders", icon: ShoppingCart },
-  { href: "/products", label: "Products", icon: Package },
-  { href: "/categories", label: "Categories", icon: Tags },
-  { href: "/posts", label: "Posts", icon: FileText },
-  { href: "/profile", label: "Profile", icon: User },
-  { href: "/settings", label: "Settings", icon: Settings },
-];
-
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
   const { logout } = useAuth();
+  const { t } = useI18n();
+
+  const navItems = [
+    { href: "/", label: t("common.dashboard"), icon: LayoutDashboard },
+    { href: "/users", label: t("common.users"), icon: Users },
+    { href: "/orders", label: t("common.orders"), icon: ShoppingCart },
+    { href: "/products", label: t("common.products"), icon: Package },
+    { href: "/categories", label: t("common.categories"), icon: Tags },
+    { href: "/posts", label: t("common.posts"), icon: FileText },
+    { href: "/profile", label: t("common.profile"), icon: User },
+    { href: "/settings", label: t("common.settings"), icon: Settings },
+  ];
 
   return (
     <aside
@@ -100,7 +102,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           )}
         >
           <LogOut className="h-4 w-4 shrink-0" />
-          {!collapsed && <span className="ml-3">Logout</span>}
+          {!collapsed && <span className="ml-3">{t("common.logout")}</span>}
         </Button>
       </div>
     </aside>

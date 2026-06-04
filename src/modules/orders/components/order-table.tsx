@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { formatDate, formatNumber } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
@@ -35,6 +36,7 @@ interface OrderTableProps {
 const columnHelper = createColumnHelper<Order>();
 
 export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }: OrderTableProps) {
+  const { t } = useI18n();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -48,15 +50,15 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
         cell: (info) => <span className="font-mono text-xs">#{info.getValue()}</span>,
       }),
       columnHelper.accessor("user_name", {
-        header: "Customer",
+        header: t("orders.customer"),
         cell: (info) => <span className="font-medium">{info.getValue() ?? "N/A"}</span>,
       }),
       columnHelper.accessor("total", {
-        header: "Total",
+        header: t("orders.total"),
         cell: (info) => <span className="font-mono">${formatNumber(info.getValue() ?? 0)}</span>,
       }),
       columnHelper.accessor("status", {
-        header: "Status",
+        header: t("common.status"),
         cell: (info) => <StatusBadge status={info.getValue() ?? ""} />,
       }),
       columnHelper.accessor("payment_status", {
@@ -68,7 +70,7 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
         ),
       }),
       columnHelper.accessor("created_at", {
-        header: "Date",
+        header: t("orders.date"),
         cell: (info) => (
           <span className="text-muted-foreground text-xs">{formatDate(info.getValue() ?? "")}</span>
         ),
@@ -92,7 +94,7 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
         ),
       }),
     ],
-    [onEdit, onView],
+    [onEdit, onView, t],
   );
 
   const table = useReactTable({
@@ -113,9 +115,9 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
     <>
       {!isLoading && orders.length === 0 ? (
         <EmptyState
-          title="No orders found"
-          description="Get started by creating your first order."
-          action={<Button onClick={onCreate}>Create Order</Button>}
+          title={t("common.noData")}
+          description={t("orders.title")}
+          action={<Button onClick={onCreate}>{t("orders.create")}</Button>}
         />
       ) : (
         <>

@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CategoryForm } from "@/modules/categories/components/category-form";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Category = components["schemas"]["Category"];
@@ -21,13 +22,15 @@ interface CategoryFormDialogProps {
 }
 
 export function CategoryFormDialog({ open, onOpenChange, category, onSubmit, isPending }: CategoryFormDialogProps) {
+  const { t } = useI18n();
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{category ? "Edit Category" : "Create Category"}</DialogTitle>
+          <DialogTitle>{category ? t("categories.edit") : t("categories.create")}</DialogTitle>
           <DialogDescription>
-            {category ? "Update the category details below." : "Fill in the details to create a new category."}
+            {category ? t("categories.edit") : t("categories.create")}
           </DialogDescription>
         </DialogHeader>
         <CategoryForm category={category} onSubmit={onSubmit} isPending={isPending} />

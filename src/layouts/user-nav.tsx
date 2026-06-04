@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -18,6 +19,7 @@ type User = components["schemas"]["User"];
 
 export function UserNav() {
   const { user, logout } = useAuth();
+  const { t } = useI18n();
 
   if (!user) return null;
 
@@ -48,19 +50,19 @@ export function UserNav() {
         <Link href="/profile">
           <DropdownMenuItem>
             <UserIcon className="mr-2 h-4 w-4" />
-            Profile
+            {t("common.profile")}
           </DropdownMenuItem>
         </Link>
         <Link href="/settings">
           <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
-            Settings
+            {t("common.settings")}
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout()}>
           <LogOut className="mr-2 h-4 w-4" />
-          Logout
+          {t("common.logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

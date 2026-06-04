@@ -8,26 +8,28 @@ import { SearchInput } from "@/components/search-input";
 import { OrderTable } from "@/modules/orders/components/order-table";
 import { OrderFormDialog } from "@/modules/orders/components/order-form-dialog";
 import { useCreateOrder, useUpdateOrder } from "@/hooks/use-orders";
+import { useI18n } from "@/providers/i18n-provider";
 import { cn } from "@/lib/utils";
 import type { components } from "@/types/api";
 
 type Order = components["schemas"]["Order"];
 
-const STATUS_OPTIONS = [
-  { label: "All", value: "" },
-  { label: "Pending", value: "pending" },
-  { label: "Processing", value: "processing" },
-  { label: "Shipped", value: "shipped" },
-  { label: "Completed", value: "completed" },
-  { label: "Cancelled", value: "cancelled" },
-];
-
 export default function OrdersPage() {
+  const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState("");
   const [editOrder, setEditOrder] = useState<Order | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+
+  const STATUS_OPTIONS = [
+    { label: t("common.all"), value: "" },
+    { label: t("orders.status_pending"), value: "pending" },
+    { label: "Processing", value: "processing" },
+    { label: "Shipped", value: "shipped" },
+    { label: t("orders.status_completed"), value: "completed" },
+    { label: t("orders.status_cancelled"), value: "cancelled" },
+  ];
 
   const createMutation = useCreateOrder();
   const updateMutation = useUpdateOrder(editOrder?.id ?? 0);
@@ -53,15 +55,15 @@ export default function OrdersPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Orders" description="Manage customer orders">
+      <PageHeader title={t("orders.title")} description={t("orders.title")}>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Create Order
+          {t("orders.create")}
         </Button>
       </PageHeader>
 
       <div className="flex flex-wrap items-center gap-2">
-        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Search orders..." />
+        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder={t("common.search") + " " + t("orders.title") + "..."} />
       </div>
 
       <div className="flex flex-wrap gap-1">

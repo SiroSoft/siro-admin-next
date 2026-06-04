@@ -18,6 +18,7 @@ import {
   type UpdateProductFormData,
 } from "@/modules/products/schemas/product.schema";
 import { useCategories } from "@/hooks/use-categories";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Product = components["schemas"]["Product"];
@@ -29,6 +30,7 @@ interface ProductFormProps {
 }
 
 export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) {
+  const { t } = useI18n();
   const isEdit = !!product;
   const { categories } = useCategories({ per_page: 100 });
 
@@ -66,7 +68,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="name">Name *</Label>
+          <Label htmlFor="name">{t("products.name")} *</Label>
           <Input id="name" {...register("name")} placeholder="Product name" disabled={isPending} />
           {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
         </div>
@@ -78,7 +80,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t("products.description")}</Label>
         <RichTextEditor value={watch("description") ?? ""} onChange={(html) => setValue("description", html, { shouldValidate: true })} placeholder="Full product description..." disabled={isPending} minHeight={200} />
       </div>
 
@@ -89,7 +91,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="price">Price *</Label>
+          <Label htmlFor="price">{t("products.price")} *</Label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
             <Input id="price" type="number" step="0.01" className="pl-7" {...register("price")} disabled={isPending} />
@@ -97,14 +99,14 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
           {errors.price && <p className="text-sm text-destructive">{errors.price.message}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="compare_price">Compare Price</Label>
+          <Label htmlFor="compare_price">{t("products.price")}</Label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
             <Input id="compare_price" type="number" step="0.01" className="pl-7" {...register("compare_price")} disabled={isPending} />
           </div>
         </div>
         <div className="space-y-2">
-          <Label htmlFor="cost_price">Cost Price</Label>
+          <Label htmlFor="cost_price">{t("products.price")}</Label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
             <Input id="cost_price" type="number" step="0.01" className="pl-7" {...register("cost_price")} disabled={isPending} />
@@ -114,11 +116,11 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="stock">Stock</Label>
+          <Label htmlFor="stock">{t("products.stock")}</Label>
           <Input id="stock" type="number" {...register("stock")} disabled={isPending} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="stock_min">Min Stock</Label>
+          <Label htmlFor="stock_min">{t("products.stock")}</Label>
           <Input id="stock_min" type="number" {...register("stock_min")} disabled={isPending} />
         </div>
       </div>
@@ -144,7 +146,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
           <Input id="barcode" {...register("barcode")} disabled={isPending} />
         </div>
         <div className="space-y-2">
-          <Label>Category</Label>
+            <Label>{t("products.category")}</Label>
           <Select value={String(watch("category_id") ?? "")} onValueChange={(v) => setValue("category_id", v ? Number(v) : undefined)} disabled={isPending}>
             <SelectTrigger>
               <SelectValue placeholder="Select category" />
@@ -166,7 +168,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-2">
           <Switch id="is_active" checked={!!watch("is_active")} onCheckedChange={(v) => setValue("is_active", v)} disabled={isPending} />
-          <Label htmlFor="is_active">Active</Label>
+          <Label htmlFor="is_active">{t("common.active")}</Label>
         </div>
         <div className="flex items-center gap-2">
           <Switch id="is_featured" checked={!!watch("is_featured")} onCheckedChange={(v) => setValue("is_featured", v)} disabled={isPending} />
@@ -177,7 +179,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
       <div className="flex justify-end gap-2 pt-2">
         <Button type="submit" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isEdit ? "Update" : "Create"} Product
+          {isEdit ? t("common.save") : t("common.create")}
         </Button>
       </div>
     </form>

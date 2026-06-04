@@ -8,11 +8,13 @@ import { SearchInput } from "@/components/search-input";
 import { TagTable } from "@/modules/tags/components/tag-table";
 import { TagFormDialog } from "@/modules/tags/components/tag-form-dialog";
 import { useCreateTag, useUpdateTag } from "@/hooks/use-tags";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Tag = components["schemas"]["Tag"];
 
 export default function TagsPage() {
+  const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [editTag, setEditTag] = useState<Tag | null>(null);
@@ -37,15 +39,15 @@ export default function TagsPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Tags" description="Manage content tags">
+      <PageHeader title={t("tags.title")} description={t("tags.title")}>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Create Tag
+          {t("tags.create")}
         </Button>
       </PageHeader>
 
       <div className="flex flex-wrap items-center gap-2">
-        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Search tags..." />
+        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder={t("common.search") + " " + t("tags.title") + "..."} />
       </div>
 
       <TagTable

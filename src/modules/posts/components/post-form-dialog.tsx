@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { PostForm } from "@/modules/posts/components/post-form";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Post = components["schemas"]["Post"];
@@ -21,13 +22,15 @@ interface PostFormDialogProps {
 }
 
 export function PostFormDialog({ open, onOpenChange, post, onSubmit, isPending }: PostFormDialogProps) {
+  const { t } = useI18n();
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{post ? "Edit Post" : "Create Post"}</DialogTitle>
+          <DialogTitle>{post ? t("posts.edit") : t("posts.create")}</DialogTitle>
           <DialogDescription>
-            {post ? "Update the post details below." : "Fill in the details to create a new post."}
+            {post ? t("posts.edit") : t("posts.create")}
           </DialogDescription>
         </DialogHeader>
         <PostForm post={post} onSubmit={onSubmit} isPending={isPending} />

@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/providers/i18n-provider";
 import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData> {
@@ -49,6 +50,7 @@ function LoadingRows({ rows, cols }: { rows: number; cols: number }) {
 
 export function DataTable<TData>({ table, isLoading }: DataTableProps<TData>) {
   const columns = table.getAllColumns();
+  const { t } = useI18n();
 
   return (
     <div className="rounded-md border overflow-x-auto">
@@ -92,7 +94,7 @@ export function DataTable<TData>({ table, isLoading }: DataTableProps<TData>) {
               : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                    No results found.
+                    {t("common.noData")}
                   </TableCell>
                 </TableRow>
               )}

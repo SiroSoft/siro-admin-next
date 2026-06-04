@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
@@ -34,6 +35,7 @@ interface PostTableProps {
 const columnHelper = createColumnHelper<Post>();
 
 export function PostTable({ onEdit, onCreate, params, onParamsChange }: PostTableProps) {
+  const { t } = useI18n();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -43,17 +45,17 @@ export function PostTable({ onEdit, onCreate, params, onParamsChange }: PostTabl
   const columns = useMemo(
     () => [
       columnHelper.accessor("title", {
-        header: "Title",
+        header: t("posts.title_field"),
         cell: (info) => (
           <div className="font-medium max-w-[250px] truncate">{info.getValue()}</div>
         ),
       }),
       columnHelper.accessor("author_name", {
-        header: "Author",
+        header: t("posts.author"),
         cell: (info) => <span className="text-muted-foreground">{info.getValue() ?? "N/A"}</span>,
       }),
       columnHelper.accessor("status", {
-        header: "Status",
+        header: t("common.status"),
         cell: (info) => <StatusBadge status={info.getValue() ?? ""} />,
       }),
       columnHelper.accessor("featured", {
@@ -65,11 +67,11 @@ export function PostTable({ onEdit, onCreate, params, onParamsChange }: PostTabl
         ),
       }),
       columnHelper.accessor("category_name", {
-        header: "Category",
+        header: t("products.category"),
         cell: (info) => <span className="text-xs text-muted-foreground">{info.getValue() ?? "—"}</span>,
       }),
       columnHelper.accessor("created_at", {
-        header: "Created",
+        header: t("users.createdAt"),
         cell: (info) => (
           <span className="text-muted-foreground text-xs">{formatDate(info.getValue() ?? "")}</span>
         ),
@@ -88,7 +90,7 @@ export function PostTable({ onEdit, onCreate, params, onParamsChange }: PostTabl
         ),
       }),
     ],
-    [onEdit],
+    [onEdit, t],
   );
 
   const table = useReactTable({
@@ -109,9 +111,9 @@ export function PostTable({ onEdit, onCreate, params, onParamsChange }: PostTabl
     <>
       {!isLoading && posts.length === 0 ? (
         <EmptyState
-          title="No posts found"
-          description="Get started by creating your first post."
-          action={<Button onClick={onCreate}>Create Post</Button>}
+          title={t("common.noData")}
+          description={t("posts.title")}
+          action={<Button onClick={onCreate}>{t("posts.create")}</Button>}
         />
       ) : (
         <>

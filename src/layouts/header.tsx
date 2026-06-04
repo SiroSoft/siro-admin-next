@@ -5,6 +5,8 @@ import { useTheme } from "next-themes";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { UserNav } from "@/layouts/user-nav";
+import { LocaleSwitcher } from "@/components/locale-switcher";
+import { useI18n } from "@/providers/i18n-provider";
 import { cn } from "@/lib/utils";
 
 interface HeaderProps {
@@ -14,6 +16,7 @@ interface HeaderProps {
 export function Header({ onMenuToggle }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
+  const { t } = useI18n();
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
@@ -23,7 +26,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
       <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-1 text-sm text-muted-foreground">
         {pathname === "/" ? (
-          <span className="text-foreground font-medium">Dashboard</span>
+          <span className="text-foreground font-medium">{t("common.dashboard")}</span>
         ) : (
           pathname.split("/").filter(Boolean).map((segment, i, arr) => (
             <span key={segment} className="flex items-center gap-1">
@@ -37,6 +40,8 @@ export function Header({ onMenuToggle }: HeaderProps) {
       </nav>
 
       <div className="flex-1" />
+
+      <LocaleSwitcher />
 
       <Button
         variant="ghost"

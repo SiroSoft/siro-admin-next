@@ -8,11 +8,13 @@ import { SearchInput } from "@/components/search-input";
 import { CategoryTable } from "@/modules/categories/components/category-table";
 import { CategoryFormDialog } from "@/modules/categories/components/category-form-dialog";
 import { useCreateCategory, useUpdateCategory } from "@/hooks/use-categories";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Category = components["schemas"]["Category"];
 
 export default function CategoriesPage() {
+  const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [editCategory, setEditCategory] = useState<Category | null>(null);
@@ -37,15 +39,15 @@ export default function CategoriesPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Categories" description="Manage content categories">
+      <PageHeader title={t("categories.title")} description={t("categories.title")}>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Create Category
+          {t("categories.create")}
         </Button>
       </PageHeader>
 
       <div className="flex flex-wrap items-center gap-2">
-        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Search categories..." />
+        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder={t("common.search") + " " + t("categories.title") + "..."} />
       </div>
 
       <CategoryTable

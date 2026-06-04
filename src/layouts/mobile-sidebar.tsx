@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { X, LayoutDashboard, Users, ShoppingCart, FileText, Settings, Package, Tags, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/providers/i18n-provider";
 import { APP_NAME } from "@/lib/constants";
 
 interface MobileSidebarProps {
@@ -14,20 +15,21 @@ interface MobileSidebarProps {
   onClose: () => void;
 }
 
-const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/users", label: "Users", icon: Users },
-  { href: "/orders", label: "Orders", icon: ShoppingCart },
-  { href: "/products", label: "Products", icon: Package },
-  { href: "/categories", label: "Categories", icon: Tags },
-  { href: "/posts", label: "Posts", icon: FileText },
-  { href: "/profile", label: "Profile", icon: User },
-  { href: "/settings", label: "Settings", icon: Settings },
-];
-
 export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
   const pathname = usePathname();
   const { logout } = useAuth();
+  const { t } = useI18n();
+
+  const navItems = [
+    { href: "/", label: t("common.dashboard"), icon: LayoutDashboard },
+    { href: "/users", label: t("common.users"), icon: Users },
+    { href: "/orders", label: t("common.orders"), icon: ShoppingCart },
+    { href: "/products", label: t("common.products"), icon: Package },
+    { href: "/categories", label: t("common.categories"), icon: Tags },
+    { href: "/posts", label: t("common.posts"), icon: FileText },
+    { href: "/profile", label: t("common.profile"), icon: User },
+    { href: "/settings", label: t("common.settings"), icon: Settings },
+  ];
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === "Escape" && open) onClose();
@@ -89,7 +91,7 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
             className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors active:scale-[0.98]"
           >
             <LogOut className="h-4 w-4" />
-            Logout
+            {t("common.logout")}
           </button>
         </div>
       </aside>

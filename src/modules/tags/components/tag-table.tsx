@@ -13,6 +13,7 @@ import { DataTable } from "@/components/data-table";
 import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
@@ -32,6 +33,7 @@ interface TagTableProps {
 const columnHelper = createColumnHelper<Tag>();
 
 export function TagTable({ onEdit, onCreate, params, onParamsChange }: TagTableProps) {
+  const { t } = useI18n();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -41,7 +43,7 @@ export function TagTable({ onEdit, onCreate, params, onParamsChange }: TagTableP
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("tags.name"),
         cell: (info) => (
           <div className="font-medium flex items-center gap-2">
             {info.row.original.color && (
@@ -52,11 +54,11 @@ export function TagTable({ onEdit, onCreate, params, onParamsChange }: TagTableP
         ),
       }),
       columnHelper.accessor("slug", {
-        header: "Slug",
+        header: t("categories.slug"),
         cell: (info) => <span className="font-mono text-xs text-muted-foreground">{info.getValue()}</span>,
       }),
       columnHelper.accessor("created_at", {
-        header: "Created",
+        header: t("users.createdAt"),
         cell: (info) => (
           <span className="text-muted-foreground text-xs">{formatDate(info.getValue() ?? "")}</span>
         ),
@@ -75,7 +77,7 @@ export function TagTable({ onEdit, onCreate, params, onParamsChange }: TagTableP
         ),
       }),
     ],
-    [onEdit],
+    [onEdit, t],
   );
 
   const table = useReactTable({
@@ -96,9 +98,9 @@ export function TagTable({ onEdit, onCreate, params, onParamsChange }: TagTableP
     <>
       {!isLoading && tags.length === 0 ? (
         <EmptyState
-          title="No tags found"
-          description="Get started by creating your first tag."
-          action={<Button onClick={onCreate}>Create Tag</Button>}
+          title={t("common.noData")}
+          description={t("tags.title")}
+          action={<Button onClick={onCreate}>{t("tags.create")}</Button>}
         />
       ) : (
         <>

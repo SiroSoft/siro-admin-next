@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { UserForm } from "@/modules/users/components/user-form";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 import type { CreateUserFormData, UpdateUserFormData } from "@/modules/users/schemas/user.schema";
 
@@ -22,13 +23,15 @@ interface UserFormDialogProps {
 }
 
 export function UserFormDialog({ open, onOpenChange, user, onSubmit, isPending }: UserFormDialogProps) {
+  const { t } = useI18n();
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{user ? "Edit User" : "Create User"}</DialogTitle>
+          <DialogTitle>{user ? t("users.edit") : t("users.create")}</DialogTitle>
           <DialogDescription>
-            {user ? "Update the user details below." : "Fill in the details to create a new user."}
+            {user ? t("users.edit") : t("users.create")}
           </DialogDescription>
         </DialogHeader>
         <UserForm user={user} onSubmit={onSubmit} isPending={isPending} />

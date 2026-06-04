@@ -8,23 +8,25 @@ import { SearchInput } from "@/components/search-input";
 import { ProductTable } from "@/modules/products/components/product-table";
 import { ProductFormDialog } from "@/modules/products/components/product-form-dialog";
 import { useCreateProduct, useUpdateProduct } from "@/hooks/use-products";
+import { useI18n } from "@/providers/i18n-provider";
 import { cn } from "@/lib/utils";
 import type { components } from "@/types/api";
 
 type Product = components["schemas"]["Product"];
 
-const STATUS_OPTIONS = [
-  { label: "All", value: "" },
-  { label: "Active", value: "active" },
-  { label: "Inactive", value: "inactive" },
-];
-
 export default function ProductsPage() {
+  const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState("");
   const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+
+  const STATUS_OPTIONS = [
+    { label: t("common.all"), value: "" },
+    { label: t("common.active"), value: "active" },
+    { label: t("common.inactive"), value: "inactive" },
+  ];
 
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct(editProduct?.id ?? 0);
@@ -50,15 +52,15 @@ export default function ProductsPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Products" description="Manage product catalog">
+      <PageHeader title={t("products.title")} description={t("products.title")}>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Create Product
+          {t("products.create")}
         </Button>
       </PageHeader>
 
       <div className="flex flex-wrap items-center gap-2">
-        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Search products..." />
+        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder={t("common.search") + " " + t("products.title") + "..."} />
       </div>
 
       <div className="flex flex-wrap gap-1">

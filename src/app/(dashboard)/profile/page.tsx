@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { ImageUpload } from "@/components/ui/image-upload";
 import { PageHeader } from "@/components/page-header";
 import { useAuth } from "@/hooks/use-auth";
+import { useI18n } from "@/providers/i18n-provider";
 import { useUpdateProfile, useChangePassword } from "@/hooks/use-profile";
 import { toast } from "@/hooks/use-toast";
 import { formatDate } from "@/lib/utils";
@@ -40,6 +41,7 @@ type PasswordFormData = z.infer<typeof passwordSchema>;
 
 export default function ProfilePage() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const updateProfileMutation = useUpdateProfile();
   const changePasswordMutation = useChangePassword();
   const [avatar, setAvatar] = useState(user?.avatar ?? "");
@@ -91,12 +93,12 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Profile" description="Manage your account settings" />
+      <PageHeader title={t("common.profile")} description={t("common.settings")} />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-1">
           <CardHeader>
-            <CardTitle>Account Info</CardTitle>
+            <CardTitle>{t("common.profile")}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center text-center">
             <Avatar className="h-24 w-24 mb-4">
@@ -108,7 +110,7 @@ export default function ProfilePage() {
             <p className="text-xs text-muted-foreground mt-1 capitalize">{user?.role}</p>
             {user?.created_at && (
               <p className="text-xs text-muted-foreground mt-4">
-                Member since {formatDate(user.created_at)}
+                {t("users.createdAt")}: {formatDate(user.created_at)}
               </p>
             )}
           </CardContent>
@@ -117,8 +119,8 @@ export default function ProfilePage() {
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Profile Details</CardTitle>
-              <CardDescription>Update your name, email and avatar</CardDescription>
+              <CardTitle>{t("common.profile")}</CardTitle>
+              <CardDescription>{t("common.settings")}</CardDescription>
             </CardHeader>
             <CardContent>
               <form
@@ -137,14 +139,14 @@ export default function ProfilePage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name">{t("users.name")}</Label>
                   <Input id="name" {...profileForm.register("name")} disabled={updateProfileMutation.isPending} />
                   {profileForm.formState.errors.name && (
                     <p className="text-sm text-destructive">{profileForm.formState.errors.name.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t("auth.email")}</Label>
                   <Input id="email" type="email" {...profileForm.register("email")} disabled={updateProfileMutation.isPending} />
                   {profileForm.formState.errors.email && (
                     <p className="text-sm text-destructive">{profileForm.formState.errors.email.message}</p>
@@ -153,7 +155,7 @@ export default function ProfilePage() {
                 <div className="flex gap-2">
                   <Button type="submit" disabled={updateProfileMutation.isPending}>
                     {updateProfileMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Save Changes
+                    {t("common.save")}
                   </Button>
                   <Button
                     type="button"
@@ -164,7 +166,7 @@ export default function ProfilePage() {
                     }}
                     disabled={updateProfileMutation.isPending}
                   >
-                    Cancel
+                    {t("common.cancel")}
                   </Button>
                 </div>
               </form>
@@ -173,8 +175,8 @@ export default function ProfilePage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Change Password</CardTitle>
-              <CardDescription>Update your password</CardDescription>
+              <CardTitle>{t("settings.security")}</CardTitle>
+              <CardDescription>{t("common.settings")}</CardDescription>
             </CardHeader>
             <CardContent>
               <form
@@ -182,7 +184,7 @@ export default function ProfilePage() {
                 className="space-y-4"
               >
                 <div className="space-y-2">
-                  <Label htmlFor="current_password">Current Password</Label>
+                  <Label htmlFor="current_password">{t("auth.password")}</Label>
                   <Input id="current_password" type="password" {...passwordForm.register("current_password")} disabled={changePasswordMutation.isPending} />
                   {passwordForm.formState.errors.current_password && (
                     <p className="text-sm text-destructive">{passwordForm.formState.errors.current_password.message}</p>
@@ -190,14 +192,14 @@ export default function ProfilePage() {
                 </div>
                 <Separator />
                 <div className="space-y-2">
-                  <Label htmlFor="new_password">New Password</Label>
+                  <Label htmlFor="new_password">{t("auth.password")}</Label>
                   <Input id="new_password" type="password" {...passwordForm.register("new_password")} disabled={changePasswordMutation.isPending} />
                   {passwordForm.formState.errors.new_password && (
                     <p className="text-sm text-destructive">{passwordForm.formState.errors.new_password.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="new_password_confirmation">Confirm New Password</Label>
+                  <Label htmlFor="new_password_confirmation">{t("common.confirm")}</Label>
                   <Input id="new_password_confirmation" type="password" {...passwordForm.register("new_password_confirmation")} disabled={changePasswordMutation.isPending} />
                   {passwordForm.formState.errors.new_password_confirmation && (
                     <p className="text-sm text-destructive">{passwordForm.formState.errors.new_password_confirmation.message}</p>
@@ -205,7 +207,7 @@ export default function ProfilePage() {
                 </div>
                 <Button type="submit" disabled={changePasswordMutation.isPending}>
                   {changePasswordMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Change Password
+                  {t("common.save")}
                 </Button>
               </form>
             </CardContent>

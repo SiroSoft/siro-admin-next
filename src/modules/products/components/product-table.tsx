@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { formatDate, formatNumber } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
@@ -34,6 +35,7 @@ interface ProductTableProps {
 const columnHelper = createColumnHelper<Product>();
 
 export function ProductTable({ onEdit, onCreate, params, onParamsChange }: ProductTableProps) {
+  const { t } = useI18n();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -43,7 +45,7 @@ export function ProductTable({ onEdit, onCreate, params, onParamsChange }: Produ
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("products.name"),
         cell: (info) => (
           <div className="font-medium max-w-[200px] truncate">{info.getValue()}</div>
         ),
@@ -53,11 +55,11 @@ export function ProductTable({ onEdit, onCreate, params, onParamsChange }: Produ
         cell: (info) => <span className="font-mono text-xs">{info.getValue()}</span>,
       }),
       columnHelper.accessor("price", {
-        header: "Price",
+        header: t("products.price"),
         cell: (info) => <span className="font-mono">${formatNumber(info.getValue() ?? 0)}</span>,
       }),
       columnHelper.accessor("stock", {
-        header: "Stock",
+        header: t("products.stock"),
         cell: (info) => {
           const stock = info.getValue() ?? 0;
           const min = info.row.original.stock_min;
@@ -69,13 +71,13 @@ export function ProductTable({ onEdit, onCreate, params, onParamsChange }: Produ
         },
       }),
       columnHelper.accessor("is_active", {
-        header: "Status",
+        header: t("common.status"),
         cell: (info) => (
           <StatusBadge status={info.getValue() ? "active" : "inactive"} />
         ),
       }),
       columnHelper.accessor("created_at", {
-        header: "Created",
+        header: t("users.createdAt"),
         cell: (info) => (
           <span className="text-muted-foreground text-xs">{formatDate(info.getValue() ?? "")}</span>
         ),
@@ -94,7 +96,7 @@ export function ProductTable({ onEdit, onCreate, params, onParamsChange }: Produ
         ),
       }),
     ],
-    [onEdit],
+    [onEdit, t],
   );
 
   const table = useReactTable({
@@ -115,9 +117,9 @@ export function ProductTable({ onEdit, onCreate, params, onParamsChange }: Produ
     <>
       {!isLoading && products.length === 0 ? (
         <EmptyState
-          title="No products found"
-          description="Get started by creating your first product."
-          action={<Button onClick={onCreate}>Create Product</Button>}
+          title={t("common.noData")}
+          description={t("products.title")}
+          action={<Button onClick={onCreate}>{t("products.create")}</Button>}
         />
       ) : (
         <>

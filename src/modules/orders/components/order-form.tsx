@@ -17,6 +17,7 @@ import {
 } from "@/modules/orders/schemas/order.schema";
 import { useProducts } from "@/hooks/use-products";
 import { useUsers } from "@/hooks/use-users";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Order = components["schemas"]["Order"];
@@ -30,6 +31,7 @@ interface OrderFormProps {
 const ORDER_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"] as const;
 
 export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
+  const { t } = useI18n();
   const isEdit = !!order;
   const { products } = useProducts({ per_page: 200 });
   const { users } = useUsers({ per_page: 200 });
@@ -68,7 +70,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
 
   const statusField = (
     <div className="space-y-2">
-      <Label>Status</Label>
+      <Label>{t("common.status")}</Label>
       <Select value={watch("status") ?? "pending"} onValueChange={(v) => setValue("status", v)} disabled={isPending}>
         <SelectTrigger>
           <SelectValue />
@@ -102,14 +104,14 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
           <div className="flex justify-end gap-2 pt-2">
             <Button type="submit" disabled={isPending}>
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Update Order
+              {t("common.save")}
             </Button>
           </div>
         </>
       ) : (
         <>
           <div className="space-y-3">
-            <Label>Order Items</Label>
+            <Label>{t("orders.items")}</Label>
             {fields.map((field, index) => (
               <div key={field.id} className="flex items-end gap-2">
                 <div className="flex-1 space-y-1">
@@ -129,7 +131,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
                   />
                 </div>
                 <div className="w-24 space-y-1">
-                  <Label className="text-xs">Qty</Label>
+                  <Label className="text-xs">{t("orders.items")}</Label>
                   <Input type="number" {...register(`items.${index}.quantity` as const)} placeholder="1" disabled={isPending} />
                 </div>
                 <Button type="button" variant="ghost" size="icon" onClick={() => remove(index)} disabled={isPending}>
@@ -139,7 +141,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
             ))}
             <Button type="button" variant="outline" size="sm" onClick={() => append({ product_id: undefined as unknown as number, quantity: 1 })} disabled={isPending}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Item
+              {t("common.create")}
             </Button>
             {"items" in errors && errors.items && <p className="text-sm text-destructive">{(errors.items as { message?: string }).message || "Items validation error"}</p>}
           </div>
@@ -147,7 +149,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
           {statusField}
 
           <div className="space-y-2">
-            <Label>Customer</Label>
+            <Label>{t("orders.customer")}</Label>
             <Controller
               control={control}
               name="customer_id"
@@ -179,7 +181,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
           <div className="flex justify-end gap-2 pt-2">
             <Button type="submit" disabled={isPending}>
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Order
+              {t("common.save")}
             </Button>
           </div>
         </>

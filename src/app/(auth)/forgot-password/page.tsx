@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useI18n } from "@/providers/i18n-provider";
 import { toast } from "@/hooks/use-toast";
 
 const schema = z.object({
@@ -19,6 +20,7 @@ const schema = z.object({
 type Form = z.infer<typeof schema>;
 
 export default function ForgotPasswordPage() {
+  const { t } = useI18n();
   const [sent, setSent] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const {
@@ -41,7 +43,7 @@ export default function ForgotPasswordPage() {
       }
       setSent(true);
     } catch (e: any) {
-      toast({ title: "Error", description: e.message || "Something went wrong. Please try again.", variant: "destructive" });
+      toast({ title: t("errors.unknown"), description: e.message || t("errors.networkError"), variant: "destructive" });
     } finally {
       setIsPending(false);
     }
@@ -52,14 +54,14 @@ export default function ForgotPasswordPage() {
       <Card className="shadow-lg">
         <CardHeader className="text-center">
           <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500 mb-2" />
-          <CardTitle>Check your email</CardTitle>
+          <CardTitle>{t("common.confirm")}</CardTitle>
           <CardDescription>If an account exists, we have sent a reset link.</CardDescription>
         </CardHeader>
         <CardContent className="text-center">
           <Link href="/login">
             <Button variant="link">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to login
+              {t("common.back")} {t("common.login")}
             </Button>
           </Link>
         </CardContent>
@@ -70,23 +72,23 @@ export default function ForgotPasswordPage() {
   return (
     <Card className="shadow-lg">
       <CardHeader className="text-center">
-        <CardTitle>Forgot password?</CardTitle>
+        <CardTitle>{t("auth.forgotPassword")}</CardTitle>
         <CardDescription>Enter your email and we will send you a reset link.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("auth.email")}</Label>
             <Input id="email" type="email" placeholder="admin@example.com" {...register("email")} disabled={isPending} />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isPending ? "Sending..." : "Send reset link"}
+            {isPending ? t("common.loading") : t("common.submit")}
           </Button>
           <div className="text-center">
             <Link href="/login" className="text-sm text-muted-foreground hover:text-primary">
-              Back to login
+              {t("common.back")} {t("common.login")}
             </Link>
           </div>
         </form>

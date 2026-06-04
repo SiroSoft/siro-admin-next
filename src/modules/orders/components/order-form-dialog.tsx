@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { OrderForm } from "@/modules/orders/components/order-form";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Order = components["schemas"]["Order"];
@@ -21,13 +22,15 @@ interface OrderFormDialogProps {
 }
 
 export function OrderFormDialog({ open, onOpenChange, order, onSubmit, isPending }: OrderFormDialogProps) {
+  const { t } = useI18n();
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[calc(100%-2rem)] sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{order ? "Edit Order" : "Create Order"}</DialogTitle>
+          <DialogTitle>{order ? t("orders.create") : t("orders.create")}</DialogTitle>
           <DialogDescription>
-            {order ? "Update the order details below." : "Fill in the details to create a new order."}
+            {order ? t("orders.detail") : t("orders.create")}
           </DialogDescription>
         </DialogHeader>
         <OrderForm order={order} onSubmit={onSubmit} isPending={isPending} />

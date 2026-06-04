@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
@@ -34,6 +35,7 @@ interface CategoryTableProps {
 const columnHelper = createColumnHelper<Category>();
 
 export function CategoryTable({ onEdit, onCreate, params, onParamsChange }: CategoryTableProps) {
+  const { t } = useI18n();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -43,7 +45,7 @@ export function CategoryTable({ onEdit, onCreate, params, onParamsChange }: Cate
   const columns = useMemo(
     () => [
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("categories.name"),
         cell: (info) => (
           <div className="font-medium flex items-center gap-2">
             {info.row.original.color && (
@@ -54,11 +56,11 @@ export function CategoryTable({ onEdit, onCreate, params, onParamsChange }: Cate
         ),
       }),
       columnHelper.accessor("slug", {
-        header: "Slug",
+        header: t("categories.slug"),
         cell: (info) => <span className="font-mono text-xs text-muted-foreground">{info.getValue()}</span>,
       }),
       columnHelper.accessor("is_active", {
-        header: "Status",
+        header: t("common.status"),
         cell: (info) => <StatusBadge status={info.getValue() ? "active" : "inactive"} />,
       }),
       columnHelper.accessor("sort_order", {
@@ -66,7 +68,7 @@ export function CategoryTable({ onEdit, onCreate, params, onParamsChange }: Cate
         cell: (info) => <span className="text-xs">{info.getValue()}</span>,
       }),
       columnHelper.accessor("created_at", {
-        header: "Created",
+        header: t("users.createdAt"),
         cell: (info) => (
           <span className="text-muted-foreground text-xs">{formatDate(info.getValue() ?? "")}</span>
         ),
@@ -85,7 +87,7 @@ export function CategoryTable({ onEdit, onCreate, params, onParamsChange }: Cate
         ),
       }),
     ],
-    [onEdit],
+    [onEdit, t],
   );
 
   const table = useReactTable({
@@ -106,9 +108,9 @@ export function CategoryTable({ onEdit, onCreate, params, onParamsChange }: Cate
     <>
       {!isLoading && categories.length === 0 ? (
         <EmptyState
-          title="No categories found"
-          description="Get started by creating your first category."
-          action={<Button onClick={onCreate}>Create Category</Button>}
+          title={t("common.noData")}
+          description={t("categories.title")}
+          action={<Button onClick={onCreate}>{t("categories.create")}</Button>}
         />
       ) : (
         <>

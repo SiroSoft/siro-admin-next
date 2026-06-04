@@ -9,6 +9,7 @@ import { SearchInput } from "@/components/search-input";
 import { UserTable } from "@/modules/users/components/user-table";
 import { UserFormDialog } from "@/modules/users/components/user-form-dialog";
 import { useCreateUser, useUpdateUser, useUsers } from "@/hooks/use-users";
+import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { toast } from "@/hooks/use-toast";
 import type { components } from "@/types/api";
@@ -16,6 +17,7 @@ import type { components } from "@/types/api";
 type User = components["schemas"]["User"];
 export default function UsersPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [editUser, setEditUser] = useState<User | null>(null);
@@ -104,14 +106,14 @@ export default function UsersPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Users" description="Manage system users">
+      <PageHeader title={t("users.title")} description={t("users.title")}>
         <Button variant="outline" onClick={handleExport}>
           <Download className="mr-2 h-4 w-4" />
-          Export
+          {t("common.export")}
         </Button>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Create User
+          {t("users.create")}
         </Button>
       </PageHeader>
 
@@ -122,12 +124,12 @@ export default function UsersPage() {
             setSearch(v);
             setPage(1);
           }}
-          placeholder="Search users..."
+          placeholder={t("common.search") + " " + t("users.title") + "..."}
         />
         {selectedIds.length > 0 && (
           <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
             <Trash2 className="mr-2 h-4 w-4" />
-            Delete Selected ({selectedIds.length})
+            {t("common.delete")} ({selectedIds.length})
           </Button>
         )}
       </div>

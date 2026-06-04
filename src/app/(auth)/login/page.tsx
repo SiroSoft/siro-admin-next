@@ -12,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
+import { useI18n } from "@/providers/i18n-provider";
 import { APP_NAME } from "@/lib/constants";
 
 const loginSchema = z.object({
@@ -25,6 +26,7 @@ const REMEMBER_EMAIL_KEY = "siro_remember_email";
 
 export default function LoginPage() {
   const { login, isLoginPending, loginError, isLoading: isAuthLoading } = useAuth();
+  const { t } = useI18n();
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
 
@@ -71,13 +73,13 @@ export default function LoginPage() {
         <img src="/logo.svg" alt="Siro Admin" className="mx-auto h-12 w-12" />
         <div>
           <CardTitle className="text-2xl font-bold">{APP_NAME}</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardDescription>{t("auth.signIn")}</CardDescription>
         </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
+            <Label htmlFor="email">{t("auth.email")} <span className="text-destructive">*</span></Label>
             <Input
               id="email"
               type="email"
@@ -92,7 +94,7 @@ export default function LoginPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password">Password <span className="text-destructive">*</span></Label>
+            <Label htmlFor="password">{t("auth.password")} <span className="text-destructive">*</span></Label>
             <div className="relative">
               <Input
                 id="password"
@@ -127,14 +129,14 @@ export default function LoginPage() {
                 checked={remember}
                 onCheckedChange={(v) => setRemember(v === true)}
               />
-              Remember me
+              {t("auth.rememberMe")}
             </label>
-            <Link href="/forgot-password" className="text-sm text-primary hover:underline">Forgot password?</Link>
+            <Link href="/forgot-password" className="text-sm text-primary hover:underline">{t("auth.forgotPassword")}</Link>
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoginPending}>
             {isLoginPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Sign in
+            {t("common.login")}
           </Button>
         </form>
       </CardContent>

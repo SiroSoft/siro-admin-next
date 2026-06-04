@@ -10,6 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useI18n } from "@/providers/i18n-provider";
 
 interface DeleteDialogProps {
   open: boolean;
@@ -24,19 +25,21 @@ export function DeleteDialog({
   open,
   onOpenChange,
   onConfirm,
-  title = "Are you sure?",
-  description = "This action cannot be undone.",
+  title,
+  description,
   isPending,
 }: DeleteDialogProps) {
+  const { t } = useI18n();
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          <AlertDialogTitle>{title ?? t("common.confirm")}</AlertDialogTitle>
+          <AlertDialogDescription>{description ?? "This action cannot be undone."}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>{t("common.cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
@@ -45,7 +48,7 @@ export function DeleteDialog({
             disabled={isPending}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
-            {isPending ? "Deleting..." : "Delete"}
+            {isPending ? "Deleting..." : t("common.delete")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

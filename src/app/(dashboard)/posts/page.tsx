@@ -8,11 +8,13 @@ import { SearchInput } from "@/components/search-input";
 import { PostTable } from "@/modules/posts/components/post-table";
 import { PostFormDialog } from "@/modules/posts/components/post-form-dialog";
 import { useCreatePost, useUpdatePost } from "@/hooks/use-posts";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Post = components["schemas"]["Post"];
 
 export default function PostsPage() {
+  const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [editPost, setEditPost] = useState<Post | null>(null);
@@ -37,15 +39,15 @@ export default function PostsPage() {
 
   return (
     <div className="space-y-4">
-      <PageHeader title="Posts" description="Manage blog posts">
+      <PageHeader title={t("posts.title")} description={t("posts.title")}>
         <Button onClick={() => setShowCreate(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Create Post
+          {t("posts.create")}
         </Button>
       </PageHeader>
 
       <div className="flex flex-wrap items-center gap-2">
-        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder="Search posts..." />
+        <SearchInput value={search} onChange={(v) => { setSearch(v); setPage(1); }} placeholder={t("common.search") + " " + t("posts.title") + "..."} />
       </div>
 
       <PostTable

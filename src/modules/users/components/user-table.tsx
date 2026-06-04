@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { StatusBadge } from "@/components/status-badge";
 import { formatDate } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
@@ -36,6 +37,7 @@ interface UserTableProps {
 const columnHelper = createColumnHelper<User>();
 
 export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedIds = [], onSelectionChange }: UserTableProps) {
+  const { t } = useI18n();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
@@ -85,24 +87,24 @@ export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedId
         enableSorting: false,
       }),
       columnHelper.accessor("name", {
-        header: "Name",
+        header: t("users.name"),
         cell: (info) => (
           <div className="font-medium">{info.getValue()}</div>
         ),
       }),
       columnHelper.accessor("email", {
-        header: "Email",
+        header: t("users.email"),
       }),
       columnHelper.accessor("role", {
-        header: "Role",
+        header: t("users.role"),
         cell: (info) => <StatusBadge status={info.getValue()} />,
       }),
       columnHelper.accessor("status", {
-        header: "Status",
+        header: t("common.status"),
         cell: (info) => <StatusBadge status={info.getValue()} />,
       }),
       columnHelper.accessor("created_at", {
-        header: "Created",
+        header: t("users.createdAt"),
         cell: (info) => (
           <span className="text-muted-foreground">{formatDate(info.getValue() ?? "")}</span>
         ),
@@ -121,7 +123,7 @@ export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedId
         ),
       }),
     ],
-    [onEdit, selectedIds, allSelected, handleSelectAll, handleSelectOne],
+    [onEdit, selectedIds, allSelected, handleSelectAll, handleSelectOne, t],
   );
 
   const table = useReactTable({
@@ -147,10 +149,10 @@ export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedId
     <>
       {!isLoading && users.length === 0 ? (
         <EmptyState
-          title="No users found"
-          description="Get started by creating your first user."
+          title={t("common.noData")}
+          description={t("users.title")}
           action={
-            <Button onClick={onCreate}>Create User</Button>
+            <Button onClick={onCreate}>{t("users.create")}</Button>
           }
         />
       ) : (

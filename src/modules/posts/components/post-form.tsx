@@ -19,6 +19,7 @@ import {
 } from "@/modules/posts/schemas/post.schema";
 import { useCategories } from "@/hooks/use-categories";
 import { useTags } from "@/hooks/use-tags";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Post = components["schemas"]["Post"];
@@ -30,6 +31,7 @@ interface PostFormProps {
 }
 
 export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
+  const { t } = useI18n();
   const isEdit = !!post;
   const { categories } = useCategories({ per_page: 100 });
   const { tags } = useTags({ per_page: 200 });
@@ -67,7 +69,7 @@ export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
       <div className="space-y-2">
-        <Label htmlFor="title">Title *</Label>
+        <Label htmlFor="title">{t("posts.title_field")} *</Label>
         <Input id="title" {...register("title")} placeholder="Post title" disabled={isPending} />
         {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
       </div>
@@ -78,7 +80,7 @@ export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="content">Content *</Label>
+        <Label htmlFor="content">{t("posts.content")} *</Label>
         <RichTextEditor
           value={watch("content") ?? ""}
           onChange={(html) => setValue("content", html, { shouldValidate: true })}
@@ -90,26 +92,26 @@ export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label>Cover Image</Label>
+        <Label>{t("products.image")}</Label>
         <ImageUpload value={watch("cover_image") ?? ""} onChange={(v) => setValue("cover_image", v)} disabled={isPending} />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Status</Label>
+          <Label>{t("common.status")}</Label>
           <Select value={watch("status")} onValueChange={(v) => setValue("status", v as "draft" | "published" | "archived")} disabled={isPending}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="draft">Draft</SelectItem>
-              <SelectItem value="published">Published</SelectItem>
+              <SelectItem value="draft">{t("posts.status_draft")}</SelectItem>
+              <SelectItem value="published">{t("posts.status_published")}</SelectItem>
               <SelectItem value="archived">Archived</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="space-y-2">
-          <Label>Category</Label>
+          <Label>{t("products.category")}</Label>
           <Select
             value={watch("category_id") ? String(watch("category_id")) : ""}
             onValueChange={(v) => setValue("category_id", v ? Number(v) : undefined)}
@@ -156,7 +158,7 @@ export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
       <div className="flex justify-end gap-2 pt-2">
         <Button type="submit" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isEdit ? "Update" : "Create"} Post
+          {isEdit ? t("common.save") : t("common.create")}
         </Button>
       </div>
     </form>

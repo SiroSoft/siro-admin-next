@@ -14,6 +14,7 @@ import {
   type CreateUserFormData,
   type UpdateUserFormData,
 } from "@/modules/users/schemas/user.schema";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type User = components["schemas"]["User"];
@@ -25,6 +26,7 @@ interface UserFormProps {
 }
 
 export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
+  const { t } = useI18n();
   const isEdit = !!user;
 
   const {
@@ -54,13 +56,13 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="name">Name <span className="text-destructive">*</span></Label>
+        <Label htmlFor="name">{t("users.name")} <span className="text-destructive">*</span></Label>
         <Input id="name" {...register("name")} placeholder="John Doe" disabled={isPending} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email <span className="text-destructive">*</span></Label>
+        <Label htmlFor="email">{t("auth.email")} <span className="text-destructive">*</span></Label>
         <Input id="email" type="email" {...register("email")} placeholder="john@example.com" disabled={isPending} />
         {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
       </div>
@@ -73,12 +75,12 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
       {!isEdit && (
         <>
           <div className="space-y-2">
-            <Label htmlFor="password">Password <span className="text-destructive">*</span></Label>
+            <Label htmlFor="password">{t("auth.password")} <span className="text-destructive">*</span></Label>
             <Input id="password" type="password" {...register("password")} placeholder="••••••••" disabled={isPending} />
             {"password" in errors && <p className="text-sm text-destructive">{String((errors as { password?: { message?: string } }).password?.message)}</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password_confirmation">Confirm Password <span className="text-destructive">*</span></Label>
+            <Label htmlFor="password_confirmation">{t("common.confirm")} <span className="text-destructive">*</span></Label>
             <Input id="password_confirmation" type="password" {...register("password_confirmation")} placeholder="••••••••" disabled={isPending} />
             {"password_confirmation" in errors && <p className="text-sm text-destructive">{String((errors as { password_confirmation?: { message?: string } }).password_confirmation?.message)}</p>}
           </div>
@@ -87,7 +89,7 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label>Role</Label>
+          <Label>{t("users.role")}</Label>
           <Select
             value={watch("role")}
             onValueChange={(v) => setValue("role", v)}
@@ -106,7 +108,7 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
         </div>
 
         <div className="space-y-2">
-          <Label>Status</Label>
+          <Label>{t("common.status")}</Label>
           <Select
             value={watch("status")}
             onValueChange={(v) => setValue("status", v)}
@@ -128,7 +130,7 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
       <div className="flex justify-end gap-2 pt-2">
         <Button type="submit" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isEdit ? "Update" : "Create"} User
+          {isEdit ? t("common.save") : t("common.create")}
         </Button>
       </div>
     </form>

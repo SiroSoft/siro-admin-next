@@ -16,6 +16,7 @@ import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 import { useSettings, useUpdateSettings } from "@/hooks/use-settings";
 import { useUpdateProfile, useChangePassword } from "@/hooks/use-profile";
 import { useAuth } from "@/hooks/use-auth";
@@ -59,7 +60,7 @@ const settingsSchema = z.object({
 
 const LANGUAGES = [
   { value: "en", label: "English" },
-  { value: "vi", label: "Vietnamese" },
+  { value: "vi", label: "Tiếng Việt" },
   { value: "ja", label: "Japanese" },
   { value: "ko", label: "Korean" },
   { value: "zh", label: "Chinese" },
@@ -106,6 +107,7 @@ type SettingsFormData = z.infer<typeof settingsSchema>;
 
 export default function SettingsPage() {
   const { user } = useAuth();
+  const { t } = useI18n();
   const { theme, setTheme } = useTheme();
   const { data: settings, isLoading: settingsLoading } = useSettings();
   const updateSettings = useUpdateSettings();
@@ -198,25 +200,25 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Settings" description="Manage your application settings" />
+      <PageHeader title={t("settings.title")} description={t("settings.title")} />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Profile</CardTitle>
-            <CardDescription>Update your name and email</CardDescription>
+            <CardTitle>{t("common.profile")}</CardTitle>
+            <CardDescription>{t("common.settings")}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={profileForm.handleSubmit(handleProfileSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="s-name">Name</Label>
+                <Label htmlFor="s-name">{t("users.name")}</Label>
                 <Input id="s-name" {...profileForm.register("name")} disabled={updateProfile.isPending} />
                 {profileForm.formState.errors.name && (
                   <p className="text-sm text-destructive">{profileForm.formState.errors.name.message}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="s-email">Email</Label>
+                <Label htmlFor="s-email">{t("auth.email")}</Label>
                 <Input id="s-email" type="email" {...profileForm.register("email")} disabled={updateProfile.isPending} />
                 {profileForm.formState.errors.email && (
                   <p className="text-sm text-destructive">{profileForm.formState.errors.email.message}</p>
@@ -224,7 +226,7 @@ export default function SettingsPage() {
               </div>
               <Button type="submit" disabled={updateProfile.isPending}>
                 {updateProfile.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Profile
+                {t("common.save")}
               </Button>
             </form>
           </CardContent>
@@ -232,13 +234,13 @@ export default function SettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Change Password</CardTitle>
-            <CardDescription>Update your password</CardDescription>
+            <CardTitle>{t("settings.security")}</CardTitle>
+            <CardDescription>{t("common.settings")}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={passwordForm.handleSubmit(handlePasswordSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="s-current">Current Password</Label>
+                <Label htmlFor="s-current">{t("auth.password")}</Label>
                 <Input id="s-current" type="password" {...passwordForm.register("current_password")} disabled={changePassword.isPending} />
                 {passwordForm.formState.errors.current_password && (
                   <p className="text-sm text-destructive">{passwordForm.formState.errors.current_password.message}</p>
@@ -246,14 +248,14 @@ export default function SettingsPage() {
               </div>
               <Separator />
               <div className="space-y-2">
-                <Label htmlFor="s-new">New Password</Label>
+                <Label htmlFor="s-new">{t("auth.password")}</Label>
                 <Input id="s-new" type="password" {...passwordForm.register("new_password")} disabled={changePassword.isPending} />
                 {passwordForm.formState.errors.new_password && (
                   <p className="text-sm text-destructive">{passwordForm.formState.errors.new_password.message}</p>
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="s-confirm">Confirm Password</Label>
+                <Label htmlFor="s-confirm">{t("common.confirm")}</Label>
                 <Input id="s-confirm" type="password" {...passwordForm.register("new_password_confirmation")} disabled={changePassword.isPending} />
                 {passwordForm.formState.errors.new_password_confirmation && (
                   <p className="text-sm text-destructive">{passwordForm.formState.errors.new_password_confirmation.message}</p>
@@ -261,7 +263,7 @@ export default function SettingsPage() {
               </div>
               <Button type="submit" disabled={changePassword.isPending}>
                 {changePassword.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Change Password
+                {t("common.save")}
               </Button>
             </form>
           </CardContent>
@@ -269,8 +271,8 @@ export default function SettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Theme</CardTitle>
-            <CardDescription>Choose your preferred appearance</CardDescription>
+            <CardTitle>{t("common.settings")}</CardTitle>
+            <CardDescription>{t("settings.general")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex gap-2">
@@ -295,8 +297,8 @@ export default function SettingsPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Application Settings</CardTitle>
-            <CardDescription>Configure application preferences</CardDescription>
+            <CardTitle>{t("settings.title")}</CardTitle>
+            <CardDescription>{t("settings.general")}</CardDescription>
           </CardHeader>
           <CardContent>
             {settingsLoading ? (
@@ -306,19 +308,19 @@ export default function SettingsPage() {
             ) : (
               <form onSubmit={settingsForm.handleSubmit(handleSettingsSubmit)} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="app_name">App Name</Label>
+                  <Label htmlFor="app_name">{t("settings.appName")}</Label>
                   <Input id="app_name" {...settingsForm.register("app_name")} disabled={updateSettings.isPending} />
                   {settingsForm.formState.errors.app_name && (
                     <p className="text-sm text-destructive">{settingsForm.formState.errors.app_name.message}</p>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="app_description">Description</Label>
+                  <Label htmlFor="app_description">{t("products.description")}</Label>
                   <Input id="app_description" {...settingsForm.register("app_description")} disabled={updateSettings.isPending} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Language</Label>
+                    <Label>{t("settings.language")}</Label>
                     <Select
                       value={settingsForm.watch("language")}
                       onValueChange={(v) => settingsForm.setValue("language", v)}
@@ -335,7 +337,7 @@ export default function SettingsPage() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Timezone</Label>
+                    <Label>{t("settings.timezone")}</Label>
                     <Select
                       value={settingsForm.watch("timezone")}
                       onValueChange={(v) => settingsForm.setValue("timezone", v)}
@@ -354,7 +356,7 @@ export default function SettingsPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Currency</Label>
+                    <Label>{t("settings.currency")}</Label>
                     <Select
                       value={settingsForm.watch("currency")}
                       onValueChange={(v) => settingsForm.setValue("currency", v)}
@@ -371,7 +373,7 @@ export default function SettingsPage() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="pagination_per_page">Items Per Page</Label>
+                    <Label htmlFor="pagination_per_page">{t("settings.itemsPerPage")}</Label>
                     <Input id="pagination_per_page" type="number" {...settingsForm.register("pagination_per_page")} disabled={updateSettings.isPending} />
                     {settingsForm.formState.errors.pagination_per_page && (
                       <p className="text-sm text-destructive">{settingsForm.formState.errors.pagination_per_page.message}</p>
@@ -387,7 +389,7 @@ export default function SettingsPage() {
                       disabled={updateSettings.isPending}
                     />
                     <Label htmlFor="maintenance_mode" className="flex items-center gap-1">
-                      Maintenance Mode
+                      {t("settings.maintenanceMode")}
                       <AlertTriangle className="h-3 w-3 text-amber-500" />
                     </Label>
                   </div>
@@ -398,12 +400,12 @@ export default function SettingsPage() {
                       onCheckedChange={(v) => settingsForm.setValue("email_notifications", v)}
                       disabled={updateSettings.isPending}
                     />
-                    <Label htmlFor="email_notifications">Email Notifications</Label>
+                    <Label htmlFor="email_notifications">{t("settings.emailNotifications")}</Label>
                   </div>
                 </div>
                 <Button type="submit" disabled={updateSettings.isPending}>
                   {updateSettings.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Save Settings
+                  {t("common.save")}
                 </Button>
               </form>
             )}
@@ -413,35 +415,35 @@ export default function SettingsPage() {
         <AlertDialog open={showMaintenanceConfirm} onOpenChange={setShowMaintenanceConfirm}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Enable Maintenance Mode?</AlertDialogTitle>
+              <AlertDialogTitle>{t("settings.maintenanceMode")}</AlertDialogTitle>
               <AlertDialogDescription>
-                This will make the application inaccessible to users. Only administrators will be able to access the site. Are you sure you want to proceed?
+                {t("common.confirm")}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmMaintenance}>Enable Maintenance Mode</AlertDialogAction>
+              <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmMaintenance}>{t("common.confirm")}</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>API Information</CardTitle>
-            <CardDescription>Connection details for the API backend</CardDescription>
+            <CardTitle>{t("settings.apiInfo")}</CardTitle>
+            <CardDescription>{t("settings.general")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">API URL</p>
+                <p className="text-xs text-muted-foreground">{t("settings.apiInfo")}</p>
                 <p className="text-sm font-mono">{API_URL}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">App Name</p>
+                <p className="text-xs text-muted-foreground">{t("settings.appName")}</p>
                 <p className="text-sm font-medium">{APP_NAME}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-muted-foreground">Environment</p>
+                <p className="text-xs text-muted-foreground">{t("common.status")}</p>
                 <p className="text-sm font-medium">{process.env.NODE_ENV}</p>
               </div>
             </div>

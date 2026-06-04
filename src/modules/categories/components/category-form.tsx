@@ -17,6 +17,7 @@ import {
   type UpdateCategoryFormData,
 } from "@/modules/categories/schemas/category.schema";
 import { useCategories } from "@/hooks/use-categories";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type Category = components["schemas"]["Category"];
@@ -28,6 +29,7 @@ interface CategoryFormProps {
 }
 
 export function CategoryForm({ category, onSubmit, isPending }: CategoryFormProps) {
+  const { t } = useI18n();
   const isEdit = !!category;
   const { categories } = useCategories({ per_page: 100 });
 
@@ -55,13 +57,13 @@ export function CategoryForm({ category, onSubmit, isPending }: CategoryFormProp
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Name *</Label>
+        <Label htmlFor="name">{t("categories.name")} *</Label>
         <Input id="name" {...register("name")} placeholder="Category name" disabled={isPending} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t("products.description")}</Label>
         <Textarea id="description" {...register("description")} placeholder="Category description" disabled={isPending} />
       </div>
 
@@ -116,13 +118,13 @@ export function CategoryForm({ category, onSubmit, isPending }: CategoryFormProp
 
       <div className="flex items-center gap-2">
         <Switch id="is_active" checked={!!watch("is_active")} onCheckedChange={(v) => setValue("is_active", v)} disabled={isPending} />
-        <Label htmlFor="is_active">Active</Label>
+        <Label htmlFor="is_active">{t("common.active")}</Label>
       </div>
 
       <div className="flex justify-end gap-2 pt-2">
         <Button type="submit" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isEdit ? "Update" : "Create"} Category
+          {isEdit ? t("common.save") : t("common.create")}
         </Button>
       </div>
     </form>

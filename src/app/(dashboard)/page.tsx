@@ -15,6 +15,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 import { useDashboard } from "@/hooks/use-dashboard";
 import { useAuth } from "@/hooks/use-auth";
 import type { components } from "@/types/api";
@@ -74,6 +75,7 @@ function StatCardSkeleton() {
 export default function DashboardPage() {
   const { data, isLoading, isError, error, refetch, isRefetching } = useDashboard();
   const { user } = useAuth();
+  const { t } = useI18n();
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
   const hour = new Date().getHours();
   const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
@@ -85,18 +87,18 @@ export default function DashboardPage() {
 
   const stats = useMemo(
     () => [
-      { title: "Total Users", value: formatNumber(data?.total_users ?? 0), icon: Users, href: "/users" },
-      { title: "Total Orders", value: formatNumber(data?.total_orders ?? 0), icon: ShoppingCart, href: "/orders" },
-      { title: "Total Products", value: formatNumber(data?.total_products ?? 0), icon: Package, href: "/products" },
-      { title: "Revenue", value: `$${formatNumber(data?.total_revenue ?? 0)}`, icon: DollarSign, href: "/orders", trend: { value: "+12.5%", up: true } },
+      { title: t("dashboard.totalUsers"), value: formatNumber(data?.total_users ?? 0), icon: Users, href: "/users" },
+      { title: t("dashboard.totalOrders"), value: formatNumber(data?.total_orders ?? 0), icon: ShoppingCart, href: "/orders" },
+      { title: t("dashboard.totalProducts"), value: formatNumber(data?.total_products ?? 0), icon: Package, href: "/products" },
+      { title: t("dashboard.totalRevenue"), value: `$${formatNumber(data?.total_revenue ?? 0)}`, icon: DollarSign, href: "/orders", trend: { value: "+12.5%", up: true } },
     ],
-    [data],
+    [data, t],
   );
 
   if (isError) {
     return (
       <div className="space-y-6">
-        <PageHeader title="Dashboard" description="Overview of your application">
+        <PageHeader title={t("dashboard.title")} description="Overview of your application">
           <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
             <RefreshCw className={`mr-2 h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
             Refresh
@@ -113,7 +115,7 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">{greeting}, {user?.name || "there"} 👋</h1>
-            <p className="text-muted-foreground mt-1">Here&apos;s what&apos;s happening with your application today.</p>
+            <p className="text-muted-foreground mt-1">{t("dashboard.title")} overview</p>
           </div>
           <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
             <RefreshCw className={`mr-2 h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
@@ -131,7 +133,7 @@ export default function DashboardPage() {
       <div className="grid gap-4 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-sm font-medium">Recent Activity</CardTitle>
+            <CardTitle className="text-sm font-medium">{t("dashboard.recentOrders")}</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -164,7 +166,7 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <EmptyState title="No recent activity" description="Activity will appear here as users interact with the system." />
+              <EmptyState title={t("common.noData")} description="Activity will appear here as users interact with the system." />
             )}
           </CardContent>
         </Card>
@@ -172,7 +174,7 @@ export default function DashboardPage() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">API Status</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("dashboard.apiStatus")}</CardTitle>
             </CardHeader>
             <CardContent>
               {isLoading ? (
@@ -187,7 +189,7 @@ export default function DashboardPage() {
               ) : data?.api_status ? (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Status</span>
+                    <span className="text-sm text-muted-foreground">{t("common.status")}</span>
                     <StatusBadge status={data.api_status.status ?? "down"} />
                   </div>
                   <div className="flex items-center justify-between">
@@ -215,30 +217,30 @@ export default function DashboardPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-sm font-medium">Quick Actions</CardTitle>
+              <CardTitle className="text-sm font-medium">{t("dashboard.quickActions")}</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-2">
               <Link href="/users/new" className="group">
                 <Button variant="default" className="w-full justify-start">
-                  <Plus className="mr-2 h-4 w-4" /> New User
+                  <Plus className="mr-2 h-4 w-4" /> {t("dashboard.newUser")}
                   <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
                 </Button>
               </Link>
               <Link href="/orders" className="group">
                 <Button variant="secondary" className="w-full justify-start">
-                  <Eye className="mr-2 h-4 w-4" /> View Orders
+                  <Eye className="mr-2 h-4 w-4" /> {t("dashboard.viewOrders")}
                   <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
                 </Button>
               </Link>
               <Link href="/products" className="group">
                 <Button variant="secondary" className="w-full justify-start">
-                  <Package className="mr-2 h-4 w-4" /> Manage Products
+                  <Package className="mr-2 h-4 w-4" /> {t("dashboard.manageProducts")}
                   <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
                 </Button>
               </Link>
               <Link href="/settings" className="group">
                 <Button variant="secondary" className="w-full justify-start">
-                  <Settings className="mr-2 h-4 w-4" /> Settings
+                  <Settings className="mr-2 h-4 w-4" /> {t("common.settings")}
                   <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
                 </Button>
               </Link>
@@ -248,12 +250,12 @@ export default function DashboardPage() {
       </div>
 
       <Card>
-        <CardHeader><CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-sm font-medium">{t("dashboard.monthlyRevenue")}</CardTitle></CardHeader>
         <CardContent>
           {isLoading ? (
             <Skeleton className="h-[300px] w-full" />
           ) : isError ? (
-            <ErrorState message="Failed to load revenue data" onRetry={() => refetch()} />
+            <ErrorState message={t("errors.serverError")} onRetry={() => refetch()} />
           ) : data?.monthly_revenue && data.monthly_revenue.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={data.monthly_revenue}>
