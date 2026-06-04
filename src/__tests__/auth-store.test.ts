@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from "vitest";
 import { useAuthStore } from "@/store/auth.store";
 
 describe("auth.store", () => {
-  const mockUser = { id: 1, name: "Test", email: "test@test.com", role: "admin", status: 1 };
+  const mockUser = { id: 1, name: "Test", email: "test@test.com", role: "admin", status: "active" };
 
   beforeEach(() => {
     localStorage.clear();

@@ -31,7 +31,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { serverService } from "@/services/server.service";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -194,6 +195,22 @@ export default function SettingsPage() {
     { value: "dark", label: "Dark", icon: Moon },
     { value: "system", label: "System", icon: Monitor },
   ];
+
+  function ServerInfoCard() {
+    const [info, setInfo] = useState<any>(null);
+    useEffect(() => {
+      serverService.getInfo().then(setInfo).catch(() => {});
+    }, []);
+    if (!info) return null;
+    return (
+      <div className="grid gap-4 sm:grid-cols-4">
+        <div className="space-y-1"><p className="text-xs text-muted-foreground">PHP Version</p><p className="text-sm font-mono">{info.php_version}</p></div>
+        <div className="space-y-1"><p className="text-xs text-muted-foreground">Server</p><p className="text-sm font-mono">{info.server}</p></div>
+        <div className="space-y-1"><p className="text-xs text-muted-foreground">Database driver</p><p className="text-sm font-mono">{info.db_driver}</p></div>
+        <div className="space-y-1"><p className="text-xs text-muted-foreground">Current time</p><p className="text-sm font-mono">{info.current_time}</p></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -406,6 +423,16 @@ export default function SettingsPage() {
                 </Button>
               </form>
             )}
+          </CardContent>
+        </Card>
+
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle>System Info</CardTitle>
+            <CardDescription>Server information</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ServerInfoCard />
           </CardContent>
         </Card>
 

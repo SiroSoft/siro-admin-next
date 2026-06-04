@@ -190,6 +190,27 @@ const de = {
     showPassword: 'Passwort anzeigen',
     invalidCredentials: 'Ungültige Anmeldedaten',
   },
+  register: {
+    title: 'Konto erstellen',
+    name: 'Name',
+    submit: 'Konto erstellen',
+    success: 'Konto erfolgreich erstellt',
+    haveAccount: 'Bereits ein Konto?',
+    loginHere: 'Hier anmelden',
+    namePlaceholder: 'Max Mustermann',
+  },
+  resetPassword: {
+    title: 'Passwort zurücksetzen',
+    submit: 'Passwort zurücksetzen',
+    success: 'Passwort wurde erfolgreich zurückgesetzt',
+    invalidToken: 'Ungültiges oder fehlendes Reset-Token',
+  },
+  verifyEmail: {
+    title: 'E-Mail bestätigen',
+    submit: 'E-Mail bestätigen',
+    success: 'E-Mail erfolgreich bestätigt',
+    invalidToken: 'Ungültiges oder abgelaufenes Bestätigungs-Token',
+  },
   errors: {
     notFound: 'Nicht gefunden',
     serverError: 'Interner Serverfehler',

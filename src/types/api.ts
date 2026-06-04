@@ -577,8 +577,8 @@ export interface components {
             email?: string;
             /** @example admin */
             role?: string;
-            /** @example 1 */
-            status?: number;
+            /** @enum {string} */
+            status?: string;
             /** Format: date-time */
             created_at?: string;
             /** Format: date-time */
@@ -616,32 +616,24 @@ export interface components {
             user_name?: string;
             /** Format: float */
             total?: number;
-            /** Format: float */
-            subtotal?: number;
-            /** Format: float */
-            tax?: number;
-            /** Format: float */
-            shipping?: number;
-            /** Format: float */
-            discount?: number;
             /** @enum {string} */
             status?: "pending" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled";
-            payment_method?: string;
             /** @example pending */
             payment_status?: string;
+            payment_method?: string;
             shipping_address?: string;
             billing_address?: string;
             notes?: string | null;
             items?: components["schemas"]["OrderItem"][];
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
             /**
              * Format: email
              * @example john@example.com
              */
             customer_email?: string;
+            /** Format: date-time */
+            created_at?: string;
+            /** Format: date-time */
+            updated_at?: string;
         };
         OrderItem: {
             id?: number;
@@ -793,23 +785,20 @@ export interface components {
         Post: {
             id?: number;
             title?: string;
-            slug?: string;
             /** @example Post body content */
             content?: string;
             excerpt?: string | null;
+            locale?: string;
             /** @example https://example.com/image.jpg */
             cover_image?: string | null;
             /** @enum {string} */
             status?: "draft" | "published" | "archived";
             /** @example false */
             featured?: boolean;
-            author_id?: number;
             author_name?: string;
             category_id?: number | null;
             category_name?: string | null;
             tags?: components["schemas"]["Tag"][];
-            /** Format: date-time */
-            published_at?: string | null;
             /** Format: date-time */
             created_at?: string;
             /** Format: date-time */

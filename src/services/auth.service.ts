@@ -24,6 +24,21 @@ export const authService = {
     return res.data;
   },
 
+  async register(data: components["schemas"]["RegisterRequest"]) {
+    const res = await api.post<components["schemas"]["SuccessResponse_null"]>("/api/auth/register", data);
+    return res.data;
+  },
+
+  async resetPassword(data: components["schemas"]["ResetPasswordRequest"]) {
+    const res = await api.post<components["schemas"]["SuccessResponse_null"]>("/api/auth/reset-password", data);
+    return res.data;
+  },
+
+  async verifyEmail(data: components["schemas"]["VerifyEmailRequest"]) {
+    const res = await api.post<components["schemas"]["SuccessResponse_null"]>("/api/auth/verify-email", data);
+    return res.data;
+  },
+
   async logout() {
     await api.post("/api/auth/logout");
   },

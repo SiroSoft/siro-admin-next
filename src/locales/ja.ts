@@ -190,6 +190,27 @@ const ja = {
     showPassword: 'パスワードを表示',
     invalidCredentials: '認証情報が無効です',
   },
+  register: {
+    title: 'アカウントを作成',
+    name: '名前',
+    submit: 'アカウントを作成',
+    success: 'アカウントを作成しました',
+    haveAccount: 'すでにアカウントをお持ちですか？',
+    loginHere: 'こちらからログイン',
+    namePlaceholder: '山田 太郎',
+  },
+  resetPassword: {
+    title: 'パスワードをリセット',
+    submit: 'パスワードをリセット',
+    success: 'パスワードがリセットされました',
+    invalidToken: '無効または欠落しているリセットトークン',
+  },
+  verifyEmail: {
+    title: 'メールを確認',
+    submit: 'メールを確認',
+    success: 'メールが確認されました',
+    invalidToken: '無効または期限切れの確認トークン',
+  },
   errors: {
     notFound: '見つかりません',
     serverError: 'サーバーエラー',

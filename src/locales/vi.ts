@@ -192,6 +192,27 @@ const vi: Locale = {
     showPassword: 'Hiện mật khẩu',
     invalidCredentials: 'Thông tin đăng nhập không hợp lệ',
   },
+  register: {
+    title: 'Tạo tài khoản',
+    name: 'Tên',
+    submit: 'Tạo tài khoản',
+    success: 'Tạo tài khoản thành công',
+    haveAccount: 'Đã có tài khoản?',
+    loginHere: 'Đăng nhập tại đây',
+    namePlaceholder: 'Nguyễn Văn A',
+  },
+  resetPassword: {
+    title: 'Đặt lại mật khẩu',
+    submit: 'Đặt lại mật khẩu',
+    success: 'Mật khẩu đã được đặt lại thành công',
+    invalidToken: 'Token đặt lại không hợp lệ hoặc thiếu',
+  },
+  verifyEmail: {
+    title: 'Xác thực email',
+    submit: 'Xác thực email',
+    success: 'Email đã được xác thực thành công',
+    invalidToken: 'Token xác thực không hợp lệ hoặc hết hạn',
+  },
   errors: {
     notFound: 'Không tìm thấy',
     serverError: 'Lỗi máy chủ',
