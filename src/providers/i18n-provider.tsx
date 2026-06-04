@@ -3,6 +3,9 @@
 import { createContext, useContext, useState, useCallback, useMemo, useEffect } from "react";
 import en from "@/locales/en";
 import vi from "@/locales/vi";
+import de from "@/locales/de";
+import zh from "@/locales/zh";
+import ja from "@/locales/ja";
 import type { Locale } from "@/locales/en";
 
 type NestedKeyOf<T> = T extends Record<string, unknown>
@@ -11,7 +14,7 @@ type NestedKeyOf<T> = T extends Record<string, unknown>
 
 type TranslationKey = NestedKeyOf<Locale>;
 
-type LocaleName = "en" | "vi";
+type LocaleName = "en" | "vi" | "de" | "zh" | "ja";
 
 interface I18nContextValue {
   locale: LocaleName;
@@ -21,7 +24,7 @@ interface I18nContextValue {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
-const locales: Record<LocaleName, Locale> = { en, vi };
+const locales: Record<LocaleName, Locale> = { en, vi, de, zh, ja };
 
 function getValue(obj: Record<string, unknown>, path: string): string {
   const keys = path.split(".");
@@ -38,7 +41,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const saved = localStorage.getItem("siro_locale");
-    if (saved === "en" || saved === "vi") setLocaleState(saved);
+    if (saved === "en" || saved === "vi" || saved === "de" || saved === "zh" || saved === "ja") setLocaleState(saved);
   }, []);
 
   const setLocale = useCallback((l: LocaleName) => {

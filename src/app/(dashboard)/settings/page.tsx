@@ -61,6 +61,9 @@ const settingsSchema = z.object({
 const LANGUAGES = [
   { value: "en", label: "English" },
   { value: "vi", label: "Tiếng Việt" },
+  { value: "de", label: "Deutsch" },
+  { value: "zh", label: "中文" },
+  { value: "ja", label: "日本語" },
 ];
 
 const TIMEZONES = [
