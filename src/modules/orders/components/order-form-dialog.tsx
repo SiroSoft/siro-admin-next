@@ -10,6 +10,7 @@ import {
 import { OrderForm } from "@/modules/orders/components/order-form";
 import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
+import type { CreateOrderFormData, UpdateOrderFormData } from "@/modules/orders/schemas/order.schema";
 
 type Order = components["schemas"]["Order"];
 
@@ -17,7 +18,7 @@ interface OrderFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   order?: Order;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: CreateOrderFormData | UpdateOrderFormData) => void;
   isPending: boolean;
 }
 

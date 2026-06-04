@@ -10,6 +10,7 @@ import { PostFormDialog } from "@/modules/posts/components/post-form-dialog";
 import { useCreatePost, useUpdatePost } from "@/hooks/use-posts";
 import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
+import type { CreatePostFormData, UpdatePostFormData } from "@/modules/posts/schemas/post.schema";
 
 type Post = components["schemas"]["Post"];
 
@@ -28,12 +29,12 @@ export default function PostsPage() {
   const handleEdit = useCallback((post: Post) => setEditPost(post), []);
 
   const handleCreateSubmit = useCallback(
-    (data: any) => createMutation.mutate(data, { onSuccess: () => setShowCreate(false) }),
+    (data: CreatePostFormData | UpdatePostFormData) => createMutation.mutate(data as components["schemas"]["CreatePostRequest"], { onSuccess: () => setShowCreate(false) }),
     [createMutation],
   );
 
   const handleEditSubmit = useCallback(
-    (data: any) => updateMutation.mutate(data, { onSuccess: () => setEditPost(null) }),
+    (data: CreatePostFormData | UpdatePostFormData) => updateMutation.mutate(data as components["schemas"]["UpdatePostRequest"], { onSuccess: () => setEditPost(null) }),
     [updateMutation],
   );
 

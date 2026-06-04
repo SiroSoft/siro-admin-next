@@ -1,6 +1,11 @@
 import type { Locale } from "./en";
 
 const vi: Locale = {
+  greeting: {
+    morning: 'Chào buổi sáng',
+    afternoon: 'Chào buổi chiều',
+    evening: 'Chào buổi tối',
+  },
   common: {
     dashboard: 'Bảng điều khiển',
     users: 'Người dùng',
@@ -69,6 +74,16 @@ const vi: Locale = {
     newUser: 'Người dùng mới',
     viewOrders: 'Xem đơn hàng',
     manageProducts: 'Quản lý sản phẩm',
+    overview: 'Tổng quan ứng dụng của bạn',
+    refresh: 'Làm mới',
+    activityEmpty: 'Hoạt động sẽ xuất hiện ở đây khi người dùng tương tác với hệ thống.',
+    version: 'Phiên bản',
+    uptime: 'Thời gian hoạt động',
+    responseTime: 'Thời gian phản hồi',
+    lastChecked: 'Lần kiểm tra cuối',
+    apiStatusUnavailable: 'Trạng thái API không khả dụng',
+    noRevenue: 'Không có dữ liệu doanh thu',
+    noRevenueDesc: 'Dữ liệu doanh thu sẽ xuất hiện sau khi có đơn hàng.',
   },
   users: {
     title: 'Người dùng',
@@ -83,6 +98,10 @@ const vi: Locale = {
     createdAt: 'Ngày tạo',
     confirmDelete: 'Bạn có chắc chắn muốn xóa người dùng này?',
     exportTitle: 'Xuất danh sách người dùng',
+    deleted: 'Đã xóa người dùng',
+    deletedDescription: 'người dùng đã bị xóa.',
+    exportStarted: 'Đã xuất',
+    exportStartedDescription: 'người dùng đã được xuất.',
   },
   products: {
     title: 'Sản phẩm',
@@ -147,6 +166,12 @@ const vi: Locale = {
     emailNotifications: 'Thông báo email',
     theme: 'Giao diện',
     apiInfo: 'Thông tin API',
+    saved: 'Đã lưu cài đặt',
+    savedDescription: 'Cài đặt ứng dụng đã được cập nhật.',
+    profileUpdated: 'Đã cập nhật hồ sơ',
+    profileUpdatedDescription: 'Hồ sơ của bạn đã được cập nhật.',
+    passwordChanged: 'Đã đổi mật khẩu',
+    passwordChangedDescription: 'Mật khẩu của bạn đã được thay đổi.',
   },
   validation: {
     required: 'Trường này là bắt buộc',
@@ -154,6 +179,18 @@ const vi: Locale = {
     minLength: 'Tối thiểu {{min}} ký tự',
     maxLength: 'Tối đa {{max}} ký tự',
     passwordMismatch: 'Mật khẩu không khớp',
+  },
+  forgotPassword: {
+    sentMessage: 'Nếu tài khoản tồn tại, chúng tôi đã gửi liên kết đặt lại mật khẩu.',
+    description: 'Nhập email của bạn và chúng tôi sẽ gửi liên kết đặt lại mật khẩu.',
+    emailPlaceholder: 'admin@example.com',
+  },
+  login: {
+    emailPlaceholder: 'admin@example.com',
+    passwordPlaceholder: '••••••••',
+    hidePassword: 'Ẩn mật khẩu',
+    showPassword: 'Hiện mật khẩu',
+    invalidCredentials: 'Thông tin đăng nhập không hợp lệ',
   },
   errors: {
     notFound: 'Không tìm thấy',

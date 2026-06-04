@@ -1,4 +1,9 @@
 const en = {
+  greeting: {
+    morning: 'Good morning',
+    afternoon: 'Good afternoon',
+    evening: 'Good evening',
+  },
   common: {
     dashboard: 'Dashboard',
     users: 'Users',
@@ -67,6 +72,16 @@ const en = {
     newUser: 'New User',
     viewOrders: 'View Orders',
     manageProducts: 'Manage Products',
+    overview: 'Overview of your application',
+    refresh: 'Refresh',
+    activityEmpty: 'Activity will appear here as users interact with the system.',
+    version: 'Version',
+    uptime: 'Uptime',
+    responseTime: 'Response Time',
+    lastChecked: 'Last Checked',
+    apiStatusUnavailable: 'API status unavailable',
+    noRevenue: 'No revenue data',
+    noRevenueDesc: 'Revenue data will appear once orders are placed.',
   },
   users: {
     title: 'Users',
@@ -81,6 +96,10 @@ const en = {
     createdAt: 'Created At',
     confirmDelete: 'Are you sure you want to delete this user?',
     exportTitle: 'Users Export',
+    deleted: 'Users deleted',
+    deletedDescription: 'user(s) have been deleted.',
+    exportStarted: 'Export started',
+    exportStartedDescription: 'user(s) exported.',
   },
   products: {
     title: 'Products',
@@ -145,6 +164,12 @@ const en = {
     emailNotifications: 'Email Notifications',
     theme: 'Theme',
     apiInfo: 'API Information',
+    saved: 'Settings saved',
+    savedDescription: 'Application settings have been updated.',
+    profileUpdated: 'Profile updated',
+    profileUpdatedDescription: 'Your profile has been updated.',
+    passwordChanged: 'Password changed',
+    passwordChangedDescription: 'Your password has been changed.',
   },
   validation: {
     required: 'This field is required',
@@ -152,6 +177,18 @@ const en = {
     minLength: 'Minimum {{min}} characters',
     maxLength: 'Maximum {{max}} characters',
     passwordMismatch: 'Passwords do not match',
+  },
+  forgotPassword: {
+    sentMessage: 'If an account exists, we have sent a reset link.',
+    description: 'Enter your email and we will send you a reset link.',
+    emailPlaceholder: 'admin@example.com',
+  },
+  login: {
+    emailPlaceholder: 'admin@example.com',
+    passwordPlaceholder: '••••••••',
+    hidePassword: 'Hide password',
+    showPassword: 'Show password',
+    invalidCredentials: 'Invalid credentials',
   },
   errors: {
     notFound: 'Not Found',

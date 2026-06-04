@@ -9,8 +9,8 @@ import { ProductTable } from "@/modules/products/components/product-table";
 import { ProductFormDialog } from "@/modules/products/components/product-form-dialog";
 import { useCreateProduct, useUpdateProduct } from "@/hooks/use-products";
 import { useI18n } from "@/providers/i18n-provider";
-import { cn } from "@/lib/utils";
 import type { components } from "@/types/api";
+import type { CreateProductFormData, UpdateProductFormData } from "@/modules/products/schemas/product.schema";
 
 type Product = components["schemas"]["Product"];
 
@@ -36,12 +36,12 @@ export default function ProductsPage() {
   const handleEdit = useCallback((product: Product) => setEditProduct(product), []);
 
   const handleCreateSubmit = useCallback(
-    (data: any) => createMutation.mutate(data, { onSuccess: () => setShowCreate(false) }),
+    (data: CreateProductFormData | UpdateProductFormData) => createMutation.mutate(data as components["schemas"]["CreateProductRequest"], { onSuccess: () => setShowCreate(false) }),
     [createMutation],
   );
 
   const handleEditSubmit = useCallback(
-    (data: any) => updateMutation.mutate(data, { onSuccess: () => setEditProduct(null) }),
+    (data: CreateProductFormData | UpdateProductFormData) => updateMutation.mutate(data as components["schemas"]["UpdateProductRequest"], { onSuccess: () => setEditProduct(null) }),
     [updateMutation],
   );
 

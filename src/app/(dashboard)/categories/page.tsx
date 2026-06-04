@@ -10,6 +10,7 @@ import { CategoryFormDialog } from "@/modules/categories/components/category-for
 import { useCreateCategory, useUpdateCategory } from "@/hooks/use-categories";
 import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
+import type { CreateCategoryFormData, UpdateCategoryFormData } from "@/modules/categories/schemas/category.schema";
 
 type Category = components["schemas"]["Category"];
 
@@ -28,12 +29,12 @@ export default function CategoriesPage() {
   const handleEdit = useCallback((category: Category) => setEditCategory(category), []);
 
   const handleCreateSubmit = useCallback(
-    (data: any) => createMutation.mutate(data, { onSuccess: () => setShowCreate(false) }),
+    (data: CreateCategoryFormData | UpdateCategoryFormData) => createMutation.mutate(data as components["schemas"]["CreateCategoryRequest"], { onSuccess: () => setShowCreate(false) }),
     [createMutation],
   );
 
   const handleEditSubmit = useCallback(
-    (data: any) => updateMutation.mutate(data, { onSuccess: () => setEditCategory(null) }),
+    (data: CreateCategoryFormData | UpdateCategoryFormData) => updateMutation.mutate(data as components["schemas"]["UpdateCategoryRequest"], { onSuccess: () => setEditCategory(null) }),
     [updateMutation],
   );
 

@@ -42,8 +42,8 @@ export default function ForgotPasswordPage() {
         throw new Error(err.message || "Failed to send reset link");
       }
       setSent(true);
-    } catch (e: any) {
-      toast({ title: t("errors.unknown"), description: e.message || t("errors.networkError"), variant: "destructive" });
+    } catch (e) {
+      toast({ title: t("errors.unknown"), description: (e as Error).message || t("errors.networkError"), variant: "destructive" });
     } finally {
       setIsPending(false);
     }
@@ -55,7 +55,7 @@ export default function ForgotPasswordPage() {
         <CardHeader className="text-center">
           <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500 mb-2" />
           <CardTitle>{t("common.confirm")}</CardTitle>
-          <CardDescription>If an account exists, we have sent a reset link.</CardDescription>
+          <CardDescription>{t("forgotPassword.sentMessage")}</CardDescription>
         </CardHeader>
         <CardContent className="text-center">
           <Link href="/login">
@@ -73,13 +73,13 @@ export default function ForgotPasswordPage() {
     <Card className="shadow-lg">
       <CardHeader className="text-center">
         <CardTitle>{t("auth.forgotPassword")}</CardTitle>
-        <CardDescription>Enter your email and we will send you a reset link.</CardDescription>
+        <CardDescription>{t("forgotPassword.description")}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">{t("auth.email")}</Label>
-            <Input id="email" type="email" placeholder="admin@example.com" {...register("email")} disabled={isPending} />
+            <Input id="email" type="email" placeholder={t("forgotPassword.emailPlaceholder")} {...register("email")} disabled={isPending} />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
           <Button type="submit" className="w-full" disabled={isPending}>

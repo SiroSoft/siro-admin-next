@@ -10,6 +10,7 @@ import {
 import { CategoryForm } from "@/modules/categories/components/category-form";
 import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
+import type { CreateCategoryFormData, UpdateCategoryFormData } from "@/modules/categories/schemas/category.schema";
 
 type Category = components["schemas"]["Category"];
 
@@ -17,7 +18,7 @@ interface CategoryFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   category?: Category;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: CreateCategoryFormData | UpdateCategoryFormData) => void;
   isPending: boolean;
 }
 

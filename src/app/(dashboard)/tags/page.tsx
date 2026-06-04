@@ -10,6 +10,7 @@ import { TagFormDialog } from "@/modules/tags/components/tag-form-dialog";
 import { useCreateTag, useUpdateTag } from "@/hooks/use-tags";
 import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
+import type { CreateTagFormData, UpdateTagFormData } from "@/modules/tags/schemas/tag.schema";
 
 type Tag = components["schemas"]["Tag"];
 
@@ -28,12 +29,12 @@ export default function TagsPage() {
   const handleEdit = useCallback((tag: Tag) => setEditTag(tag), []);
 
   const handleCreateSubmit = useCallback(
-    (data: any) => createMutation.mutate(data, { onSuccess: () => setShowCreate(false) }),
+    (data: CreateTagFormData | UpdateTagFormData) => createMutation.mutate(data as components["schemas"]["CreateTagRequest"], { onSuccess: () => setShowCreate(false) }),
     [createMutation],
   );
 
   const handleEditSubmit = useCallback(
-    (data: any) => updateMutation.mutate(data, { onSuccess: () => setEditTag(null) }),
+    (data: CreateTagFormData | UpdateTagFormData) => updateMutation.mutate(data as components["schemas"]["UpdateTagRequest"], { onSuccess: () => setEditTag(null) }),
     [updateMutation],
   );
 

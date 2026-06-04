@@ -13,6 +13,7 @@ import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { toast } from "@/hooks/use-toast";
 import type { components } from "@/types/api";
+import type { CreateUserFormData, UpdateUserFormData } from "@/modules/users/schemas/user.schema";
 
 type User = components["schemas"]["User"];
 export default function UsersPage() {
@@ -41,8 +42,8 @@ export default function UsersPage() {
   }, []);
 
   const handleCreateSubmit = useCallback(
-    (data: any) => {
-      createMutation.mutate(data, {
+    (data: CreateUserFormData | UpdateUserFormData) => {
+      createMutation.mutate(data as components["schemas"]["CreateUserRequest"], {
         onSuccess: () => setShowCreate(false),
       });
     },
@@ -50,8 +51,8 @@ export default function UsersPage() {
   );
 
   const handleEditSubmit = useCallback(
-    (data: any) => {
-      updateMutation.mutate(data, {
+    (data: CreateUserFormData | UpdateUserFormData) => {
+      updateMutation.mutate(data as components["schemas"]["UpdateUserRequest"], {
         onSuccess: () => setEditUser(null),
       });
     },
@@ -73,7 +74,7 @@ export default function UsersPage() {
       setSelectedIds([]);
       setShowBulkDelete(false);
       refetch();
-      toast({ title: "Users deleted", description: `${selectedIds.length} user(s) have been deleted.` });
+      toast({ title: t("users.deleted"), description: `${selectedIds.length} ${t("users.deletedDescription")}` });
     } catch {
       toast({ title: "Error", description: "Failed to delete some users.", variant: "destructive" });
     }
@@ -94,7 +95,7 @@ export default function UsersPage() {
         ].join(","),
       );
     }
-    toast({ title: "Export started", description: `${users.length} user(s) exported.` });
+    toast({ title: t("users.exportStarted"), description: `${users.length} ${t("users.exportStartedDescription")}` });
     const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");

@@ -1,6 +1,6 @@
 "use client";
 
-import { flexRender, type Table as TableType } from "@tanstack/react-table";
+import { flexRender, type Column, type Table as TableType } from "@tanstack/react-table";
 import { ChevronUp, ChevronDown, ChevronsUpDown } from "lucide-react";
 import {
   Table,
@@ -19,7 +19,7 @@ interface DataTableProps<TData> {
   isLoading?: boolean;
 }
 
-function SortHeader({ column, children }: { column: any; children: React.ReactNode }) {
+function SortHeader<TData, TValue>({ column, children }: { column: Column<TData, TValue>; children: React.ReactNode }) {
   const isSorted = column.getIsSorted();
   const Icon = isSorted === "asc" ? ChevronUp : isSorted === "desc" ? ChevronDown : ChevronsUpDown;
 

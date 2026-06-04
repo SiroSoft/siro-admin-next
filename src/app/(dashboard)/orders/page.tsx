@@ -11,6 +11,7 @@ import { useCreateOrder, useUpdateOrder } from "@/hooks/use-orders";
 import { useI18n } from "@/providers/i18n-provider";
 import { cn } from "@/lib/utils";
 import type { components } from "@/types/api";
+import type { CreateOrderFormData, UpdateOrderFormData } from "@/modules/orders/schemas/order.schema";
 
 type Order = components["schemas"]["Order"];
 
@@ -39,12 +40,12 @@ export default function OrdersPage() {
   const handleEdit = useCallback((order: Order) => setEditOrder(order), []);
 
   const handleCreateSubmit = useCallback(
-    (data: any) => createMutation.mutate(data, { onSuccess: () => setShowCreate(false) }),
+    (data: CreateOrderFormData | UpdateOrderFormData) => createMutation.mutate(data as components["schemas"]["CreateOrderRequest"], { onSuccess: () => setShowCreate(false) }),
     [createMutation],
   );
 
   const handleEditSubmit = useCallback(
-    (data: any) => updateMutation.mutate(data, { onSuccess: () => setEditOrder(null) }),
+    (data: CreateOrderFormData | UpdateOrderFormData) => updateMutation.mutate(data as components["schemas"]["UpdateOrderRequest"], { onSuccess: () => setEditOrder(null) }),
     [updateMutation],
   );
 

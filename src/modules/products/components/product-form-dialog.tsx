@@ -10,6 +10,7 @@ import {
 import { ProductForm } from "@/modules/products/components/product-form";
 import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
+import type { CreateProductFormData, UpdateProductFormData } from "@/modules/products/schemas/product.schema";
 
 type Product = components["schemas"]["Product"];
 
@@ -17,7 +18,7 @@ interface ProductFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   product?: Product;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: CreateProductFormData | UpdateProductFormData) => void;
   isPending: boolean;
 }
 

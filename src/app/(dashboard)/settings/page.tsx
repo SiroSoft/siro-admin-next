@@ -61,12 +61,6 @@ const settingsSchema = z.object({
 const LANGUAGES = [
   { value: "en", label: "English" },
   { value: "vi", label: "Tiếng Việt" },
-  { value: "ja", label: "Japanese" },
-  { value: "ko", label: "Korean" },
-  { value: "zh", label: "Chinese" },
-  { value: "fr", label: "French" },
-  { value: "de", label: "German" },
-  { value: "es", label: "Spanish" },
 ];
 
 const TIMEZONES = [
@@ -144,7 +138,7 @@ export default function SettingsPage() {
   const handleSettingsSubmit = (data: SettingsFormData) => {
     updateSettings.mutate(data, {
       onSuccess: () => {
-        toast({ title: "Settings saved", description: "Application settings have been updated.", variant: "success" });
+        toast({ title: t("settings.saved"), description: t("settings.savedDescription"), variant: "success" });
       },
       onError: () => {
         toast({ title: "Error", description: "Failed to save settings.", variant: "destructive" });
@@ -172,7 +166,7 @@ export default function SettingsPage() {
   const handleProfileSubmit = (data: { name: string; email: string }) => {
     updateProfile.mutate(data, {
       onSuccess: () => {
-        toast({ title: "Profile updated", description: "Your profile has been updated.", variant: "success" });
+        toast({ title: t("settings.profileUpdated"), description: t("settings.profileUpdatedDescription"), variant: "success" });
       },
       onError: () => {
         toast({ title: "Error", description: "Failed to update profile.", variant: "destructive" });
@@ -184,7 +178,7 @@ export default function SettingsPage() {
     changePassword.mutate(data, {
       onSuccess: () => {
         passwordForm.reset();
-        toast({ title: "Password changed", description: "Your password has been changed.", variant: "success" });
+        toast({ title: t("settings.passwordChanged"), description: t("settings.passwordChangedDescription"), variant: "success" });
       },
       onError: () => {
         toast({ title: "Error", description: "Failed to change password.", variant: "destructive" });

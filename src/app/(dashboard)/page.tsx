@@ -13,8 +13,8 @@ import { EmptyState } from "@/components/empty-state";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
-import { cn } from "@/lib/utils";
+import { cn, formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
+
 import { useI18n } from "@/providers/i18n-provider";
 import { useDashboard } from "@/hooks/use-dashboard";
 import { useAuth } from "@/hooks/use-auth";
@@ -23,29 +23,29 @@ import type { components } from "@/types/api";
 type DashboardStats = components["schemas"]["DashboardStatsResponse"];
 
 const iconColors: Record<string, string> = {
-  Users: "bg-gradient-to-br from-blue-500/10 to-blue-600/20 text-blue-600 dark:from-blue-500/20 dark:to-blue-600/30 dark:text-blue-400 ring-1 ring-blue-500/20",
-  Orders: "bg-gradient-to-br from-orange-500/10 to-orange-600/20 text-orange-600 dark:from-orange-500/20 dark:to-orange-600/30 dark:text-orange-400 ring-1 ring-orange-500/20",
-  Products: "bg-gradient-to-br from-purple-500/10 to-purple-600/20 text-purple-600 dark:from-purple-500/20 dark:to-purple-600/30 dark:text-purple-400 ring-1 ring-purple-500/20",
-  Revenue: "bg-gradient-to-br from-emerald-500/10 to-emerald-600/20 text-emerald-600 dark:from-emerald-500/20 dark:to-emerald-600/30 dark:text-emerald-400 ring-1 ring-emerald-500/20",
+  users: "bg-gradient-to-br from-blue-500/10 to-blue-600/20 text-blue-600 dark:from-blue-500/20 dark:to-blue-600/30 dark:text-blue-400 ring-1 ring-blue-500/20",
+  orders: "bg-gradient-to-br from-orange-500/10 to-orange-600/20 text-orange-600 dark:from-orange-500/20 dark:to-orange-600/30 dark:text-orange-400 ring-1 ring-orange-500/20",
+  products: "bg-gradient-to-br from-purple-500/10 to-purple-600/20 text-purple-600 dark:from-purple-500/20 dark:to-purple-600/30 dark:text-purple-400 ring-1 ring-purple-500/20",
+  revenue: "bg-gradient-to-br from-emerald-500/10 to-emerald-600/20 text-emerald-600 dark:from-emerald-500/20 dark:to-emerald-600/30 dark:text-emerald-400 ring-1 ring-emerald-500/20",
 };
 
 const gradColors: Record<string, string> = {
-  Users: "from-blue-600 to-blue-400",
-  Orders: "from-orange-600 to-orange-400",
-  Products: "from-purple-600 to-purple-400",
-  Revenue: "from-emerald-600 to-emerald-400",
+  users: "from-blue-600 to-blue-400",
+  orders: "from-orange-600 to-orange-400",
+  products: "from-purple-600 to-purple-400",
+  revenue: "from-emerald-600 to-emerald-400",
 };
 
-function StatCard({ title, value, icon: Icon, href }: { title: string; value: string; icon: any; href?: string }) {
+function StatCard({ id, title, value, icon: Icon, href }: { id: string; title: string; value: string; icon: React.ComponentType<{ className?: string }>; href?: string }) {
   const content = (
     <Card className="relative overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-xl cursor-pointer group">
-      <div className={cn("absolute inset-0 opacity-[0.03] bg-gradient-to-br dark:opacity-[0.08]", gradColors[title])} />
+      <div className={cn("absolute inset-0 opacity-[0.03] bg-gradient-to-br dark:opacity-[0.08]", gradColors[id])} />
       <CardContent className="p-6 relative">
         <div className="flex items-center justify-between">
-          <div className={cn("rounded-xl p-3 transition-transform group-hover:scale-110", iconColors[title] || "bg-muted")}>
+          <div className={cn("rounded-xl p-3 transition-transform group-hover:scale-110", iconColors[id] || "bg-muted")}>
             <Icon className="h-5 w-5" />
           </div>
-          <div className={cn("h-16 w-16 rounded-full opacity-10 blur-2xl bg-gradient-to-br", gradColors[title])} />
+          <div className={cn("h-16 w-16 rounded-full opacity-10 blur-2xl bg-gradient-to-br", gradColors[id])} />
         </div>
         <div className="mt-4">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -78,7 +78,7 @@ export default function DashboardPage() {
   const { t } = useI18n();
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
   const hour = new Date().getHours();
-  const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  const greeting = hour < 12 ? t("greeting.morning") : hour < 18 ? t("greeting.afternoon") : t("greeting.evening");
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -87,10 +87,10 @@ export default function DashboardPage() {
 
   const stats = useMemo(
     () => [
-      { title: t("dashboard.totalUsers"), value: formatNumber(data?.total_users ?? 0), icon: Users, href: "/users" },
-      { title: t("dashboard.totalOrders"), value: formatNumber(data?.total_orders ?? 0), icon: ShoppingCart, href: "/orders" },
-      { title: t("dashboard.totalProducts"), value: formatNumber(data?.total_products ?? 0), icon: Package, href: "/products" },
-      { title: t("dashboard.totalRevenue"), value: `$${formatNumber(data?.total_revenue ?? 0)}`, icon: DollarSign, href: "/orders", trend: { value: "+12.5%", up: true } },
+      { id: "users", title: t("dashboard.totalUsers"), value: formatNumber(data?.total_users ?? 0), icon: Users, href: "/users" },
+      { id: "orders", title: t("dashboard.totalOrders"), value: formatNumber(data?.total_orders ?? 0), icon: ShoppingCart, href: "/orders" },
+      { id: "products", title: t("dashboard.totalProducts"), value: formatNumber(data?.total_products ?? 0), icon: Package, href: "/products" },
+      { id: "revenue", title: t("dashboard.totalRevenue"), value: `$${formatNumber(data?.total_revenue ?? 0)}`, icon: DollarSign, href: "/orders" },
     ],
     [data, t],
   );
@@ -98,10 +98,10 @@ export default function DashboardPage() {
   if (isError) {
     return (
       <div className="space-y-6">
-        <PageHeader title={t("dashboard.title")} description="Overview of your application">
+        <PageHeader title={t("dashboard.title")} description={t("dashboard.overview")}>
           <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
             <RefreshCw className={`mr-2 h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
-            Refresh
+            {t("dashboard.refresh")}
           </Button>
         </PageHeader>
         <ErrorState onRetry={() => refetch()} />
@@ -115,11 +115,11 @@ export default function DashboardPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">{greeting}, {user?.name || "there"} 👋</h1>
-            <p className="text-muted-foreground mt-1">{t("dashboard.title")} overview</p>
+            <p className="text-muted-foreground mt-1">{t("dashboard.overview")}</p>
           </div>
           <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefetching}>
             <RefreshCw className={`mr-2 h-4 w-4 ${isRefetching ? "animate-spin" : ""}`} />
-            Refresh
+            {t("dashboard.refresh")}
           </Button>
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function DashboardPage() {
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {isLoading
           ? Array.from({ length: 4 }).map((_, i) => <StatCardSkeleton key={i} />)
-          : stats.map((s) => <StatCard key={s.title} {...s} />)}
+          : stats.map((s) => <StatCard key={s.id} {...s} />)}
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -166,7 +166,7 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <EmptyState title={t("common.noData")} description="Activity will appear here as users interact with the system." />
+              <EmptyState title={t("common.noData")} description={t("dashboard.activityEmpty")} />
             )}
           </CardContent>
         </Card>
@@ -193,24 +193,24 @@ export default function DashboardPage() {
                     <StatusBadge status={data.api_status.status ?? "down"} />
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Version</span>
+                    <span className="text-sm text-muted-foreground">{t("dashboard.version")}</span>
                     <span className="text-sm font-medium">{data.api_status.version}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Uptime</span>
+                    <span className="text-sm text-muted-foreground">{t("dashboard.uptime")}</span>
                     <span className="text-sm font-medium">{Math.round((data.api_status.uptime ?? 0) / 3600)}h</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Response Time</span>
+                    <span className="text-sm text-muted-foreground">{t("dashboard.responseTime")}</span>
                     <span className="text-sm font-medium">{data.api_status.response_time}ms</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Last Checked</span>
+                    <span className="text-sm text-muted-foreground">{t("dashboard.lastChecked")}</span>
                     <span className="text-sm font-medium">{lastChecked ? formatRelativeTime(lastChecked) : "–"}</span>
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground py-4 text-center">API status unavailable</p>
+                <p className="text-sm text-muted-foreground py-4 text-center">{t("dashboard.apiStatusUnavailable")}</p>
               )}
             </CardContent>
           </Card>
@@ -267,7 +267,7 @@ export default function DashboardPage() {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <EmptyState title="No revenue data" description="Revenue data will appear once orders are placed." />
+            <EmptyState title={t("dashboard.noRevenue")} description={t("dashboard.noRevenueDesc")} />
           )}
         </CardContent>
       </Card>

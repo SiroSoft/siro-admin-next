@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AxiosError } from "axios";
 import { useAuth } from "@/hooks/use-auth";
 import { useI18n } from "@/providers/i18n-provider";
 import { APP_NAME } from "@/lib/constants";
@@ -83,7 +84,7 @@ export default function LoginPage() {
             <Input
               id="email"
               type="email"
-              placeholder="admin@example.com"
+              placeholder={t("login.emailPlaceholder")}
               {...register("email")}
               autoComplete="email"
               autoFocus
@@ -99,7 +100,7 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                placeholder="••••••••"
+                placeholder={t("login.passwordPlaceholder")}
                 {...register("password")}
                 autoComplete="current-password"
               />
@@ -107,7 +108,7 @@ export default function LoginPage() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-label={showPassword ? t("login.hidePassword") : t("login.showPassword")}
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
@@ -119,7 +120,7 @@ export default function LoginPage() {
 
           {loginError && (
             <p className="text-sm text-destructive">
-              {(loginError as any)?.response?.data?.message || "Invalid credentials"}
+              {(loginError as AxiosError<{ message?: string }>)?.response?.data?.message || t("login.invalidCredentials")}
             </p>
           )}
 

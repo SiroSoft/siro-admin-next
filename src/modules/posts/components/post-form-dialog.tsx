@@ -10,6 +10,7 @@ import {
 import { PostForm } from "@/modules/posts/components/post-form";
 import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
+import type { CreatePostFormData, UpdatePostFormData } from "@/modules/posts/schemas/post.schema";
 
 type Post = components["schemas"]["Post"];
 
@@ -17,7 +18,7 @@ interface PostFormDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   post?: Post;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: CreatePostFormData | UpdatePostFormData) => void;
   isPending: boolean;
 }
 
