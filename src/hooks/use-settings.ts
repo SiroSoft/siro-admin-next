@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { settingsService } from "@/services/settings.service";
+import type { components } from "@/types/api";
 import { toast } from "@/hooks/use-toast";
 
 export function useSettings() {
@@ -14,7 +15,7 @@ export function useSettings() {
 export function useUpdateSettings() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => settingsService.update(data),
+    mutationFn: (data: components["schemas"]["UpdateSettingsRequest"]) => settingsService.update(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["settings"] });
       toast({ title: "Settings updated", description: "Settings have been updated." });

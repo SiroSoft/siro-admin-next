@@ -32,7 +32,7 @@ export default function UsersPage() {
     per_page: 10,
   };
 
-  const { refetch } = useUsers(params);
+  const { users, refetch } = useUsers(params);
 
   const handleEdit = useCallback((user: User) => {
     setEditUser(user);
@@ -79,16 +79,28 @@ export default function UsersPage() {
 
   const handleExport = useCallback(() => {
     const csvFields = ["id", "name", "email", "role", "status", "created_at"];
-    const csvRows = [`${csvFields.join(",")}\n`];
-    toast({ title: "Export started", description: "User data export has been initiated." });
-    const blob = new Blob(csvRows, { type: "text/csv" });
+    const csvRows = [csvFields.join(",")];
+    for (const user of users) {
+      csvRows.push(
+        [
+          user.id ?? "",
+          `"${(user.name ?? "").replace(/"/g, '""')}"`,
+          `"${(user.email ?? "").replace(/"/g, '""')}"`,
+          user.role ?? "",
+          user.status ?? "",
+          user.created_at ?? "",
+        ].join(","),
+      );
+    }
+    toast({ title: "Export started", description: `${users.length} user(s) exported.` });
+    const blob = new Blob([csvRows.join("\n")], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `users-export-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  }, []);
+  }, [users]);
 
   return (
     <div className="space-y-4">

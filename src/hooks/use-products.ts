@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { productsService } from "@/services/products.service";
+import type { components } from "@/types/api";
 import { toast } from "@/hooks/use-toast";
 
 export function useProducts(params?: Record<string, unknown>) {
@@ -31,7 +32,7 @@ export function useProduct(id: number) {
 export function useCreateProduct() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => productsService.create(data),
+    mutationFn: (data: components["schemas"]["CreateProductRequest"]) => productsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast({ title: "Product created", description: "Product has been created successfully." });
@@ -45,7 +46,7 @@ export function useCreateProduct() {
 export function useUpdateProduct(id: number) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => productsService.update(id, data),
+    mutationFn: (data: components["schemas"]["UpdateProductRequest"]) => productsService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       toast({ title: "Product updated", description: "Product has been updated successfully." });

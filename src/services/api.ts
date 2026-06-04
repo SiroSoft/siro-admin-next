@@ -125,10 +125,22 @@ api.interceptors.response.use(
       if (typeof window !== "undefined") window.dispatchEvent(toastEvent);
     }
 
+    if (status === 404) {
+      const toastEvent = new CustomEvent("app:toast", {
+        detail: {
+          title: "Not Found",
+          description: "The requested resource was not found.",
+          variant: "destructive",
+        },
+      });
+      if (typeof window !== "undefined") window.dispatchEvent(toastEvent);
+    }
+
     if (status === 422) {
-      const data = error.response.data as any;
+      const data = error.response.data as components["schemas"]["ValidationErrorResponse"];
       if (data?.errors) {
-        const firstError = Object.values(data.errors)[0] as string[];
+        const values = Object.values(data.errors);
+        const firstError = values[0];
         const toastEvent = new CustomEvent("app:toast", {
           detail: {
             title: "Validation Error",

@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ordersService } from "@/services/orders.service";
+import type { components } from "@/types/api";
 import { toast } from "@/hooks/use-toast";
 
 export function useOrders(params?: Record<string, unknown>) {
@@ -31,7 +32,7 @@ export function useOrder(id: number) {
 export function useCreateOrder() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => ordersService.create(data),
+    mutationFn: (data: components["schemas"]["CreateOrderRequest"]) => ordersService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast({ title: "Order created", description: "Order has been created successfully." });
@@ -45,7 +46,7 @@ export function useCreateOrder() {
 export function useUpdateOrder(id: number) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => ordersService.update(id, data),
+    mutationFn: (data: components["schemas"]["UpdateOrderRequest"]) => ordersService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       toast({ title: "Order updated", description: "Order has been updated successfully." });

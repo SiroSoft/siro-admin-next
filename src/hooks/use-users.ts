@@ -35,7 +35,7 @@ export function useCreateUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: any) => usersService.create(data),
+    mutationFn: (data: components["schemas"]["CreateUserRequest"]) => usersService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast({ title: "User created", description: "User has been created successfully." });
@@ -50,7 +50,7 @@ export function useUpdateUser(id: number) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: any) => usersService.update(id, data),
+    mutationFn: (data: components["schemas"]["UpdateUserRequest"]) => usersService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
       toast({ title: "User updated", description: "User has been updated successfully." });

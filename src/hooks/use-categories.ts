@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { categoriesService } from "@/services/categories.service";
+import type { components } from "@/types/api";
 import { toast } from "@/hooks/use-toast";
 
 export function useCategories(params?: Record<string, unknown>) {
@@ -31,7 +32,7 @@ export function useCategory(id: number) {
 export function useCreateCategory() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => categoriesService.create(data),
+    mutationFn: (data: components["schemas"]["CreateCategoryRequest"]) => categoriesService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast({ title: "Category created", description: "Category has been created successfully." });
@@ -45,7 +46,7 @@ export function useCreateCategory() {
 export function useUpdateCategory(id: number) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => categoriesService.update(id, data),
+    mutationFn: (data: components["schemas"]["UpdateCategoryRequest"]) => categoriesService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       toast({ title: "Category updated", description: "Category has been updated successfully." });

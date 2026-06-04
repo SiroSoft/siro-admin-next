@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { postsService } from "@/services/posts.service";
+import type { components } from "@/types/api";
 import { toast } from "@/hooks/use-toast";
 
 export function usePosts(params?: Record<string, unknown>) {
@@ -31,7 +32,7 @@ export function usePost(id: number) {
 export function useCreatePost() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => postsService.create(data),
+    mutationFn: (data: components["schemas"]["CreatePostRequest"]) => postsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       toast({ title: "Post created", description: "Post has been created successfully." });
@@ -45,7 +46,7 @@ export function useCreatePost() {
 export function useUpdatePost(id: number) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => postsService.update(id, data),
+    mutationFn: (data: components["schemas"]["UpdatePostRequest"]) => postsService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       toast({ title: "Post updated", description: "Post has been updated successfully." });

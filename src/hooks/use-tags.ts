@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { tagsService } from "@/services/tags.service";
+import type { components } from "@/types/api";
 import { toast } from "@/hooks/use-toast";
 
 export function useTags(params?: Record<string, unknown>) {
@@ -31,7 +32,7 @@ export function useTag(id: number) {
 export function useCreateTag() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => tagsService.create(data),
+    mutationFn: (data: components["schemas"]["CreateTagRequest"]) => tagsService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
       toast({ title: "Tag created", description: "Tag has been created successfully." });
@@ -45,7 +46,7 @@ export function useCreateTag() {
 export function useUpdateTag(id: number) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: any) => tagsService.update(id, data),
+    mutationFn: (data: components["schemas"]["UpdateTagRequest"]) => tagsService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tags"] });
       toast({ title: "Tag updated", description: "Tag has been updated successfully." });

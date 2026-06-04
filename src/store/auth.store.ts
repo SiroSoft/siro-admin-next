@@ -27,6 +27,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading }),
 
   login: (user, accessToken, refreshToken) => {
+    // NOTE: In production, use httpOnly cookies instead of localStorage for tokens
     localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
     localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
     localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
@@ -45,6 +46,19 @@ export const useAuthStore = create<AuthState>((set) => ({
       const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
       const userStr = localStorage.getItem(STORAGE_KEYS.USER);
       if (token && userStr) {
+        // Check token expiry before using
+        try {
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          if (payload.exp && payload.exp * 1000 < Date.now()) {
+            localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.USER);
+            set({ isLoading: false });
+            return null;
+          }
+        } catch {
+          // Invalid token format, proceed with restore
+        }
         const user = JSON.parse(userStr) as User;
         set({ user, isAuthenticated: true, isLoading: false });
         return user;
