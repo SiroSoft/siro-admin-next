@@ -3,8 +3,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loader2 } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, Mail } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +17,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useI18n } from "@/providers/i18n-provider";
 import { useUpdateProfile, useChangePassword } from "@/hooks/use-profile";
 import { toast } from "@/hooks/use-toast";
+import { authService } from "@/services/auth.service";
 import { formatDate } from "@/lib/utils";
 import { useState, useEffect } from "react";
 
@@ -84,6 +86,20 @@ export default function ProfilePage() {
     if (user?.avatar) setAvatar(user.avatar);
   }, [user?.avatar]);
 
+  const [isResending, setIsResending] = useState(false);
+
+  const handleResendVerification = async () => {
+    setIsResending(true);
+    try {
+      await authService.resendVerificationEmail();
+      toast({ title: t("profile.verificationSent"), variant: "success" });
+    } catch {
+      toast({ title: t("errors.networkError"), variant: "destructive" });
+    } finally {
+      setIsResending(false);
+    }
+  };
+
   const initials = user?.name
     ?.split(" ")
     .map((n) => n[0])
@@ -108,6 +124,35 @@ export default function ProfilePage() {
             <h3 className="text-lg font-semibold">{user?.name}</h3>
             <p className="text-sm text-muted-foreground">{user?.email}</p>
             <p className="text-xs text-muted-foreground mt-1 capitalize">{user?.role}</p>
+            <div className="mt-3 flex items-center gap-2">
+              {user?.email_verified_at ? (
+                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-800">
+                  <CheckCircle2 className="h-3 w-3 mr-1" />
+                  {t("profile.emailVerified")}
+                </Badge>
+              ) : (
+                <>
+                  <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20 dark:text-amber-400 dark:border-amber-800">
+                    <AlertCircle className="h-3 w-3 mr-1" />
+                    {t("profile.emailNotVerified")}
+                  </Badge>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    disabled={isResending}
+                    onClick={handleResendVerification}
+                    className="text-xs h-7 px-2"
+                  >
+                    {isResending ? (
+                      <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                    ) : (
+                      <Mail className="h-3 w-3 mr-1" />
+                    )}
+                    {t("profile.resendVerification")}
+                  </Button>
+                </>
+              )}
+            </div>
             {user?.created_at && (
               <p className="text-xs text-muted-foreground mt-4">
                 {t("users.createdAt")}: {formatDate(user.created_at)}

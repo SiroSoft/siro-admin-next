@@ -51,7 +51,7 @@ export function ProductTable({ onEdit, onCreate, params, onParamsChange }: Produ
         ),
       }),
       columnHelper.accessor("sku", {
-        header: "SKU",
+        header: () => t("products.sku") || "SKU",
         cell: (info) => <span className="font-mono text-xs">{info.getValue()}</span>,
       }),
       columnHelper.accessor("price", {

@@ -18,7 +18,7 @@ import { APP_NAME } from "@/lib/constants";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
-  password: z.string().min(1, "Password is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -139,6 +139,10 @@ export default function LoginPage() {
             {isLoginPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t("common.login")}
           </Button>
+          <p className="text-sm text-center text-muted-foreground mt-4">
+            {t("auth.noAccount")}{' '}
+            <Link href="/register" className="text-primary hover:underline">{t("auth.signUp")}</Link>
+          </p>
         </form>
       </CardContent>
     </Card>

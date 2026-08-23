@@ -39,6 +39,11 @@ export const authService = {
     return res.data;
   },
 
+  async resendVerificationEmail() {
+    const res = await api.post<components["schemas"]["SuccessResponse_null"]>("/api/auth/verify-email/resend");
+    return res.data;
+  },
+
   async logout() {
     await api.post("/api/auth/logout");
   },

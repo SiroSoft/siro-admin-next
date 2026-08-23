@@ -575,6 +575,7 @@ export interface components {
             name?: string;
             /** Format: email */
             email?: string;
+            email_verified_at?: string | null;
             /** @example admin */
             role?: string;
             /** @enum {string} */

@@ -1,0 +1,29 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'npm' }
+      - run: npm ci
+      - run: npx vitest run
+      - run: npx tsc --noEmit
+      - run: npx next build
+      - run: npx next lint
+  e2e:
+    needs: test
+    runs-on: ubuntu-latest
+    services:
+      siro-api:
+        image: sirosoft/api:latest
+        ports: [8080:8080]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: 'npm' }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+        env: { NEXT_PUBLIC_API_URL: http://localhost:8080/api/v1 }
