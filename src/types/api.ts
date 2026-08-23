@@ -575,17 +575,17 @@ export interface components {
             name?: string;
             /** Format: email */
             email?: string;
-            email_verified_at?: string | null;
             /** @example admin */
             role?: string;
-            /** @enum {string} */
-            status?: string;
+            /** @example 1 */
+            status?: number;
             /** Format: date-time */
             created_at?: string;
             /** Format: date-time */
             updated_at?: string;
             avatar?: string | null;
             phone?: string | null;
+            email_verified_at?: string | null;
         };
         CreateUserRequest: {
             name: string;
@@ -597,8 +597,6 @@ export interface components {
             role: "admin" | "editor" | "viewer";
             /** @enum {string} */
             status: "active" | "inactive" | "suspended";
-            avatar?: string;
-            phone?: string;
         };
         UpdateUserRequest: {
             name: string;
@@ -608,8 +606,6 @@ export interface components {
             role: "admin" | "editor" | "viewer";
             /** @enum {string} */
             status: "active" | "inactive" | "suspended";
-            avatar?: string;
-            phone?: string;
         };
         Order: {
             id?: number;
@@ -617,24 +613,32 @@ export interface components {
             user_name?: string;
             /** Format: float */
             total?: number;
+            /** Format: float */
+            subtotal?: number;
+            /** Format: float */
+            tax?: number;
+            /** Format: float */
+            shipping?: number;
+            /** Format: float */
+            discount?: number;
             /** @enum {string} */
             status?: "pending" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled";
+            payment_method?: string;
             /** @example pending */
             payment_status?: string;
-            payment_method?: string;
             shipping_address?: string;
             billing_address?: string;
             notes?: string | null;
             items?: components["schemas"]["OrderItem"][];
+            /** Format: date-time */
+            created_at?: string;
+            /** Format: date-time */
+            updated_at?: string;
             /**
              * Format: email
              * @example john@example.com
              */
             customer_email?: string;
-            /** Format: date-time */
-            created_at?: string;
-            /** Format: date-time */
-            updated_at?: string;
         };
         OrderItem: {
             id?: number;
@@ -656,8 +660,6 @@ export interface components {
             billing_address?: string;
             notes?: string;
             payment_method?: string;
-            status?: string;
-            customer_id?: number;
         };
         UpdateOrderRequest: {
             /** @enum {string} */
@@ -726,7 +728,6 @@ export interface components {
             /** @default false */
             is_featured: boolean;
             category_id?: number | null;
-            cover_image?: string;
         };
         UpdateProductRequest: {
             name?: string;
@@ -746,7 +747,6 @@ export interface components {
             is_active?: boolean;
             is_featured?: boolean;
             category_id?: number | null;
-            cover_image?: string;
         };
         Category: {
             id?: number;
@@ -786,20 +786,23 @@ export interface components {
         Post: {
             id?: number;
             title?: string;
+            slug?: string;
             /** @example Post body content */
             content?: string;
             excerpt?: string | null;
-            locale?: string;
             /** @example https://example.com/image.jpg */
             cover_image?: string | null;
             /** @enum {string} */
             status?: "draft" | "published" | "archived";
             /** @example false */
             featured?: boolean;
+            author_id?: number;
             author_name?: string;
             category_id?: number | null;
             category_name?: string | null;
             tags?: components["schemas"]["Tag"][];
+            /** Format: date-time */
+            published_at?: string | null;
             /** Format: date-time */
             created_at?: string;
             /** Format: date-time */
@@ -847,14 +850,10 @@ export interface components {
         CreateTagRequest: {
             name: string;
             color?: string;
-            description?: string;
-            is_active?: boolean;
         };
         UpdateTagRequest: {
             name?: string;
             color?: string;
-            description?: string;
-            is_active?: boolean;
         };
         Settings: {
             app_name?: string;
