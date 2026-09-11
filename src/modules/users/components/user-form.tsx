@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -23,9 +24,11 @@ interface UserFormProps {
   user?: User;
   onSubmit: (data: CreateUserFormData | UpdateUserFormData) => void;
   isPending: boolean;
+  onCancel?: () => void;
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
-export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
+export function UserForm({ user, onSubmit, isPending, onCancel, onDirtyChange }: UserFormProps) {
   const { t } = useI18n();
   const isEdit = !!user;
 
@@ -34,7 +37,7 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<CreateUserFormData | UpdateUserFormData>({
     resolver: zodResolver(isEdit ? updateUserSchema : createUserSchema),
     defaultValues: {
@@ -47,6 +50,10 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
       phone: user?.phone ?? "",
     } as CreateUserFormData | UpdateUserFormData,
   });
+
+  useEffect(() => {
+    onDirtyChange?.(isDirty);
+  }, [isDirty, onDirtyChange]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
@@ -128,6 +135,11 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
       </div>
 
       <div className="flex justify-end gap-2 pt-2">
+        {onCancel && (
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
+            {t("common.cancel")}
+          </Button>
+        )}
         <Button type="submit" disabled={isPending}>
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isEdit ? t("common.save") : t("common.create")}

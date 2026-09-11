@@ -6,15 +6,15 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   createColumnHelper,
-  type SortingState,
 } from "@tanstack/react-table";
+import { useServerSorting } from "@/hooks/use-server-sorting";
 import { Edit, Trash2, Eye } from "lucide-react";
 import { DataTable } from "@/components/data-table";
 import { Pagination } from "@/components/pagination";
 import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
-import { formatDate, formatNumber } from "@/lib/utils";
+import { formatCurrency, formatDate, formatNumber } from "@/lib/utils";
 import { useI18n } from "@/providers/i18n-provider";
 import { DeleteDialog } from "@/components/delete-dialog";
 import { EmptyState } from "@/components/empty-state";
@@ -37,7 +37,7 @@ const columnHelper = createColumnHelper<Order>();
 
 export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }: OrderTableProps) {
   const { t } = useI18n();
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const { sorting, handleSortingChange } = useServerSorting(onParamsChange);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const { orders, meta, isLoading, isError, error, refetch } = useOrders(params);
@@ -55,7 +55,7 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
       }),
       columnHelper.accessor("total", {
         header: t("orders.total"),
-        cell: (info) => <span className="font-mono">${formatNumber(info.getValue() ?? 0)}</span>,
+        cell: (info) => <span className="font-mono">{formatCurrency(info.getValue() ?? 0)}</span>,
       }),
       columnHelper.accessor("status", {
         header: t("common.status"),
@@ -101,7 +101,7 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
     data: orders,
     columns,
     state: { sorting },
-    onSortingChange: setSorting,
+    onSortingChange: handleSortingChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualSorting: true,

@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useI18n } from "@/providers/i18n-provider";
 import type { components } from "@/types/api";
 
 type PaginationMeta = components["schemas"]["PaginationMeta"];
@@ -12,6 +13,7 @@ interface PaginationProps {
 }
 
 export function Pagination({ meta, onPageChange }: PaginationProps) {
+  const { t } = useI18n();
   if (!meta || meta.last_page <= 1) return null;
 
   const { page: currentPage, last_page, total } = meta;
@@ -33,6 +35,7 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
           className="h-8 w-8"
           disabled={currentPage <= 1}
           onClick={() => onPageChange(currentPage - 1)}
+          aria-label={t("a11y.prevPage")}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -43,6 +46,8 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
             size="icon"
             className="h-8 w-8"
             onClick={() => onPageChange(p)}
+            aria-label={t("a11y.pageNumber", { page: p })}
+            aria-current={p === currentPage ? "page" : undefined}
           >
             {p}
           </Button>
@@ -53,6 +58,7 @@ export function Pagination({ meta, onPageChange }: PaginationProps) {
           className="h-8 w-8"
           disabled={currentPage >= last_page}
           onClick={() => onPageChange(currentPage + 1)}
+          aria-label={t("a11y.nextPage")}
         >
           <ChevronRight className="h-4 w-4" />
         </Button>

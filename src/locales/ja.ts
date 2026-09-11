@@ -19,6 +19,7 @@ const ja = {
     register: '登録',
     save: '保存',
     cancel: 'キャンセル',
+    unsavedChanges: 'You have unsaved changes. Discard them?',
     delete: '削除',
     edit: '編集',
     create: '作成',
@@ -309,6 +310,9 @@ const ja = {
     closeOverlay: 'Close overlay',
     mobileNav: 'Mobile navigation',
     closeNav: 'Close navigation',
+    prevPage: 'Previous page',
+    nextPage: 'Next page',
+    pageNumber: 'Page {{page}}',
   },
   forms: {
     userName: 'Full name',

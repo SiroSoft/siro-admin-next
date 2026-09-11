@@ -21,6 +21,8 @@ export default function UsersPage() {
   const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<string | undefined>(undefined);
+  const [order, setOrder] = useState<string | undefined>(undefined);
   const [editUser, setEditUser] = useState<User | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -33,6 +35,8 @@ export default function UsersPage() {
     page,
     search: search || undefined,
     per_page: 10,
+    sort,
+    order,
   };
 
   const { users, refetch } = useUsers(params);
@@ -141,6 +145,8 @@ export default function UsersPage() {
         params={params}
         onParamsChange={(p) => {
           if (p.page) setPage(p.page as number);
+          if ("sort" in p) setSort(p.sort as string | undefined);
+          if ("order" in p) setOrder(p.order as string | undefined);
         }}
         selectedIds={selectedIds}
         onSelectionChange={handleSelectionChange}

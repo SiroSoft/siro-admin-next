@@ -33,16 +33,33 @@ function DashboardTitle() {
   return null;
 }
 
+const SIDEBAR_KEY = "siro_sidebar_collapsed";
+
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem(SIDEBAR_KEY) === "1";
+  });
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const toggleCollapsed = () => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(SIDEBAR_KEY, next ? "1" : "0");
+      } catch {
+        // private mode etc. — collapse simply won't persist
+      }
+      return next;
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
       <Suspense>
         <DashboardTitle />
       </Suspense>
-      <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
+      <Sidebar collapsed={collapsed} onToggle={toggleCollapsed} />
       <MobileSidebar open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
       <div

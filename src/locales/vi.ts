@@ -21,6 +21,7 @@ const vi: Locale = {
     register: 'Đăng ký',
     save: 'Lưu',
     cancel: 'Hủy',
+    unsavedChanges: 'Bạn có thay đổi chưa lưu. Bỏ qua?',
     delete: 'Xóa',
     edit: 'Sửa',
     create: 'Thêm',
@@ -311,6 +312,9 @@ const vi: Locale = {
     closeOverlay: 'Đóng lớp phủ',
     mobileNav: 'Điều hướng di động',
     closeNav: 'Đóng điều hướng',
+    prevPage: 'Trang trước',
+    nextPage: 'Trang sau',
+    pageNumber: 'Trang {{page}}',
   },
   forms: {
     userName: 'Họ và tên',

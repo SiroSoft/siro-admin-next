@@ -19,6 +19,7 @@ const zh = {
     register: '注册',
     save: '保存',
     cancel: '取消',
+    unsavedChanges: 'You have unsaved changes. Discard them?',
     delete: '删除',
     edit: '编辑',
     create: '创建',
@@ -309,6 +310,9 @@ const zh = {
     closeOverlay: 'Close overlay',
     mobileNav: 'Mobile navigation',
     closeNav: 'Close navigation',
+    prevPage: 'Previous page',
+    nextPage: 'Next page',
+    pageNumber: 'Page {{page}}',
   },
   forms: {
     userName: 'Full name',

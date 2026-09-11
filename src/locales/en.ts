@@ -19,6 +19,7 @@ const en = {
     register: 'Register',
     save: 'Save',
     cancel: 'Cancel',
+    unsavedChanges: 'You have unsaved changes. Discard them?',
     delete: 'Delete',
     edit: 'Edit',
     create: 'Create',
@@ -309,6 +310,9 @@ const en = {
     closeOverlay: 'Close overlay',
     mobileNav: 'Mobile navigation',
     closeNav: 'Close navigation',
+    prevPage: 'Previous page',
+    nextPage: 'Next page',
+    pageNumber: 'Page {{page}}',
   },
   forms: {
     userName: 'Full name',

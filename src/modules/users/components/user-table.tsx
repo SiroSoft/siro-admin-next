@@ -6,7 +6,6 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   createColumnHelper,
-  type SortingState,
 } from "@tanstack/react-table";
 import { Edit, Trash2 } from "lucide-react";
 import { DataTable } from "@/components/data-table";
@@ -20,6 +19,7 @@ import { DeleteDialog } from "@/components/delete-dialog";
 import { EmptyState } from "@/components/empty-state";
 import { ErrorState } from "@/components/error-state";
 import { useUsers, useDeleteUser } from "@/hooks/use-users";
+import { useServerSorting } from "@/hooks/use-server-sorting";
 import type { components } from "@/types/api";
 
 type User = components["schemas"]["User"];
@@ -38,7 +38,7 @@ const columnHelper = createColumnHelper<User>();
 
 export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedIds = [], onSelectionChange }: UserTableProps) {
   const { t } = useI18n();
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const { sorting, handleSortingChange } = useServerSorting(onParamsChange);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const { users, meta, isLoading, isError, error, refetch } = useUsers(params);
@@ -130,7 +130,7 @@ export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedId
     data: users,
     columns,
     state: { sorting },
-    onSortingChange: setSorting,
+    onSortingChange: handleSortingChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualSorting: true,

@@ -6,8 +6,8 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   createColumnHelper,
-  type SortingState,
 } from "@tanstack/react-table";
+import { useServerSorting } from "@/hooks/use-server-sorting";
 import { Edit, Trash2 } from "lucide-react";
 import { DataTable } from "@/components/data-table";
 import { Pagination } from "@/components/pagination";
@@ -34,7 +34,7 @@ const columnHelper = createColumnHelper<Tag>();
 
 export function TagTable({ onEdit, onCreate, params, onParamsChange }: TagTableProps) {
   const { t } = useI18n();
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const { sorting, handleSortingChange } = useServerSorting(onParamsChange);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const { tags, meta, isLoading, isError, error, refetch } = useTags(params);
@@ -84,7 +84,7 @@ export function TagTable({ onEdit, onCreate, params, onParamsChange }: TagTableP
     data: tags,
     columns,
     state: { sorting },
-    onSortingChange: setSorting,
+    onSortingChange: handleSortingChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualSorting: true,

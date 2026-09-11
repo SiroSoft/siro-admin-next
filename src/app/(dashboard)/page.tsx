@@ -13,7 +13,7 @@ import { EmptyState } from "@/components/empty-state";
 import { StatusBadge } from "@/components/status-badge";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { cn, formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
+import { cn, formatCurrency, formatDate, formatNumber, formatRelativeTime } from "@/lib/utils";
 
 import { useI18n } from "@/providers/i18n-provider";
 import { useDashboard } from "@/hooks/use-dashboard";
@@ -90,7 +90,7 @@ export default function DashboardPage() {
       { id: "users", title: t("dashboard.totalUsers"), value: formatNumber(data?.total_users ?? 0), icon: Users, href: "/users" },
       { id: "orders", title: t("dashboard.totalOrders"), value: formatNumber(data?.total_orders ?? 0), icon: ShoppingCart, href: "/orders" },
       { id: "products", title: t("dashboard.totalProducts"), value: formatNumber(data?.total_products ?? 0), icon: Package, href: "/products" },
-      { id: "revenue", title: t("dashboard.totalRevenue"), value: `$${formatNumber(data?.total_revenue ?? 0)}`, icon: DollarSign, href: "/orders" },
+      { id: "revenue", title: t("dashboard.totalRevenue"), value: formatCurrency(data?.total_revenue ?? 0), icon: DollarSign, href: "/orders" },
     ],
     [data, t],
   );

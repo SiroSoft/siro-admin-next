@@ -26,6 +26,13 @@ export function formatNumber(num: number): string {
   return new Intl.NumberFormat("en-US").format(num);
 }
 
+export function formatCurrency(num: number, currency = "USD"): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(num);
+}
+
 export function formatRelativeTime(date?: string | Date | null): string {
   if (!date) return "";
   try {

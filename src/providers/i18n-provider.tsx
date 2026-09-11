@@ -19,7 +19,7 @@ type LocaleName = "en" | "vi" | "de" | "zh" | "ja";
 interface I18nContextValue {
   locale: LocaleName;
   setLocale: (locale: LocaleName) => void;
-  t: (key: TranslationKey) => string;
+  t: (key: TranslationKey, params?: Record<string, string | number>) => string;
 }
 
 const I18nContext = createContext<I18nContextValue | null>(null);
@@ -50,8 +50,10 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const t = useCallback(
-    (key: TranslationKey): string => {
-      return getValue(locales[locale] as unknown as Record<string, unknown>, key);
+    (key: TranslationKey, params?: Record<string, string | number>): string => {
+      const raw = getValue(locales[locale] as unknown as Record<string, unknown>, key);
+      if (!params) return raw;
+      return raw.replace(/\{\{(\w+)\}\}/g, (_, p: string) => String(params[p] ?? ""));
     },
     [locale],
   );

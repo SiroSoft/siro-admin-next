@@ -58,21 +58,35 @@ export function DataTable<TData>({ table, isLoading }: DataTableProps<TData>) {
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : header.column.getCanSort()
-                      ? (
-                        <SortHeader column={header.column}>
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                        </SortHeader>
-                      )
-                      : (
-                        flexRender(header.column.columnDef.header, header.getContext())
-                      )}
-                </TableHead>
-              ))}
+              {headerGroup.headers.map((header) => {
+                const sortDir = header.column.getIsSorted();
+                return (
+                  <TableHead
+                    key={header.id}
+                    aria-sort={
+                      sortDir === "asc"
+                        ? "ascending"
+                        : sortDir === "desc"
+                          ? "descending"
+                          : header.column.getCanSort()
+                            ? "none"
+                            : undefined
+                    }
+                  >
+                    {header.isPlaceholder
+                      ? null
+                      : header.column.getCanSort()
+                        ? (
+                          <SortHeader column={header.column}>
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                          </SortHeader>
+                        )
+                        : (
+                          flexRender(header.column.columnDef.header, header.getContext())
+                        )}
+                  </TableHead>
+                );
+              })}
             </TableRow>
           ))}
         </TableHeader>

@@ -18,6 +18,8 @@ export default function TagsPage() {
   const { t } = useI18n();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<string | undefined>(undefined);
+  const [order, setOrder] = useState<string | undefined>(undefined);
   const [editTag, setEditTag] = useState<Tag | null>(null);
   const [showCreate, setShowCreate] = useState(false);
 
@@ -55,7 +57,9 @@ export default function TagsPage() {
         onEdit={handleEdit}
         onCreate={() => setShowCreate(true)}
         params={params}
-        onParamsChange={(p) => { if (p.page) setPage(p.page as number); }}
+        onParamsChange={(p) => { if (p.page) setPage(p.page as number);
+          if ("sort" in p) setSort(p.sort as string | undefined);
+          if ("order" in p) setOrder(p.order as string | undefined); }}
       />
 
       <TagFormDialog
