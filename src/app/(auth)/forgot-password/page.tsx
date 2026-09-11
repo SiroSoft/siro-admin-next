@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 import { Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import { toast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth.service"; import { Turnstile } from "@marsidev/react-turnstile";
 
 const schema = z.object({
-  email: z.string().email("Please enter a valid email"),
+  email: z.string().email(tSchema("validation.invalidEmail")),
 });
 
 type Form = z.infer<typeof schema>;

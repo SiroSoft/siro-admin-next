@@ -45,18 +45,18 @@ export function MobileSidebar({ open, onClose }: MobileSidebarProps) {
   return (
     <>
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/50 lg:hidden" onClick={onClose} aria-label="Close overlay" role="presentation" />
+        <div className="fixed inset-0 z-50 bg-black/50 lg:hidden" onClick={onClose} aria-label={t("a11y.closeOverlay")} role="presentation" />
       )}
       <aside
         className={cn(
           "fixed inset-y-0 left-0 z-50 w-60 bg-sidebar p-4 transition-transform lg:hidden",
           open ? "translate-x-0" : "-translate-x-full",
         )}
-        aria-label="Mobile navigation"
+        aria-label={t("a11y.mobileNav")}
       >
         <div className="flex items-center justify-between mb-6">
           <span className="text-sm font-bold text-sidebar-foreground">{APP_NAME}</span>
-          <Button variant="ghost" size="icon" onClick={onClose} className="text-sidebar-foreground hover:bg-sidebar-accent" aria-label="Close navigation menu">
+          <Button variant="ghost" size="icon" onClick={onClose} className="text-sidebar-foreground hover:bg-sidebar-accent" aria-label={t("a11y.closeNav")}>
             <X className="h-4 w-4" />
           </Button>
         </div>

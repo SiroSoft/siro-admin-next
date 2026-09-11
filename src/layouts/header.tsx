@@ -20,11 +20,11 @@ export function Header({ onMenuToggle }: HeaderProps) {
 
   return (
     <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
-      <Button variant="ghost" size="icon" onClick={onMenuToggle} className="lg:hidden" aria-label="Open navigation menu">
+      <Button variant="ghost" size="icon" onClick={onMenuToggle} className="lg:hidden" aria-label={t("a11y.openNav")}>
         <Menu className="h-5 w-5" />
       </Button>
 
-      <nav aria-label="Breadcrumb" className="hidden md:flex items-center gap-1 text-sm text-muted-foreground">
+      <nav aria-label={t("a11y.breadcrumb")} className="hidden md:flex items-center gap-1 text-sm text-muted-foreground">
         {pathname === "/" ? (
           <span className="text-foreground font-medium">{t("common.dashboard")}</span>
         ) : (
@@ -47,7 +47,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         variant="ghost"
         size="icon"
         onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+        aria-label={theme === "dark" ? t("a11y.switchToLight") : t("a11y.switchToDark")}
       >
         <Sun className={cn("h-5 w-5", theme === "dark" && "hidden")} />
         <Moon className={cn("h-5 w-5", theme !== "dark" && "hidden")} />

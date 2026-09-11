@@ -1,14 +1,15 @@
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 
 export const createTagSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z.string().min(2, tSchema("validation.nameMin2")),
   color: z.string().optional(),
   description: z.string().optional(),
   is_active: z.boolean().default(true),
 });
 
 export const updateTagSchema = z.object({
-  name: z.string().min(2).optional(),
+  name: z.string().min(2, tSchema("validation.nameMin2")).optional(),
   color: z.string().optional(),
   description: z.string().optional(),
   is_active: z.boolean().optional(),

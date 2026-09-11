@@ -33,7 +33,7 @@ export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-2 rounded-full outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label="User menu">
+        <button className="flex items-center gap-2 rounded-full outline-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" aria-label={t("a11y.userMenu")}>
           <Avatar className="h-8 w-8">
             <AvatarFallback className="text-xs">{initials}</AvatarFallback>
           </Avatar>

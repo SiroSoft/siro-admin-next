@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
@@ -17,7 +18,7 @@ import { toast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth.service";
 
 const verifyEmailSchema = z.object({
-  token: z.string().min(1, "Token is required"),
+  token: z.string().min(1, tSchema("validation.tokenRequired")),
 });
 
 type VerifyEmailForm = z.infer<typeof verifyEmailSchema>;

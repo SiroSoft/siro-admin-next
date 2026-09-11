@@ -51,7 +51,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     >
       <div className={cn("flex h-14 items-center border-b border-sidebar-border px-4 gap-2", collapsed && "justify-center")}>
         <Link href="/" className="flex items-center gap-2 truncate">
-          <img src="/logo.svg" alt="Siro Admin" className="h-7 w-7 shrink-0" />
+          <img src="/logo.svg" alt={t("a11y.appLogo")} className="h-7 w-7 shrink-0" />
           {!collapsed && <span className="text-sm font-bold text-sidebar-foreground">{APP_NAME}</span>}
         </Link>
         <Button
@@ -59,7 +59,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           size="icon"
           onClick={onToggle}
           className={cn("ml-auto text-sidebar-foreground hover:bg-sidebar-accent", collapsed && "ml-0")}
-          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          aria-label={collapsed ? t("a11y.expandSidebar") : t("a11y.collapseSidebar")}
         >
           <ChevronLeft className={cn("h-4 w-4 transition-transform", collapsed && "rotate-180")} />
         </Button>

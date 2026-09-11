@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -17,12 +18,12 @@ import { authService } from "@/services/auth.service";
 import { Turnstile } from "@marsidev/react-turnstile";
 
 const registerSchema = z.object({
-  name: z.string().min(3, "Name must be at least 3 characters"),
-  email: z.string().email("Please enter a valid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  name: z.string().min(3, tSchema("validation.nameMin3")),
+  email: z.string().email(tSchema("validation.invalidEmail")),
+  password: z.string().min(8, tSchema("validation.passwordMin8")),
   password_confirmation: z.string(),
 }).refine((d) => d.password === d.password_confirmation, {
-  message: "Passwords do not match",
+  message: tSchema("validation.passwordMismatch"),
   path: ["password_confirmation"],
 });
 
@@ -63,7 +64,7 @@ export default function RegisterPage() {
   return (
     <Card className="shadow-lg">
       <CardHeader className="space-y-4 text-center">
-        <img src="/logo.svg" alt="Siro Admin" className="mx-auto h-12 w-12" />
+        <img src="/logo.svg" alt={t("a11y.appLogo")} className="mx-auto h-12 w-12" />
         <div>
           <CardTitle className="text-2xl font-bold">{t("register.title")}</CardTitle>
           <CardDescription>{t("auth.signUp")}</CardDescription>

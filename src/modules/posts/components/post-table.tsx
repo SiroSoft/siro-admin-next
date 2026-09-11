@@ -80,10 +80,10 @@ export function PostTable({ onEdit, onCreate, params, onParamsChange }: PostTabl
         id: "actions",
         cell: (info) => (
           <div className="flex justify-end gap-1">
-            <Button variant="ghost" size="icon" onClick={() => onEdit(info.row.original)} aria-label={`Edit ${info.row.original.title ?? "post"}`}>
+            <Button variant="ghost" size="icon" onClick={() => onEdit(info.row.original)} aria-label={`${t("a11y.edit")} ${info.row.original.title ?? "post"}`}>
               <Edit className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setDeleteId(info.row.original.id!)} aria-label={`Delete ${info.row.original.title ?? "post"}`}>
+            <Button variant="ghost" size="icon" onClick={() => setDeleteId(info.row.original.id!)} aria-label={`${t("a11y.delete")} ${info.row.original.title ?? "post"}`}>
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
           </div>

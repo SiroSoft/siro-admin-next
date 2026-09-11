@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -16,10 +17,10 @@ import { toast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth.service";
 
 const resetPasswordSchema = z.object({
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  password: z.string().min(8, tSchema("validation.passwordMin8")),
   password_confirmation: z.string(),
 }).refine((d) => d.password === d.password_confirmation, {
-  message: "Passwords do not match",
+  message: tSchema("validation.passwordMismatch"),
   path: ["password_confirmation"],
 });
 

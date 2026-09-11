@@ -71,7 +71,7 @@ export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedId
           <Checkbox
             checked={allSelected}
             onCheckedChange={(v) => handleSelectAll(v === true)}
-            aria-label="Select all"
+            aria-label={t("a11y.selectAll")}
           />
         ),
         cell: (info) => {
@@ -80,7 +80,7 @@ export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedId
             <Checkbox
               checked={id ? selectedIds.includes(id) : false}
               onCheckedChange={(v) => id && handleSelectOne(id, v === true)}
-              aria-label="Select row"
+              aria-label={t("a11y.selectRow")}
             />
           );
         },
@@ -113,10 +113,10 @@ export function UserTable({ onEdit, onCreate, params, onParamsChange, selectedId
         id: "actions",
         cell: (info) => (
           <div className="flex justify-end gap-1">
-            <Button variant="ghost" size="icon" onClick={() => onEdit(info.row.original)} aria-label={`Edit ${info.row.original.name ?? "user"}`}>
+            <Button variant="ghost" size="icon" onClick={() => onEdit(info.row.original)} aria-label={`${t("a11y.edit")} ${info.row.original.name ?? "user"}`}>
               <Edit className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" onClick={() => setDeleteId(info.row.original.id ?? null)} aria-label={`Delete ${info.row.original.name ?? "user"}`}>
+            <Button variant="ghost" size="icon" onClick={() => setDeleteId(info.row.original.id ?? null)} aria-label={`${t("a11y.delete")} ${info.row.original.name ?? "user"}`}>
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
           </div>

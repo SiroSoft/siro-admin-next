@@ -2,7 +2,7 @@
 
 import { useMemo, useCallback, useState } from "react";
 import Link from "next/link";
-import { Users, ShoppingCart, DollarSign, Package, TrendingUp, TrendingDown, ArrowRight, Plus, Eye, Settings, RefreshCw, Activity, Server } from "lucide-react";
+import { Users, ShoppingCart, DollarSign, Package, TrendingUp, TrendingDown, ArrowRight, Plus, Eye, Settings, RefreshCw, Activity, Server, Database } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -123,6 +123,18 @@ export default function DashboardPage() {
           </Button>
         </div>
       </div>
+
+      {!isLoading && !isError && (data?.total_users ?? 0) + (data?.total_products ?? 0) + (data?.total_orders ?? 0) === 0 && (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 flex items-start gap-3">
+          <Database className="h-5 w-5 mt-0.5 text-amber-500 shrink-0" />
+          <div>
+            <p className="font-medium">{t("dashboard.emptyDbTitle")}</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              {t("dashboard.emptyDbDesc")} <code className="px-1 rounded bg-muted">php siro db:seed</code>
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         {isLoading

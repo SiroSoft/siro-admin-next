@@ -124,7 +124,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
                         options={productOptions}
                         value={itemField.value ? String(itemField.value) : ""}
                         onValueChange={(v) => itemField.onChange(Number(v))}
-                        placeholder="Search product..."
+                        placeholder={t("forms.searchProduct")}
                         disabled={isPending}
                       />
                     )}
@@ -143,7 +143,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
               <Plus className="mr-2 h-4 w-4" />
               {t("common.create")}
             </Button>
-            {"items" in errors && errors.items && <p className="text-sm text-destructive">{(errors.items as { message?: string }).message || "Items validation error"}</p>}
+            {"items" in errors && errors.items && <p className="text-sm text-destructive">{(errors.items as { message?: string }).message || t("validation.itemsMin")}</p>}
           </div>
 
           {statusField}
@@ -158,7 +158,7 @@ export function OrderForm({ order, onSubmit, isPending }: OrderFormProps) {
                   options={userOptions}
                   value={field.value ? String(field.value) : ""}
                   onValueChange={(v) => field.onChange(v ? Number(v) : undefined)}
-                  placeholder="Search customer..."
+                   placeholder={t("forms.searchCustomer")}
                   disabled={isPending}
                 />
               )}

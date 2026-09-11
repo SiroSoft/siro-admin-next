@@ -5,6 +5,7 @@ import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import type { Toast } from "@/hooks/use-toast";
+import { useI18n } from "@/providers/i18n-provider";
 
 const toastVariants: Record<string, string> = {
   default: "border bg-background text-foreground",
@@ -24,6 +25,7 @@ const toastIcons: Record<string, React.ElementType> = {
 
 export function Toaster() {
   const { toasts, dismiss } = useToast();
+  const { t: tr } = useI18n();
 
   return (
     <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-2 max-w-md">
@@ -44,7 +46,7 @@ export function Toaster() {
                 <p className="text-sm opacity-90">{t.description}</p>
               )}
             </div>
-            <button type="button" aria-label="Dismiss notification" onClick={() => dismiss(t.id)} className="shrink-0 opacity-60 hover:opacity-100">
+            <button type="button" aria-label={tr("a11y.dismissNotification")} onClick={() => dismiss(t.id)} className="shrink-0 opacity-60 hover:opacity-100">
               <X className="h-4 w-4" />
             </button>
           </div>

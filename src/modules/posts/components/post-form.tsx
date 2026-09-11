@@ -70,13 +70,13 @@ export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
       <div className="space-y-2">
         <Label htmlFor="title">{t("posts.title_field")} *</Label>
-        <Input id="title" {...register("title")} placeholder="Post title" disabled={isPending} />
+        <Input id="title" {...register("title")} placeholder={t("forms.postTitle")} disabled={isPending} />
         {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="excerpt">Excerpt</Label>
-        <Textarea id="excerpt" {...register("excerpt")} placeholder="Brief description" disabled={isPending} />
+        <Textarea id="excerpt" {...register("excerpt")} placeholder={t("forms.postExcerpt")} disabled={isPending} />
       </div>
 
       <div className="space-y-2">
@@ -84,7 +84,7 @@ export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
         <RichTextEditor
           value={watch("content") ?? ""}
           onChange={(html) => setValue("content", html, { shouldValidate: true })}
-          placeholder="Write your post content..."
+          placeholder={t("forms.postContent")}
           disabled={isPending}
           error={errors.content?.message}
           minHeight={300}
@@ -118,7 +118,7 @@ export function PostForm({ post, onSubmit, isPending }: PostFormProps) {
             disabled={isPending}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select category" />
+              <SelectValue placeholder={t("forms.selectCategory")} />
             </SelectTrigger>
             <SelectContent>
               {categories.map((cat) => (

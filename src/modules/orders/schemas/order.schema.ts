@@ -1,14 +1,15 @@
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 
 export const createOrderSchema = z.object({
   items: z
     .array(
       z.object({
-        product_id: z.number({ invalid_type_error: "Product is required" }),
-        quantity: z.number().min(1, "Quantity must be at least 1"),
+        product_id: z.number({ invalid_type_error: tSchema("validation.productRequired") }),
+        quantity: z.number().min(1, tSchema("validation.quantityMin")),
       }),
     )
-    .min(1, "At least one item is required"),
+    .min(1, tSchema("validation.itemsMin")),
   shipping_address: z.string().optional(),
   billing_address: z.string().optional(),
   notes: z.string().optional(),

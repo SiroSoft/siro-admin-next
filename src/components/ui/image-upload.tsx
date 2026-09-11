@@ -5,6 +5,7 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { cn } from "@/lib/utils";
 import { uploadService } from "@/services/upload.service";
+import { useI18n } from "@/providers/i18n-provider";
 
 interface ImageUploadProps {
   value?: string;
@@ -14,6 +15,7 @@ interface ImageUploadProps {
 }
 
 export function ImageUpload({ value, onChange, error, disabled }: ImageUploadProps) {
+  const { t } = useI18n();
   const [urlInput, setUrlInput] = useState("");
   const [preview, setPreview] = useState(value || "");
   const [uploading, setUploading] = useState(false);
@@ -69,7 +71,7 @@ export function ImageUpload({ value, onChange, error, disabled }: ImageUploadPro
       >
         {preview ? (
           <div className="relative w-full">
-            <img src={preview} alt="Preview" className="mx-auto max-h-48 rounded-md object-contain" />
+            <img src={preview} alt={t("a11y.preview")} className="mx-auto max-h-48 rounded-md object-contain" />
             {!disabled && (
               <Button type="button" variant="destructive" size="icon" className="absolute -right-2 -top-2 h-6 w-6 rounded-full" onClick={handleRemove}>
                 <X className="h-3 w-3" />
@@ -101,7 +103,7 @@ export function ImageUpload({ value, onChange, error, disabled }: ImageUploadPro
       </div>
       {!preview && (
         <div className="flex gap-2">
-          <Input placeholder="Or paste image URL..." value={urlInput} onChange={(e) => setUrlInput(e.target.value)} disabled={disabled} />
+          <Input placeholder={t("forms.imageUrl")} value={urlInput} onChange={(e) => setUrlInput(e.target.value)} disabled={disabled} />
           <Button type="button" variant="outline" size="sm" onClick={handleUrlSubmit} disabled={disabled || !urlInput}>
             <Link className="h-3 w-3 mr-1" /> Set
           </Button>

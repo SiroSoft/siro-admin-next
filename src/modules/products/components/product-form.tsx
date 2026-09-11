@@ -69,24 +69,24 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">{t("products.name")} *</Label>
-          <Input id="name" {...register("name")} placeholder="Product name" disabled={isPending} />
+          <Input id="name" {...register("name")} placeholder={t("forms.productName")} disabled={isPending} />
           {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="sku">SKU *</Label>
-          <Input id="sku" {...register("sku")} placeholder="PROD-001" disabled={isPending} />
+          <Input id="sku" {...register("sku")} placeholder={t("forms.productSku")} disabled={isPending} />
           {errors.sku && <p className="text-sm text-destructive">{errors.sku.message}</p>}
         </div>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">{t("products.description")}</Label>
-        <RichTextEditor value={watch("description") ?? ""} onChange={(html) => setValue("description", html, { shouldValidate: true })} placeholder="Full product description..." disabled={isPending} minHeight={200} />
+        <RichTextEditor value={watch("description") ?? ""} onChange={(html) => setValue("description", html, { shouldValidate: true })} placeholder={t("forms.productDescription")} disabled={isPending} minHeight={200} />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="short_description">Short Description</Label>
-        <Textarea id="short_description" {...register("short_description")} placeholder="Brief product summary" disabled={isPending} />
+        <Textarea id="short_description" {...register("short_description")} placeholder={t("forms.productSummary")} disabled={isPending} />
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -149,7 +149,7 @@ export function ProductForm({ product, onSubmit, isPending }: ProductFormProps) 
             <Label>{t("products.category")}</Label>
           <Select value={String(watch("category_id") ?? "")} onValueChange={(v) => setValue("category_id", v ? Number(v) : undefined)} disabled={isPending}>
             <SelectTrigger>
-              <SelectValue placeholder="Select category" />
+              <SelectValue placeholder={t("forms.selectCategory")} />
             </SelectTrigger>
             <SelectContent>
               {categories.map((cat) => (

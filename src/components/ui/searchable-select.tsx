@@ -5,6 +5,7 @@ import { Button } from "./button";
 import { Input } from "./input";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/providers/i18n-provider";
 
 interface Option {
   label: string;
@@ -24,10 +25,13 @@ export function SearchableSelect({
   options,
   value,
   onValueChange,
-  placeholder = "Select...",
+  placeholder,
   disabled,
-  emptyText = "No results",
+  emptyText,
 }: SearchableSelectProps) {
+  const { t } = useI18n();
+  const resolvedPlaceholder = placeholder ?? t("forms.select");
+  const resolvedEmptyText = emptyText ?? t("forms.noResults");
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -44,14 +48,14 @@ export function SearchableSelect({
           className="w-full justify-between font-normal"
           disabled={disabled}
         >
-          {selected ? selected.label : placeholder}
+          {selected ? selected.label : resolvedPlaceholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
         <div className="p-2">
           <Input
-            placeholder="Search..."
+            placeholder={t("forms.search")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="h-8"
@@ -59,7 +63,7 @@ export function SearchableSelect({
         </div>
         <div className="max-h-60 overflow-y-auto p-1">
           {filtered.length === 0 ? (
-            <p className="p-2 text-sm text-muted-foreground">{emptyText}</p>
+            <p className="p-2 text-sm text-muted-foreground">{resolvedEmptyText}</p>
           ) : (
             filtered.map((option) => (
               <button

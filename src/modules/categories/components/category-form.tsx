@@ -58,13 +58,13 @@ export function CategoryForm({ category, onSubmit, isPending }: CategoryFormProp
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">{t("categories.name")} *</Label>
-        <Input id="name" {...register("name")} placeholder="Category name" disabled={isPending} />
+        <Input id="name" {...register("name")} placeholder={t("forms.categoryName")} disabled={isPending} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="description">{t("products.description")}</Label>
-        <Textarea id="description" {...register("description")} placeholder="Category description" disabled={isPending} />
+        <Textarea id="description" {...register("description")} placeholder={t("forms.categoryDescription")} disabled={isPending} />
       </div>
 
       <div className="space-y-2">
@@ -106,7 +106,7 @@ export function CategoryForm({ category, onSubmit, isPending }: CategoryFormProp
           disabled={isPending}
         >
           <SelectTrigger>
-            <SelectValue placeholder="None (top level)" />
+            <SelectValue placeholder={t("forms.noneTopLevel")} />
           </SelectTrigger>
           <SelectContent>
             {parentCategories.map((cat) => (

@@ -57,19 +57,19 @@ export function UserForm({ user, onSubmit, isPending }: UserFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="name">{t("users.name")} <span className="text-destructive">*</span></Label>
-        <Input id="name" {...register("name")} placeholder="John Doe" disabled={isPending} />
+        <Input id="name" {...register("name")} placeholder={t("forms.userName")} disabled={isPending} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="email">{t("auth.email")} <span className="text-destructive">*</span></Label>
-        <Input id="email" type="email" {...register("email")} placeholder="john@example.com" disabled={isPending} />
+        <Input id="email" type="email" {...register("email")} placeholder={t("forms.userEmail")} disabled={isPending} />
         {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="phone">Phone</Label>
-        <Input id="phone" type="tel" {...register("phone")} placeholder="+1 (555) 000-0000" disabled={isPending} />
+        <Input id="phone" type="tel" {...register("phone")} placeholder={t("forms.userPhone")} disabled={isPending} />
       </div>
 
       {!isEdit && (

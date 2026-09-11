@@ -76,7 +76,7 @@ export function OpenSourceLinks({ compact = false }: { compact?: boolean }) {
         type="button"
         onClick={copyCmd}
         className="mt-2 flex w-full items-center justify-between gap-2 rounded-lg bg-muted px-3 py-2 font-mono text-xs text-muted-foreground hover:text-foreground"
-        aria-label="Copy composer command"
+        aria-label={t("a11y.copyComposer")}
       >
         <span className="truncate">{COMPOSER_CMD}</span>
         {copied ? <Check className="h-3.5 w-3.5 shrink-0" /> : <Copy className="h-3.5 w-3.5 shrink-0" />}

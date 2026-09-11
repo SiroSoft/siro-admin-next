@@ -1,8 +1,9 @@
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 
 export const createPostSchema = z.object({
-  title: z.string().min(2, "Title must be at least 2 characters"),
-  content: z.string().min(1, "Content is required"),
+  title: z.string().min(2, tSchema("validation.titleMin2")),
+  content: z.string().min(1, tSchema("validation.contentRequired")),
   excerpt: z.string().optional(),
   cover_image: z.string().optional(),
   status: z.enum(["draft", "published", "archived"]).default("draft"),
@@ -12,7 +13,7 @@ export const createPostSchema = z.object({
 });
 
 export const updatePostSchema = z.object({
-  title: z.string().min(2).optional(),
+  title: z.string().min(2, tSchema("validation.titleMin2")).optional(),
   content: z.string().optional(),
   excerpt: z.string().optional(),
   cover_image: z.string().optional(),

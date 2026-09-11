@@ -12,7 +12,7 @@ type NestedKeyOf<T> = T extends Record<string, unknown>
   ? { [K in keyof T]: K extends string ? `${K}${T[K] extends Record<string, unknown> ? `.${NestedKeyOf<T[K]>}` : ""}` : never }[keyof T]
   : "";
 
-type TranslationKey = NestedKeyOf<Locale>;
+export type TranslationKey = NestedKeyOf<Locale>;
 
 type LocaleName = "en" | "vi" | "de" | "zh" | "ja";
 

@@ -4,6 +4,7 @@ import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 import { Loader2, Sun, Moon, Monitor, Info, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -36,21 +37,21 @@ import { useState, useCallback, useEffect } from "react";
 import { serverService } from "@/services/server.service";
 
 const profileSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
+  name: z.string().min(2, tSchema("validation.nameMin2")),
+  email: z.string().email(tSchema("validation.invalidEmail")),
 });
 
 const passwordSchema = z.object({
-  current_password: z.string().min(1, "Current password is required"),
-  new_password: z.string().min(8, "Password must be at least 8 characters"),
+  current_password: z.string().min(1, tSchema("validation.currentPasswordRequired")),
+  new_password: z.string().min(8, tSchema("validation.passwordMin8")),
   new_password_confirmation: z.string(),
 }).refine((d) => d.new_password === d.new_password_confirmation, {
-  message: "Passwords do not match",
+  message: tSchema("validation.passwordMismatch"),
   path: ["new_password_confirmation"],
 });
 
 const settingsSchema = z.object({
-  app_name: z.string().min(1, "App name is required"),
+  app_name: z.string().min(1, tSchema("validation.appNameRequired")),
   app_description: z.string().optional(),
   language: z.string().min(1),
   timezone: z.string().min(1),

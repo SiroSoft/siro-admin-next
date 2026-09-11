@@ -49,7 +49,7 @@ export function TagForm({ tag, onSubmit, isPending }: TagFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="name">{t("tags.name")} *</Label>
-        <Input id="name" {...register("name")} placeholder="Tag name" disabled={isPending} />
+        <Input id="name" {...register("name")} placeholder={t("forms.tagName")} disabled={isPending} />
         {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
       </div>
 
@@ -75,7 +75,7 @@ export function TagForm({ tag, onSubmit, isPending }: TagFormProps) {
 
       <div className="space-y-2">
         <Label htmlFor="description">{t("products.description")}</Label>
-        <Textarea id="description" {...register("description")} placeholder="Tag description" disabled={isPending} />
+        <Textarea id="description" {...register("description")} placeholder={t("forms.tagDescription")} disabled={isPending} />
       </div>
 
       <div className="flex items-center gap-2">

@@ -1,14 +1,36 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useI18n, type TranslationKey } from "@/providers/i18n-provider";
 import { Sidebar } from "@/layouts/sidebar";
 import { Header } from "@/layouts/header"; import { OpenSourceLinks } from "@/components/open-source-links";
 import { MobileSidebar } from "@/layouts/mobile-sidebar";
 import { cn } from "@/lib/utils";
 
+const SEGMENT_TITLE_KEYS: Record<string, TranslationKey> = {
+  "": "common.dashboard",
+  users: "common.users",
+  orders: "common.orders",
+  products: "common.products",
+  categories: "common.categories",
+  tags: "common.tags",
+  posts: "common.posts",
+  profile: "common.profile",
+  settings: "common.settings",
+};
+
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useI18n();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const segment = (pathname ?? "/").split("/")[1] ?? "";
+    const key = SEGMENT_TITLE_KEYS[segment] ?? "common.dashboard";
+    document.title = `${t(key)} | Siro Admin`;
+  }, [pathname, t]);
 
   return (
     <div className="min-h-screen bg-background">

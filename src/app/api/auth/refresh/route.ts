@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 
 const ALLOWED_ORIGINS = [
   "http://localhost:3000",
@@ -22,7 +23,7 @@ function checkRateLimit(ip: string): boolean {
 }
 
 const refreshSchema = z.object({
-  refresh_token: z.string().min(1, "refresh_token is required"),
+  refresh_token: z.string().min(1, tSchema("validation.refreshTokenRequired")),
 });
 
 export async function POST(req: NextRequest) {

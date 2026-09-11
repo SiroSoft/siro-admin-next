@@ -1,13 +1,14 @@
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 
 export const createProductSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
+  name: z.string().min(2, tSchema("validation.nameMin2")),
   description: z.string().optional(),
   short_description: z.string().optional(),
-  price: z.coerce.number().min(0, "Price must be 0 or greater"),
+  price: z.coerce.number().min(0, tSchema("validation.priceMin")),
   compare_price: z.coerce.number().min(0).optional(),
   cost_price: z.coerce.number().min(0).optional(),
-  sku: z.string().min(1, "SKU is required"),
+  sku: z.string().min(1, tSchema("validation.skuRequired")),
   barcode: z.string().optional(),
   stock: z.coerce.number().int().default(0),
   stock_min: z.coerce.number().int().optional(),
@@ -22,12 +23,12 @@ export const createProductSchema = z.object({
 });
 
 export const updateProductSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").optional(),
+  name: z.string().min(2, tSchema("validation.nameMin2")).optional(),
   description: z.string().optional(),
   short_description: z.string().optional(),
-  price: z.coerce.number().min(0).optional(),
-  compare_price: z.coerce.number().min(0).optional(),
-  cost_price: z.coerce.number().min(0).optional(),
+  price: z.coerce.number().min(0, tSchema("validation.priceMin")).optional(),
+  compare_price: z.coerce.number().min(0, tSchema("validation.priceMin")).optional(),
+  cost_price: z.coerce.number().min(0, tSchema("validation.priceMin")).optional(),
   sku: z.string().optional(),
   barcode: z.string().optional(),
   stock: z.coerce.number().int().optional(),

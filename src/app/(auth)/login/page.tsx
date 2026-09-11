@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { tSchema } from "@/lib/i18n";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"; import { OpenSourceLinks } from "@/components/open-source-links"; import { Turnstile } from "@marsidev/react-turnstile";
+import { Input } from "@/components/ui/input"; import { OpenSourceLinks } from "@/components/open-source-links"; import { ApiStatusFooter } from "@/components/api-status-footer"; import { Turnstile } from "@marsidev/react-turnstile";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,8 +18,8 @@ import { useI18n } from "@/providers/i18n-provider";
 import { APP_NAME } from "@/lib/constants";
 
 const loginSchema = z.object({
-  email: z.string().email("Please enter a valid email"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
+  email: z.string().email(tSchema("validation.invalidEmail")),
+  password: z.string().min(8, tSchema("validation.passwordMin8")),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -61,7 +62,7 @@ export default function LoginPage() {
 return (
     <Card className="shadow-lg">
       <CardHeader className="space-y-4 text-center">
-        <img src="/logo.svg" alt="Siro Admin" className="mx-auto h-12 w-12" />
+        <img src="/logo.svg" alt={t("a11y.appLogo")} className="mx-auto h-12 w-12" />
         <div>
           <CardTitle className="text-2xl font-bold">{APP_NAME}</CardTitle>
           <CardDescription>{t("auth.signIn")}</CardDescription>
@@ -141,6 +142,7 @@ return (
             {t("auth.noAccount")}{' '}
             <Link href="/register" className="text-primary hover:underline">{t("auth.signUp")}</Link>
           </p>
+          <ApiStatusFooter />
         </form>
       </CardContent>
     </Card>
