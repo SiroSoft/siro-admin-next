@@ -1,10 +1,1 @@
-"use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function UserDetailRedirect() {
-  const router = useRouter();
-  useEffect(() => { router.replace("/users"); }, [router]);
-  return null;
-}
+import { redirect } from 'next/navigation'; export async function generateStaticParams(){return [{id:'1'}]} export default function Page(){ redirect('/users'); }
