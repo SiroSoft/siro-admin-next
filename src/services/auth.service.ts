@@ -19,8 +19,11 @@ export const authService = {
     return res.data.data ?? null;
   },
 
-  async forgotPassword(email: string) {
-    const res = await api.post<components["schemas"]["SuccessResponse_null"]>("/api/auth/forgot-password", { email });
+  async forgotPassword(email: string, turnstileToken?: string) {
+    const res = await api.post<components["schemas"]["SuccessResponse_null"]>("/api/auth/forgot-password", {
+      email,
+      ...(turnstileToken ? { "cf-turnstile-response": turnstileToken } : {}),
+    });
     return res.data;
   },
 

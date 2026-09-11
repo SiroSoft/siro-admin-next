@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useI18n } from "@/providers/i18n-provider";
 import { toast } from "@/hooks/use-toast";
-import { authService } from "@/services/auth.service";
+import { authService } from "@/services/auth.service"; import { Turnstile } from "@marsidev/react-turnstile";
 
 const schema = z.object({
   email: z.string().email("Please enter a valid email"),
@@ -30,10 +30,7 @@ export default function ForgotPasswordPage() {
     formState: { errors },
   } = useForm<Form>({ resolver: zodResolver(schema) });
 
-  const onSubmit = async (data: Form) => {
-    setIsPending(true);
-    try {
-      await authService.forgotPassword(data.email);
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""; const [turnstileToken, setTurnstileToken] = useState(""); const onSubmit = async (data: Form) => { setIsPending(true); try { await authService.forgotPassword(data.email, turnstileToken || undefined);
       setSent(true);
     } catch (e) {
       toast({ title: t("errors.unknown"), description: (e as Error).message || t("errors.networkError"), variant: "destructive" });
@@ -75,7 +72,7 @@ export default function ForgotPasswordPage() {
             <Input id="email" type="email" placeholder={t("forgotPassword.emailPlaceholder")} {...register("email")} disabled={isPending} />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
           </div>
-          <Button type="submit" className="w-full" disabled={isPending}>
+          {turnstileSiteKey !== "" && ( <Turnstile siteKey={turnstileSiteKey} onSuccess={(token) => setTurnstileToken(token)} onExpire={() => setTurnstileToken("")} onError={() => setTurnstileToken("")} /> )} <Button type="submit" className="w-full" disabled={isPending}>
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {isPending ? t("common.loading") : t("common.submit")}
           </Button>

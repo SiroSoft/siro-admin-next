@@ -14,6 +14,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useI18n } from "@/providers/i18n-provider";
 import { toast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth.service";
+import { Turnstile } from "@marsidev/react-turnstile";
 
 const registerSchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
@@ -42,11 +43,14 @@ export default function RegisterPage() {
     defaultValues: { name: "", email: "", password: "", password_confirmation: "" },
   });
 
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
+  const [turnstileToken, setTurnstileToken] = useState("");
+
   const onSubmit = async (data: RegisterForm) => {
     setIsPending(true);
     setServerError(null);
     try {
-      await authService.register(data);
+      await authService.register({ ...data, ...(turnstileToken ? { "cf-turnstile-response": turnstileToken } : {}) });
       toast({ title: t("register.success"), variant: "success" });
       router.push("/login");
     } catch (e: any) {
@@ -88,6 +92,14 @@ export default function RegisterPage() {
             {errors.password_confirmation && <p className="text-sm text-destructive">{errors.password_confirmation.message}</p>}
           </div>
           {serverError && <p className="text-sm text-destructive">{serverError}</p>}
+          {turnstileSiteKey !== "" && (
+            <Turnstile
+              siteKey={turnstileSiteKey}
+              onSuccess={(token) => setTurnstileToken(token)}
+              onExpire={() => setTurnstileToken("")}
+              onError={() => setTurnstileToken("")}
+            />
+          )}
           <Button type="submit" className="w-full" disabled={isPending}>
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t("register.submit")}

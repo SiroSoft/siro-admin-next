@@ -1039,6 +1039,8 @@ export interface components {
              * @example secret123
              */
             password: string;
+            /** Cloudflare Turnstile token (cf-turnstile-response) */
+            "cf-turnstile-response"?: string;
         };
         ForgotPasswordRequest: {
             /**
@@ -1046,6 +1048,8 @@ export interface components {
              * @example user@example.com
              */
             email: string;
+            /** Cloudflare Turnstile token (cf-turnstile-response) */
+            "cf-turnstile-response"?: string;
         };
         ResetPasswordRequest: {
             /** @example reset-token */
