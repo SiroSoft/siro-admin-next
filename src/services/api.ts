@@ -32,6 +32,11 @@ function processQueue(error: unknown) {
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     config.headers.set("X-Request-Id", generateRequestId());
+    const feToken =
+      typeof process !== "undefined" ? process.env.NEXT_PUBLIC_FE_TOKEN : undefined;
+    if (feToken) {
+      config.headers.set("X-Siro-FE", feToken);
+    }
     const locale =
       typeof window !== "undefined"
         ? localStorage.getItem("siro_locale") || "en"
