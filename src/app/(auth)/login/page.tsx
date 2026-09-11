@@ -58,17 +58,7 @@ export default function LoginPage() {
     login(data);
   };
 
-  if (isAuthLoading) {
-    return (
-      <Card className="shadow-lg">
-        <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
+return (
     <Card className="shadow-lg">
       <CardHeader className="space-y-4 text-center">
         <img src="/logo.svg" alt="Siro Admin" className="mx-auto h-12 w-12" />
