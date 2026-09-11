@@ -2,17 +2,23 @@ import { test, expect } from "@playwright/test";
 
 /**
  * REAL-API integration tests — no route mocking.
- * Requires the SiroPHP skeleton running on http://localhost:8080
- * with seeded admin: admin@siro.test / Password123!
- *
- * Boot it from the skeleton repo:
- *   php siro migrate --force && php seed-e2e-admin.php && php siro serve
+ * Requires a SiroPHP skeleton with seeded admin. Configure via env:
+ *   E2E_API_URL=https://skeleton.sirophp.com
+ *   E2E_ADMIN_EMAIL=admin@skeleton.sirophp.com
+ *   E2E_ADMIN_PASSWORD=<secret>
+ * Local default (skeleton repo: php siro migrate --force && php siro serve):
+ *   admin@siro.test / Password123! on http://localhost:8080
+ * Skipped automatically when E2E creds are absent (e.g. captcha-gated prod).
  */
 
-const ADMIN_EMAIL = "admin@siro.test";
-const ADMIN_PASSWORD = "Password123!";
+const API_URL = process.env.E2E_API_URL || "http://localhost:8080";
+const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL || "admin@siro.test";
+const ADMIN_PASSWORD = process.env.E2E_ADMIN_PASSWORD || "Password123!";
+const HAS_CREDS = !!(process.env.E2E_ADMIN_EMAIL && process.env.E2E_ADMIN_PASSWORD);
 
 test.describe("Real API: login → dashboard", () => {
+  test.skip(!HAS_CREDS, "E2E_ADMIN_EMAIL/E2E_ADMIN_PASSWORD not set — needs real backend creds");
+
   test("login form accepts real credentials and lands on dashboard", async ({ page }) => {
     await page.goto("/login");
     await page.locator('input[type="email"]').fill(ADMIN_EMAIL);
@@ -37,7 +43,7 @@ test.describe("Real API: login → dashboard", () => {
     expect(token).toContain("eyJ"); // JWT shape
 
     // The seeded admin must appear in a REAL users query (no mocks).
-    const res = await page.request.get("http://localhost:8080/api/users?page=1&per_page=10", {
+    const res = await page.request.get(`${API_URL}/api/users?page=1&per_page=10`, {
       headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
     });
     expect(res.status()).toBe(200);
