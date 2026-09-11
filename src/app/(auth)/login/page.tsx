@@ -18,7 +18,7 @@ import { APP_NAME } from "@/lib/constants";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email"),
-  password: z.string().min(1, "Password is required"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -58,17 +58,7 @@ export default function LoginPage() {
     login(data);
   };
 
-  if (isAuthLoading) {
-    return (
-      <Card className="shadow-lg">
-        <CardContent className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-        </CardContent>
-      </Card>
-    );
-  }
-
-  return (
+return (
     <Card className="shadow-lg">
       <CardHeader className="space-y-4 text-center">
         <img src="/logo.svg" alt="Siro Admin" className="mx-auto h-12 w-12" />
@@ -139,6 +129,10 @@ export default function LoginPage() {
             {isLoginPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t("common.login")}
           </Button>
+          <p className="text-sm text-center text-muted-foreground mt-4">
+            {t("auth.noAccount")}{' '}
+            <Link href="/register" className="text-primary hover:underline">{t("auth.signUp")}</Link>
+          </p>
         </form>
       </CardContent>
     </Card>

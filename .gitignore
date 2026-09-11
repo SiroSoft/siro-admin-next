@@ -3,6 +3,7 @@ node_modules/
 out/
 .env
 .env.local
+test-results/
 .env.production
 *.tsbuildinfo
 next-env.d.ts

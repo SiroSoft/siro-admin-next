@@ -93,7 +93,9 @@ api.interceptors.response.use(
           localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
           localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
           localStorage.removeItem(STORAGE_KEYS.USER);
-          window.location.href = "/login";
+          if (window.location.pathname !== "/login") {
+            window.location.href = "/login";
+          }
         }
         return Promise.reject(error);
       }
@@ -112,7 +114,9 @@ api.interceptors.response.use(
         localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
         localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
         localStorage.removeItem(STORAGE_KEYS.USER);
-        window.location.href = "/login";
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
@@ -142,19 +146,19 @@ api.interceptors.response.use(
     }
 
     if (status === 422) {
-      const data = error.response.data as components["schemas"]["ValidationErrorResponse"];
-      if (data?.errors) {
-        const values = Object.values(data.errors);
-        const firstError = values[0];
-        const toastEvent = new CustomEvent("app:toast", {
-          detail: {
-            title: "Validation Error",
-            description: firstError?.[0] ?? data.message ?? "Please check your input.",
-            variant: "destructive",
-          },
-        });
-        if (typeof window !== "undefined") window.dispatchEvent(toastEvent);
-      }
+      const body = error.response.data as { errors?: Record<string, string[]>; meta?: { errors?: Record<string, string[]> }; message?: string }
+      // skeleton envelope is meta.errors, legacy openapi is top-level errors
+      const fieldErrors = (body as { errors?: Record<string,string[]> })?.errors ?? body?.meta?.errors
+      const values = fieldErrors ? Object.values(fieldErrors) : []
+      const firstError = values[0]?.[0]
+      const toastEvent = new CustomEvent("app:toast", {
+        detail: {
+          title: "Validation Error",
+          description: firstError ?? body?.message ?? "Please check your input.",
+          variant: "destructive",
+        },
+      });
+      if (typeof window !== "undefined") window.dispatchEvent(toastEvent);
     }
 
     if (status === 429) {

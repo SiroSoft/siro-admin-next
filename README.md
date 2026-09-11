@@ -177,7 +177,7 @@ npm run dev                 # → http://localhost:3000
 
 ## 📋 API Contract
 
-All endpoints follow the [Siro API Response Contract v1](docs/conventions/responses.md).
+All endpoints follow the [Siro API Response Contract v1](docs/openapi.json).
 
 ### Standard Response Envelope
 

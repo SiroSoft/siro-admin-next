@@ -16,7 +16,13 @@ export function useAuth() {
     mutationFn: (data: components["schemas"]["LoginRequest"]) => authService.login(data),
     onSuccess: (res) => {
       const payload = res.data;
-      if (!payload?.user || !payload?.token || !payload?.refresh_token) return;
+      if (!payload?.user || !payload?.token || !payload?.refresh_token) {
+        const toastEvent = new CustomEvent("app:toast", {
+          detail: { title: "Login Error", description: "Invalid server response. Please try again.", variant: "destructive" },
+        });
+        if (typeof window !== "undefined") window.dispatchEvent(toastEvent);
+        return;
+      }
       login(payload.user, payload.token, payload.refresh_token);
       router.push("/");
     },

@@ -46,7 +46,7 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
   const columns = useMemo(
     () => [
       columnHelper.accessor("id", {
-        header: "ID",
+        header: () => t("common.id") || "ID",
         cell: (info) => <span className="font-mono text-xs">#{info.getValue()}</span>,
       }),
       columnHelper.accessor("user_name", {
@@ -62,7 +62,7 @@ export function OrderTable({ onEdit, onCreate, onView, params, onParamsChange }:
         cell: (info) => <StatusBadge status={info.getValue() ?? ""} />,
       }),
       columnHelper.accessor("payment_status", {
-        header: "Payment",
+        header: () => t("orders.payment") || "Payment",
         cell: (info) => (
           <Badge variant={info.getValue() === "paid" ? "success" : info.getValue() === "failed" ? "destructive" : "secondary"}>
             {info.getValue() ?? "N/A"}

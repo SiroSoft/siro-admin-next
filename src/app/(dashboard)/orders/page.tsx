@@ -26,8 +26,8 @@ export default function OrdersPage() {
   const STATUS_OPTIONS = [
     { label: t("common.all"), value: "" },
     { label: t("orders.status_pending"), value: "pending" },
-    { label: "Processing", value: "processing" },
-    { label: "Shipped", value: "shipped" },
+    { label: t("orders.status_processing"), value: "processing" },
+    { label: t("orders.status_shipped"), value: "shipped" },
     { label: t("orders.status_completed"), value: "completed" },
     { label: t("orders.status_cancelled"), value: "cancelled" },
   ];
