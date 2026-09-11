@@ -72,6 +72,7 @@ const en = {
     apiStatus: 'API Status',
     quickActions: 'Quick Actions',
     monthlyRevenue: 'Monthly Revenue',
+    ordersByStatus: 'Orders by Status',
     newUser: 'New User',
     viewOrders: 'View Orders',
     manageProducts: 'Manage Products',

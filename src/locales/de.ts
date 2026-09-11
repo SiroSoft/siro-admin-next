@@ -72,6 +72,7 @@ const de = {
     apiStatus: 'API-Status',
     quickActions: 'Schnellaktionen',
     monthlyRevenue: 'Monatsumsatz',
+    ordersByStatus: 'Orders by Status',
     newUser: 'Neuer Benutzer',
     viewOrders: 'Bestellungen anzeigen',
     manageProducts: 'Produkte verwalten',

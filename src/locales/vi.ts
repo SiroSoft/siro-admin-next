@@ -74,6 +74,7 @@ const vi: Locale = {
     apiStatus: 'Trạng thái API',
     quickActions: 'Thao tác nhanh',
     monthlyRevenue: 'Doanh thu theo tháng',
+    ordersByStatus: 'Orders by Status',
     newUser: 'Người dùng mới',
     viewOrders: 'Xem đơn hàng',
     manageProducts: 'Quản lý sản phẩm',

@@ -20,6 +20,7 @@ export interface DashboardData {
     response_time: number;
   };
   monthly_revenue: Array<{ month: string; revenue: number }>;
+  orders_by_status?: Record<string, number>;
 }
 
 export const dashboardService = {

@@ -72,6 +72,7 @@ const zh = {
     apiStatus: 'API 状态',
     quickActions: '快捷操作',
     monthlyRevenue: '月收入',
+    ordersByStatus: 'Orders by Status',
     newUser: '新用户',
     viewOrders: '查看订单',
     manageProducts: '管理产品',

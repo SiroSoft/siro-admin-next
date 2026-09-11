@@ -174,6 +174,35 @@ export default function DashboardPage() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
+              <CardTitle className="text-sm font-medium">{t("dashboard.ordersByStatus")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {isLoading ? (
+                <div className="space-y-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="flex items-center justify-between">
+                      <Skeleton className="h-4 w-16" />
+                      <Skeleton className="h-4 w-10" />
+                    </div>
+                  ))}
+                </div>
+              ) : data?.orders_by_status && Object.keys(data.orders_by_status).length > 0 ? (
+                <div className="space-y-3">
+                  {Object.entries(data.orders_by_status).map(([status, count]) => (
+                    <div key={status} className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground capitalize">{status}</span>
+                      <span className="text-sm font-medium">{formatNumber(count ?? 0)}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground py-4 text-center">{t("common.noData")}</p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle className="text-sm font-medium">{t("dashboard.apiStatus")}</CardTitle>
             </CardHeader>
             <CardContent>

@@ -72,6 +72,7 @@ const ja = {
     apiStatus: 'APIステータス',
     quickActions: 'クイックアクション',
     monthlyRevenue: '月間収益',
+    ordersByStatus: 'Orders by Status',
     newUser: '新規ユーザー',
     viewOrders: '注文を見る',
     manageProducts: '商品管理',
