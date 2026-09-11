@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useI18n, type TranslationKey } from "@/providers/i18n-provider";
 
@@ -12,7 +12,7 @@ const AUTH_TITLE_KEYS: Record<string, TranslationKey> = {
   "/verify-email": "auth.verifyTitle",
 };
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+function AuthTitle() {
   const { t } = useI18n();
   const pathname = usePathname();
 
@@ -21,5 +21,16 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     document.title = `${t(key)} | Siro Admin`;
   }, [pathname, t]);
 
-  return <>{children}</>;
+  return null;
+}
+
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <Suspense>
+        <AuthTitle />
+      </Suspense>
+      {children}
+    </>
+  );
 }

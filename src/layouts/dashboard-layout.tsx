@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useI18n, type TranslationKey } from "@/providers/i18n-provider";
 import { Sidebar } from "@/layouts/sidebar";
@@ -20,9 +20,7 @@ const SEGMENT_TITLE_KEYS: Record<string, TranslationKey> = {
   settings: "common.settings",
 };
 
-export function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+function DashboardTitle() {
   const { t } = useI18n();
   const pathname = usePathname();
 
@@ -32,8 +30,18 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
     document.title = `${t(key)} | Siro Admin`;
   }, [pathname, t]);
 
+  return null;
+}
+
+export function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-background">
+      <Suspense>
+        <DashboardTitle />
+      </Suspense>
       <Sidebar collapsed={collapsed} onToggle={() => setCollapsed(!collapsed)} />
       <MobileSidebar open={mobileOpen} onClose={() => setMobileOpen(false)} />
 
