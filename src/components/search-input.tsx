@@ -34,6 +34,8 @@ export function SearchInput({ value, onChange, placeholder = "Search..." }: Sear
       />
       {local && (
         <button
+          type="button"
+          aria-label="Clear search"
           onClick={() => setLocal("")}
           className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
         >

@@ -44,7 +44,7 @@ export function Toaster() {
                 <p className="text-sm opacity-90">{t.description}</p>
               )}
             </div>
-            <button onClick={() => dismiss(t.id)} className="shrink-0 opacity-60 hover:opacity-100">
+            <button type="button" aria-label="Dismiss notification" onClick={() => dismiss(t.id)} className="shrink-0 opacity-60 hover:opacity-100">
               <X className="h-4 w-4" />
             </button>
           </div>
