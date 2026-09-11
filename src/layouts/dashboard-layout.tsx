@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar } from "@/layouts/sidebar";
-import { Header } from "@/layouts/header";
+import { Header } from "@/layouts/header"; import { OpenSourceLinks } from "@/components/open-source-links";
 import { MobileSidebar } from "@/layouts/mobile-sidebar";
 import { cn } from "@/lib/utils";
 
@@ -26,6 +26,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         <main className="p-4 lg:p-6 animate-fade-in">
           {children}
         </main>
+        <footer className="px-4 pb-6 lg:px-6">
+          <OpenSourceLinks compact />
+        </footer>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import { z } from "zod";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input"; import { OpenSourceLinks } from "@/components/open-source-links";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +49,7 @@ export default function LoginPage() {
     }
   }, [setValue]);
 
-  const onSubmit = (data: LoginForm) => {
+  const demoEmail = process.env.NEXT_PUBLIC_DEMO_EMAIL || "demo@skeleton.sirophp.com"; const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD || "Demo123!"; const demoEnabled = process.env.NEXT_PUBLIC_DEMO_ENABLED !== "false"; const onDemoLogin = () => { login({ email: demoEmail, password: demoPassword }); }; const onSubmit = (data: LoginForm) => {
     if (remember) {
       localStorage.setItem(REMEMBER_EMAIL_KEY, data.email);
     } else {
@@ -125,11 +125,11 @@ return (
             <Link href="/forgot-password" className="text-sm text-primary hover:underline">{t("auth.forgotPassword")}</Link>
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoginPending}>
+          {demoEnabled && ( <Button type="button" variant="outline" className="w-full" onClick={onDemoLogin} disabled={isLoginPending}> Try live demo — 1 click </Button> )} <Button type="submit" className="w-full" disabled={isLoginPending}>
             {isLoginPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t("common.login")}
           </Button>
-          <p className="text-sm text-center text-muted-foreground mt-4">
+          <div className="mt-4"><OpenSourceLinks /></div> <p className="text-sm text-center text-muted-foreground mt-4">
             {t("auth.noAccount")}{' '}
             <Link href="/register" className="text-primary hover:underline">{t("auth.signUp")}</Link>
           </p>
