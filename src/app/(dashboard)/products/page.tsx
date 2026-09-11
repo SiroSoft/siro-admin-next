@@ -31,7 +31,7 @@ export default function ProductsPage() {
   const createMutation = useCreateProduct();
   const updateMutation = useUpdateProduct(editProduct?.id ?? 0);
 
-  const params = { page, search: search || undefined, is_active: status || undefined, per_page: 10 };
+  const params = { page, search: search || undefined, status: status || undefined, per_page: 10 };
 
   const handleEdit = useCallback((product: Product) => setEditProduct(product), []);
 
