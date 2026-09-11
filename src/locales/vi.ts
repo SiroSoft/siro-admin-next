@@ -199,6 +199,14 @@ const vi: Locale = {
     hidePassword: 'Ẩn mật khẩu',
     showPassword: 'Hiện mật khẩu',
     invalidCredentials: 'Thông tin đăng nhập không hợp lệ',
+    tryDemo: 'Dùng thử demo - 1 click',
+  },
+  opensource: {
+    starTemplate: 'Thả sao cho template',
+    getSkeleton: 'Lấy khung SiroPHP',
+    deployOwn: 'Tự triển khai',
+    likedDemo: 'Thích demo? Lấy code và tự chạy nhé.',
+    website: 'Website chính thức SiroPHP',
   },
   register: {
     title: 'Tạo tài khoản',
@@ -236,6 +244,18 @@ const vi: Locale = {
     forbidden: 'Bị từ chối',
     networkError: 'Lỗi mạng. Vui lòng thử lại.',
     unknown: 'Đã xảy ra lỗi không xác định',
+    networkTitle: 'Lỗi mạng',
+    networkDescription: 'Không thể kết nối tới máy chủ. Vui lòng kiểm tra kết nối của bạn.',
+    accessDeniedTitle: 'Truy cập bị từ chối',
+    accessDeniedDescription: 'Bạn không có quyền thực hiện thao tác này.',
+    notFoundTitle: 'Không tìm thấy',
+    notFoundDescription: 'Không tìm thấy tài nguyên được yêu cầu.',
+    validationTitle: 'Lỗi dữ liệu',
+    validationFallback: 'Vui lòng kiểm tra lại thông tin nhập.',
+    rateLimitTitle: 'Quá nhiều yêu cầu',
+    rateLimitDescription: 'Vui lòng chậm lại và thử lại sau.',
+    serverTitle: 'Lỗi máy chủ',
+    serverDescription: 'Đã xảy ra lỗi máy chủ. Vui lòng thử lại sau.',
   },
 };
 export default vi;

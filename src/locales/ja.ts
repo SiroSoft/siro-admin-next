@@ -197,6 +197,14 @@ const ja = {
     hidePassword: 'パスワードを非表示',
     showPassword: 'パスワードを表示',
     invalidCredentials: '認証情報が無効です',
+    tryDemo: 'Try live demo - 1 click',
+  },
+  opensource: {
+    starTemplate: 'Star the template',
+    getSkeleton: 'Get SiroPHP skeleton',
+    deployOwn: 'Deploy your own',
+    likedDemo: 'Liked the demo? Grab the code and run it yourself.',
+    website: 'SiroPHP website',
   },
   register: {
     title: 'アカウントを作成',
@@ -234,6 +242,18 @@ const ja = {
     forbidden: 'アクセス禁止',
     networkError: 'ネットワークエラー。もう一度お試しください。',
     unknown: '不明なエラーが発生しました',
+    networkTitle: 'Network Error',
+    networkDescription: 'Unable to connect to the server. Please check your connection.',
+    accessDeniedTitle: 'Access Denied',
+    accessDeniedDescription: 'You do not have permission to perform this action.',
+    notFoundTitle: 'Not Found',
+    notFoundDescription: 'The requested resource was not found.',
+    validationTitle: 'Validation Error',
+    validationFallback: 'Please check your input.',
+    rateLimitTitle: 'Too Many Requests',
+    rateLimitDescription: 'Please slow down and try again shortly.',
+    serverTitle: 'Server Error',
+    serverDescription: 'An unexpected server error occurred. Please try again later.',
   },
 };
 export default ja;

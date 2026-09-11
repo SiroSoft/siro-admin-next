@@ -1,6 +1,26 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { API_URL, STORAGE_KEYS } from "@/lib/constants";
+import { getLocaleDictionary } from "@/lib/i18n";
 import type { components } from "@/types/api";
+
+function tApi(key: string): string {
+  const locale =
+    typeof window !== "undefined"
+      ? localStorage.getItem("siro_locale") || "en"
+      : "en";
+  const dict = getLocaleDictionary(locale) as unknown as Record<string, unknown>;
+  const fallback = getLocaleDictionary("en") as unknown as Record<string, unknown>;
+  const parts = key.split(".");
+  const lookup = (obj: Record<string, unknown>): string | null => {
+    let current: unknown = obj;
+    for (const part of parts) {
+      if (current == null || typeof current !== "object") return null;
+      current = (current as Record<string, unknown>)[part];
+    }
+    return typeof current === "string" ? current : null;
+  };
+  return lookup(dict) ?? lookup(fallback) ?? key;
+}
 
 function generateRequestId(): string {
   return `req_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
@@ -64,8 +84,8 @@ api.interceptors.response.use(
     if (!error.response) {
       const toastEvent = new CustomEvent("app:toast", {
         detail: {
-          title: "Network Error",
-          description: "Unable to connect to the server. Please check your connection.",
+          title: tApi("errors.networkTitle"),
+          description: tApi("errors.networkDescription"),
           variant: "destructive",
         },
       });
@@ -131,8 +151,8 @@ api.interceptors.response.use(
     if (status === 403) {
       const toastEvent = new CustomEvent("app:toast", {
         detail: {
-          title: "Access Denied",
-          description: "You do not have permission to perform this action.",
+          title: tApi("errors.accessDeniedTitle"),
+          description: tApi("errors.accessDeniedDescription"),
           variant: "destructive",
         },
       });
@@ -142,8 +162,8 @@ api.interceptors.response.use(
     if (status === 404) {
       const toastEvent = new CustomEvent("app:toast", {
         detail: {
-          title: "Not Found",
-          description: "The requested resource was not found.",
+          title: tApi("errors.notFoundTitle"),
+          description: tApi("errors.notFoundDescription"),
           variant: "destructive",
         },
       });
@@ -158,8 +178,8 @@ api.interceptors.response.use(
       const firstError = values[0]?.[0]
       const toastEvent = new CustomEvent("app:toast", {
         detail: {
-          title: "Validation Error",
-          description: firstError ?? body?.message ?? "Please check your input.",
+          title: tApi("errors.validationTitle"),
+          description: firstError ?? body?.message ?? tApi("errors.validationFallback"),
           variant: "destructive",
         },
       });
@@ -169,8 +189,8 @@ api.interceptors.response.use(
     if (status === 429) {
       const toastEvent = new CustomEvent("app:toast", {
         detail: {
-          title: "Too Many Requests",
-          description: "Please slow down and try again shortly.",
+          title: tApi("errors.rateLimitTitle"),
+          description: tApi("errors.rateLimitDescription"),
           variant: "destructive",
         },
       });
@@ -180,8 +200,8 @@ api.interceptors.response.use(
     if (status >= 500) {
       const toastEvent = new CustomEvent("app:toast", {
         detail: {
-          title: "Server Error",
-          description: "An unexpected server error occurred. Please try again later.",
+          title: tApi("errors.serverTitle"),
+          description: tApi("errors.serverDescription"),
           variant: "destructive",
         },
       });

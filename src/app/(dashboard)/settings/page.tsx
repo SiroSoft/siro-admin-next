@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PageHeader } from "@/components/page-header";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ErrorState } from "@/components/error-state";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/providers/i18n-provider";
@@ -107,7 +108,7 @@ export default function SettingsPage() {
   const { user } = useAuth();
   const { t } = useI18n();
   const { theme, setTheme } = useTheme();
-  const { data: settings, isLoading: settingsLoading } = useSettings();
+  const { data: settings, isLoading: settingsLoading, isError: settingsError, error: settingsLoadError, refetch: refetchSettings } = useSettings();
   const updateSettings = useUpdateSettings();
   const updateProfile = useUpdateProfile();
   const changePassword = useChangePassword();
@@ -319,6 +320,11 @@ export default function SettingsPage() {
               <div className="space-y-3">
                 {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-10 w-full" />)}
               </div>
+            ) : settingsError ? (
+              <ErrorState
+                message={(settingsLoadError as Error)?.message}
+                onRetry={() => refetchSettings()}
+              />
             ) : (
               <form onSubmit={settingsForm.handleSubmit(handleSettingsSubmit)} className="space-y-4">
                 <div className="space-y-2">

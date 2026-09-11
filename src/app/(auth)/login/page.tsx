@@ -133,7 +133,7 @@ return (
               onError={() => setTurnstileToken("")}
             />
           )}
-          {demoEnabled && ( <Button type="button" variant="outline" className="w-full" onClick={onDemoLogin} disabled={isLoginPending}> Try live demo - 1 click </Button> )} <Button type="submit" className="w-full" disabled={isLoginPending}>
+          {demoEnabled && ( <Button type="button" variant="outline" className="w-full" onClick={onDemoLogin} disabled={isLoginPending}> {t("login.tryDemo")} </Button> )} <Button type="submit" className="w-full" disabled={isLoginPending}>
             {isLoginPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t("common.login")}
           </Button>

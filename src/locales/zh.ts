@@ -197,6 +197,14 @@ const zh = {
     hidePassword: '隐藏密码',
     showPassword: '显示密码',
     invalidCredentials: '登录凭证无效',
+    tryDemo: 'Try live demo - 1 click',
+  },
+  opensource: {
+    starTemplate: 'Star the template',
+    getSkeleton: 'Get SiroPHP skeleton',
+    deployOwn: 'Deploy your own',
+    likedDemo: 'Liked the demo? Grab the code and run it yourself.',
+    website: 'SiroPHP website',
   },
   register: {
     title: '创建账户',
@@ -234,6 +242,18 @@ const zh = {
     forbidden: '禁止访问',
     networkError: '网络错误，请重试。',
     unknown: '发生未知错误',
+    networkTitle: 'Network Error',
+    networkDescription: 'Unable to connect to the server. Please check your connection.',
+    accessDeniedTitle: 'Access Denied',
+    accessDeniedDescription: 'You do not have permission to perform this action.',
+    notFoundTitle: 'Not Found',
+    notFoundDescription: 'The requested resource was not found.',
+    validationTitle: 'Validation Error',
+    validationFallback: 'Please check your input.',
+    rateLimitTitle: 'Too Many Requests',
+    rateLimitDescription: 'Please slow down and try again shortly.',
+    serverTitle: 'Server Error',
+    serverDescription: 'An unexpected server error occurred. Please try again later.',
   },
 };
 export default zh;
