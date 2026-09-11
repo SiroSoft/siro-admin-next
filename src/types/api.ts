@@ -646,6 +646,8 @@ export interface components {
             /** Format: email */
             email: string;
             password: string;
+            /** Cloudflare Turnstile token (cf-turnstile-response) */
+            "cf-turnstile-response"?: string;
         };
         RefreshTokenRequest: {
             refresh_token: string;
