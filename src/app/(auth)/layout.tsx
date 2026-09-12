@@ -26,11 +26,13 @@ function AuthTitle() {
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <Suspense>
-        <AuthTitle />
-      </Suspense>
-      {children}
-    </>
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6">
+      <div className="w-full max-w-md">
+        <Suspense>
+          <AuthTitle />
+        </Suspense>
+        {children}
+      </div>
+    </div>
   );
 }
