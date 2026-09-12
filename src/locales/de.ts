@@ -5,6 +5,7 @@ const de = {
     evening: 'Guten Abend',
   },
   common: {
+    demoReadOnly: 'Demo is read-only — deploy your own skeleton to upload.',
     dashboard: 'Dashboard',
     users: 'Benutzer',
     products: 'Produkte',
@@ -260,6 +261,7 @@ const de = {
     tokenPlaceholder: 'Bestätigungs-Token eingeben',
   },
   errors: {
+    uploadFailed: 'Upload failed',
     notFound: 'Nicht gefunden',
     serverError: 'Interner Serverfehler',
     unauthorized: 'Nicht autorisiert',

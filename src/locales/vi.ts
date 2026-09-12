@@ -7,6 +7,7 @@ const vi: Locale = {
     evening: 'Chào buổi tối',
   },
   common: {
+    demoReadOnly: 'Demo chỉ đọc — tự deploy skeleton để upload.',
     dashboard: 'Bảng điều khiển',
     users: 'Người dùng',
     products: 'Sản phẩm',
@@ -262,6 +263,7 @@ const vi: Locale = {
     tokenPlaceholder: 'Nhập token xác thực',
   },
   errors: {
+    uploadFailed: 'Tải lên thất bại',
     notFound: 'Không tìm thấy',
     serverError: 'Lỗi máy chủ',
     unauthorized: 'Không được phép',

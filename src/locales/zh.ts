@@ -5,6 +5,7 @@ const zh = {
     evening: '晚上好',
   },
   common: {
+    demoReadOnly: 'Demo is read-only — deploy your own skeleton to upload.',
     dashboard: '控制面板',
     users: '用户',
     products: '产品',
@@ -260,6 +261,7 @@ const zh = {
     tokenPlaceholder: '输入验证令牌',
   },
   errors: {
+    uploadFailed: 'Upload failed',
     notFound: '未找到',
     serverError: '服务器内部错误',
     unauthorized: '未授权',

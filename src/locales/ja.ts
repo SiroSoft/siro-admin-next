@@ -5,6 +5,7 @@ const ja = {
     evening: 'こんばんは',
   },
   common: {
+    demoReadOnly: 'Demo is read-only — deploy your own skeleton to upload.',
     dashboard: 'ダッシュボード',
     users: 'ユーザー',
     products: '商品',
@@ -260,6 +261,7 @@ const ja = {
     tokenPlaceholder: '確認トークンを入力',
   },
   errors: {
+    uploadFailed: 'Upload failed',
     notFound: '見つかりません',
     serverError: 'サーバーエラー',
     unauthorized: '認証されていません',

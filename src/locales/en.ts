@@ -5,6 +5,7 @@ const en = {
     evening: 'Good evening',
   },
   common: {
+    demoReadOnly: 'Demo is read-only — deploy your own skeleton to upload.',
     dashboard: 'Dashboard',
     users: 'Users',
     products: 'Products',
@@ -260,6 +261,7 @@ const en = {
     tokenPlaceholder: 'Enter verification token',
   },
   errors: {
+    uploadFailed: 'Upload failed',
     notFound: 'Not Found',
     serverError: 'Internal Server Error',
     unauthorized: 'Unauthorized',
