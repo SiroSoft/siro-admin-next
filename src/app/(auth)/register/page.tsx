@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { tSchema } from "@/lib/i18n";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -17,23 +16,28 @@ import { toast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth.service";
 import { Turnstile } from "@marsidev/react-turnstile";
 
-const registerSchema = z.object({
-  name: z.string().min(3, tSchema("validation.nameMin3")),
-  email: z.string().email(tSchema("validation.invalidEmail")),
-  password: z.string().min(8, tSchema("validation.passwordMin8")),
-  password_confirmation: z.string(),
-}).refine((d) => d.password === d.password_confirmation, {
-  message: tSchema("validation.passwordMismatch"),
-  path: ["password_confirmation"],
-});
-
-type RegisterForm = z.infer<typeof registerSchema>;
-
 export default function RegisterPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+
+  const registerSchema = useMemo(
+    () =>
+      z
+        .object({
+          name: z.string().min(3, t("validation.nameMin3")),
+          email: z.string().email(t("validation.invalidEmail")),
+          password: z.string().min(8, t("validation.passwordMin8")),
+          password_confirmation: z.string(),
+        })
+        .refine((d) => d.password === d.password_confirmation, {
+          message: t("validation.passwordMismatch"),
+          path: ["password_confirmation"],
+        }),
+    [t],
+  );
+  type RegisterForm = z.infer<typeof registerSchema>;
 
   const {
     register,
@@ -71,7 +75,7 @@ export default function RegisterPage() {
         </div>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form key={locale} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">{t("register.name")} <span className="text-destructive">*</span></Label>
             <Input id="name" placeholder={t("register.namePlaceholder")} {...register("name")} autoComplete="name" autoFocus />

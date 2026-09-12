@@ -1,10 +1,9 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { tSchema } from "@/lib/i18n";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
@@ -17,14 +16,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { toast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth.service";
 
-const verifyEmailSchema = z.object({
-  token: z.string().min(1, tSchema("validation.tokenRequired")),
-});
-
-type VerifyEmailForm = z.infer<typeof verifyEmailSchema>;
-
 function VerifyEmailFormInner() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { user, refetchSession } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,6 +27,15 @@ function VerifyEmailFormInner() {
   const [verified, setVerified] = useState(false);
 
   const isAlreadyVerified = !!user?.email_verified_at;
+
+  const verifyEmailSchema = useMemo(
+    () =>
+      z.object({
+        token: z.string().min(1, t("validation.tokenRequired")),
+      }),
+    [t],
+  );
+  type VerifyEmailForm = z.infer<typeof verifyEmailSchema>;
 
   const {
     register,
@@ -106,7 +108,7 @@ function VerifyEmailFormInner() {
             <span className="text-sm text-amber-700 dark:text-amber-400">{t("profile.emailNotVerified")}</span>
           </div>
         )}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form key={locale} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="token">{t("verifyEmail.token")}</Label>
             <Input id="token" {...register("token")} placeholder={t("verifyEmail.tokenPlaceholder")} />

@@ -1,10 +1,9 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { tSchema } from "@/lib/i18n";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -16,23 +15,28 @@ import { useI18n } from "@/providers/i18n-provider";
 import { toast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth.service";
 
-const resetPasswordSchema = z.object({
-  password: z.string().min(8, tSchema("validation.passwordMin8")),
-  password_confirmation: z.string(),
-}).refine((d) => d.password === d.password_confirmation, {
-  message: tSchema("validation.passwordMismatch"),
-  path: ["password_confirmation"],
-});
-
-type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
-
 function ResetPasswordFormInner() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token") ?? "";
   const [isPending, setIsPending] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+
+  const resetPasswordSchema = useMemo(
+    () =>
+      z
+        .object({
+          password: z.string().min(8, t("validation.passwordMin8")),
+          password_confirmation: z.string(),
+        })
+        .refine((d) => d.password === d.password_confirmation, {
+          message: t("validation.passwordMismatch"),
+          path: ["password_confirmation"],
+        }),
+    [t],
+  );
+  type ResetPasswordForm = z.infer<typeof resetPasswordSchema>;
 
   const {
     register,
@@ -79,7 +83,7 @@ function ResetPasswordFormInner() {
       </CardHeader>
       <CardContent>
         <input type="hidden" value={token} readOnly />
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form key={locale} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="password">{t("auth.password")} <span className="text-destructive">*</span></Label>
             <Input id="password" type="password" {...register("password")} autoComplete="new-password" />

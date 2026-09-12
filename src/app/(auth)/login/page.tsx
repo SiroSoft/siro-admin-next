@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { tSchema } from "@/lib/i18n";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,20 +16,25 @@ import { useAuth } from "@/hooks/use-auth";
 import { useI18n } from "@/providers/i18n-provider";
 import { APP_NAME } from "@/lib/constants";
 
-const loginSchema = z.object({
-  email: z.string().email(tSchema("validation.invalidEmail")),
-  password: z.string().min(8, tSchema("validation.passwordMin8")),
-});
-
-type LoginForm = z.infer<typeof loginSchema>;
-
 const REMEMBER_EMAIL_KEY = "siro_remember_email";
 
 export default function LoginPage() {
   const { login, isLoginPending, loginError, isLoading: isAuthLoading } = useAuth();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
+
+  // Built per-render so validation messages follow the active locale
+  // without a page reload.
+  const loginSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(t("validation.invalidEmail")),
+        password: z.string().min(8, t("validation.passwordMin8")),
+      }),
+    [t],
+  );
+  type LoginForm = z.infer<typeof loginSchema>;
 
   const {
     register,
@@ -69,7 +73,7 @@ return (
         </div>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form key={locale} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">{t("auth.email")} <span className="text-destructive">*</span></Label>
             <Input

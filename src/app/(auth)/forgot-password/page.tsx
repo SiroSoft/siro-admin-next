@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { tSchema } from "@/lib/i18n";
 import { Loader2, ArrowLeft, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,16 +14,20 @@ import { useI18n } from "@/providers/i18n-provider";
 import { toast } from "@/hooks/use-toast";
 import { authService } from "@/services/auth.service"; import { Turnstile } from "@marsidev/react-turnstile";
 
-const schema = z.object({
-  email: z.string().email(tSchema("validation.invalidEmail")),
-});
-
-type Form = z.infer<typeof schema>;
-
 export default function ForgotPasswordPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [sent, setSent] = useState(false);
   const [isPending, setIsPending] = useState(false);
+
+  const schema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(t("validation.invalidEmail")),
+      }),
+    [t],
+  );
+  type Form = z.infer<typeof schema>;
+
   const {
     register,
     handleSubmit,
@@ -67,7 +70,7 @@ export default function ForgotPasswordPage() {
         <CardDescription>{t("forgotPassword.description")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form key={locale} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">{t("auth.email")}</Label>
             <Input id="email" type="email" placeholder={t("forgotPassword.emailPlaceholder")} {...register("email")} disabled={isPending} />
